@@ -1,7 +1,6 @@
 import React from "react";
-import TableRow from "./TableRow/TableRow";
 
-export default function Table({ columnTitles, data }) {
+export default function Table({ columnTitles, children }) {
 
 
     return (
@@ -20,7 +19,7 @@ export default function Table({ columnTitles, data }) {
                     </tr>
                 </thead>
                 <tbody>
-                    <TableRow icon={"icon"} data={data} />
+                    {children}
                 </tbody>
             </table>
         </section>

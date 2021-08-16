@@ -1,6 +1,8 @@
 import React from 'react';
+
 import Navigation from '../components/Navigation/Navigation';
 import Table from '../components/Table/Table';
+import TableRow from '../components/Table/TableRow/TableRow';
 
 
 export default function Wallet() {
@@ -26,7 +28,9 @@ export default function Wallet() {
         <main className='bg-gray-900 h-screen flex' >
             <Navigation />
 
-            <Table columnTitles={column_titles} data={userCryptoData} />
+            <Table columnTitles={column_titles}>
+                <TableRow icon={"icon"} data={userCryptoData} />
+            </Table>
         </main>
     );
 }

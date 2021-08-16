@@ -2,6 +2,7 @@ import React from "react";
 
 import Navigation from "../../components/Navigation/Navigation";
 import Table from "../../components/Table/Table";
+import TableRow from "../../components/Table/TableRow/TableRow";
 
 export default function GetUsers() {
 
@@ -27,7 +28,9 @@ export default function GetUsers() {
         <main className='bg-gray-900 h-screen flex' >
             <Navigation />
 
-            <Table columnTitles={column_titles} data={userCryptoData} />
+            <Table columnTitles={column_titles} data={userCryptoData}>
+                <TableRow icon={"icon"} data={userCryptoData} error />
+            </Table>
         </main>
     )
 }
