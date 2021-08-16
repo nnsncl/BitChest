@@ -1,60 +1,44 @@
 import React from "react";
 
-export default function TableRow() {
+export default function TableRow({ icon, data, admin }) {
     return (
         <>
             <tr>
-                <td className="text-white w-10/12 flex justify-between items-center pt-3">
-                    <span>icon</span>
-                    <p>BTC/USDT</p>
-                </td>
-
-                <td className="text-white pt-3">
-                    <p>$35.608,12</p>
-                </td>
-
-                <td className="text-white pt-3">
-                    <p>+0.8%</p>
-                </td>
-
-                <td className="text-white pt-3">
-                    <p>$26,473,275,010</p>
-                </td>
-
-                <td className="text-white pt-3">
-                    <p>$635,353,344,920</p>
-                </td>
-
-                <td className="text-white pt-3">
-                    <p>graph</p>
-                </td>
+                {data.map((item, key) => {
+                    if (key === 0) {
+                        return (
+                            <td className="text-white gap-3 flex items-center pt-3">
+                                <span>{icon}</span>
+                                <p>{item}</p>
+                            </td>
+                        )
+                    } else {
+                        return (
+                            <td className="text-white pt-3">
+                                <p>{item}</p>
+                            </td>
+                        )
+                    }
+                })}
             </tr>
 
             <tr>
-                <td className="text-white w-10/12 flex justify-between items-center pt-3">
-                    <span>icon</span>
-                    <p>BTC/USDT</p>
-                </td>
-
-                <td className="text-white pt-3">
-                    <p>$35.608,12</p>
-                </td>
-
-                <td className="text-white pt-3">
-                    <p>+0.8%</p>
-                </td>
-
-                <td className="text-white pt-3">
-                    <p>$26,473,275,010</p>
-                </td>
-
-                <td className="text-white pt-3">
-                    <p>$635,353,344,920</p>
-                </td>
-
-                <td className="text-white pt-3">
-                    <p>graph</p>
-                </td>
+                {data.map((item, key) => {
+                    if (key === 0) {
+                        return (
+                            <td className="text-white gap-3 flex items-center pt-3">
+                                <span>{icon}</span>
+                                <p>{item}</p>
+                            </td>
+                        )
+                    } else {
+                        return (
+                            <td className="text-white pt-3">
+                                <p>{item}</p>
+                            </td>
+                        )
+                    }
+                })}
             </tr>
         </>
     )

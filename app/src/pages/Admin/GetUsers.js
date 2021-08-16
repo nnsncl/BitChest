@@ -1,9 +1,10 @@
-import React from 'react';
-import Navigation from '../components/Navigation/Navigation';
-import Table from '../components/Table/Table';
+import React from "react";
 
+import Navigation from "../../components/Navigation/Navigation";
+import Table from "../../components/Table/Table";
 
-export default function Wallet() {
+export default function GetUsers() {
+
     const column_titles = [
         "Coin",
         "Price",
@@ -28,5 +29,5 @@ export default function Wallet() {
 
             <Table columnTitles={column_titles} data={userCryptoData} />
         </main>
-    );
+    )
 }
