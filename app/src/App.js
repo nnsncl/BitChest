@@ -1,11 +1,19 @@
 import React from 'react';
+import { BrowserRouter as Router,  Switch, Route } from "react-router-dom";
 
-function App() {
+import * as ROUTES from './constants/routes'
+
+export default function App() {
   return (
-    <div className="App">
-     App
-    </div>
+    <Router>
+      <Switch>
+        <Route path={ ROUTES.ADMIN }>
+          Wallet
+        </Route>
+        <Route path={ROUTES.HOME}>
+          Home
+        </Route>
+      </Switch>
+    </Router>
   );
-}
-
-export default App;
+};
