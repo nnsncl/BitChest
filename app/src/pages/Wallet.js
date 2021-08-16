@@ -1,14 +1,13 @@
 import React from 'react';
 import Navigation from '../components/Navigation/Navigation';
-import Table from '../components/Table/Table';
+// import Table from '../components/Table/Table';
 
 
 export default function Wallet() {
     return (
-        <main className='bg-gray-900 h-screen flex' >
+        <main className='bg-gray-900 md:flex h-screen p-6' >
             <Navigation />
-
-            <Table />
+            {/* <Table /> */}
         </main>
     );
 }
