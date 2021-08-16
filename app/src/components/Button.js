@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
-export const Button = ({ children }) => {
+export const Button = ({ to, children }) => {
     return (
-        <button className='p-3 rounded-lg bg-transparent hover:bg-gray-900 transition duration-300 ease-in-out'>
+        <Link to={to} className='p-3 rounded-lg transition duration-300 ease-in-out'>
             {children}
-        </button>
+        </Link>
     );
 };
