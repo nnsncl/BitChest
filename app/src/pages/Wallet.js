@@ -1,83 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Navigation from '../components/Navigation';
 import { GraphUp, GraphDown } from '../components/Icons';
 // import Table from '../components/Table/Table';
 
 
-const currencies = [
-    {
-        name: 'Bitcoin',
-        slug: 'BTC',
-        price: '$5,849.56',
-        position: '1',
-        profit: true,
-    },
-    {
-        name: 'Ethereum',
-        slug: 'ETH',
-        price: '$5,849.56',
-        position: '2',
-        profit: true,
-    },
-    {
-        name: 'Ripple',
-        slug: 'RPL',
-        price: '$5,849.56',
-        position: '3',
-        profit: false,
-    },
-    {
-        name: 'Bitcoin Cash',
-        slug: 'BTCC',
-        price: '$5,849.56',
-        position: '4',
-        profit: false,
-    },
-    {
-        name: 'Cardano',
-        slug: 'CDN',
-        price: '$5,849.56',
-        position: '5',
-        profit: true,
-    },
-    {
-        name: 'NEM',
-        slug: 'NEM',
-        price: '$5,849.56',
-        position: '6',
-        profit: true,
-    },
-    {
-        name: 'Stellar',
-        slug: 'SLR',
-        price: '$5,849.56',
-        position: '7',
-        profit: false,
-    },
-    {
-        name: 'IOTA',
-        slug: 'OTA',
-        price: '$5,849.56',
-        position: '8',
-        profit: true,
-    },
-    {
-        name: 'Litcoin',
-        slug: 'LTC',
-        price: '$5,849.56',
-        position: '9',
-        profit: false,
-    },
-    {
-        name: 'Dash',
-        slug: 'DSH',
-        price: '$5,849.56',
-        position: '10',
-        profit: false,
-    }
-]
-
 export default function Wallet() {
+
+    const [topCoins, setTopCoins] = useState([]);
+
+    useEffect(() => {
+        axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false')
+            .then(function (response) {
+                setTopCoins(response.data);
+            })
+            .catch(function (error) {
+                console.error(error.message);
+            })
+    }, [])
+
     return (
         <main className='bg-gray-900 text-white md:flex md:h-screen h-full p-6' >
             <Navigation />
@@ -88,23 +29,24 @@ export default function Wallet() {
                 <p className='text-gray-700' >The most profitable cryptocurrencies</p>
                 <section className='mt-12 flex flex-wrap gap-8' >
                     {
-                        currencies.map((item) => (
+                        topCoins &&
+                        topCoins.map((item) => (
                             <article
-                                key={item.slug}
+                                key={item.id}
                                 className="flex items-center gap-3 md:w-56 w-full">
-                                <span className='text-gray-700 text-xs font-bold'>{item.position}</span>
-                                <div className='w-14 h-14 bg-gray-700 rounded-full' ></div>
+                                <span className='text-gray-700 text-xs font-bold'>{item.market_cap_rank}</span>
+                                <img className='w-12 h-12 bg-white rounded-full' src={item.image} alt={`${item.name}-logo`} />
                                 <div>
                                     <p className='flex-1 flex items-center justify-between gap-3 text-sm font-bold uppercase' >
-                                        {item.name}
+                                        {item.name}&nbsp;/&nbsp;{item.symbol}
                                         {
-                                            item.profit
+                                            item.price_change_percentage_24h > 0
                                                 ? <GraphUp />
                                                 : <GraphDown />
                                         }
                                     </p>
                                     <small className='text-gray-700 text-xs'>
-                                        {item.price}
+                                        {item.current_price}
                                     </small>
                                 </div>
                             </article>
