@@ -1,2 +1,2 @@
 export const HOME = '/'
-export const ADMIN = '/admin'
+export const ADMIN = '/wallet'
