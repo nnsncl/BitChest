@@ -14,7 +14,7 @@ class CreateWalletTable extends Migration
     public function up()
     {
         Schema::create('wallet', function (Blueprint $table) {
-            $table->id();
+            $table->integerIncrements("id");
 
             $table->unsignedInteger("currency_id")->nullable();
             $table->foreign('currency_id')->references('id')->on('currencies');
