@@ -7,7 +7,7 @@ export default function TableRow({ icon, data, error, children }) {
                 {data.map((item, key) => {
                     if (key === 0) {
                         return (
-                            <td className="text-white gap-3 flex items-center pt-3">
+                            <td key={key} className="text-white gap-3 flex items-center pt-3">
                                 {icon && <span>{icon}</span>}
                                 <p>{item}</p>
                             </td>
@@ -15,7 +15,7 @@ export default function TableRow({ icon, data, error, children }) {
                     }
                     else {
                         return (
-                            <td className="text-white pt-3">
+                            <td key={key} className="text-white pt-3">
                                 <p className={`${key === 2 && error && "text-gray-700"}`} >{item}</p>
                             </td>
                         )

@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 
-import Navigation from "../../components/Navigation/Navigation";
+import { Navigation } from "../../components/Navigation";
 import Table from "../../components/Table/Table";
 import TableRow from "../../components/Table/TableRow/TableRow";
+import { UserContext } from "../../hooks/use-user";
 
 import { column_titles, userCryptoData } from "../../constants/tableHeads";
 
 export default function GetUsers() {
+
+    const { user } = useContext(UserContext);
+
+    console.log(user);
 
     return (
         <main className='bg-gray-900 h-screen flex' >
