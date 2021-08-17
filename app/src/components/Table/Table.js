@@ -1,7 +1,8 @@
 import React from "react";
-import TableRow from "./TableRow/TableRow";
 
-export default function Table() {
+export default function Table({ columnTitles, children }) {
+
+
     return (
         <section className="w-6/12 mx-auto">
             <div className="flex justify-between items-center mb-4" >
@@ -12,16 +13,13 @@ export default function Table() {
             <table className="container">
                 <thead className="mb-6">
                     <tr>
-                        <th className="text-gray-700 w-2/12 text-left text-sm">Coin</th>
-                        <th className="text-gray-700 w-1/12 text-left text-sm">Price</th>
-                        <th className="text-gray-700 w-1/12 text-left text-sm">1h</th>
-                        <th className="text-gray-700 w-2/12 text-left text-sm">24 volume</th>
-                        <th className="text-gray-700 w-2/12 text-left text-sm">Market Cap</th>
-                        <th className="text-gray-700 w-2/12 text-left text-sm">Last 7 Days</th>
+                        {columnTitles.map(item => (
+                            <th className="text-gray-700 w-2/12 text-left text-sm" >{item}</th>
+                        ))}
                     </tr>
                 </thead>
-                <tbody>
-                    <TableRow />
+                <tbody className="text-white">
+                    {children}
                 </tbody>
             </table>
         </section>
