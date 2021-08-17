@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 
 import * as ROUTES from '../constants/routes';
+
 import { UserContext } from '../hooks/use-user';
-import { useWindowSize } from '../hooks/use-window-size'
+import { useRouter } from '../hooks/use-router';
+import { useWindowSize } from '../hooks/use-window-size';
 
 import { MEDIA_QUERIES_BREAKPOINTS } from '../constants/media-breakpoints';
 
@@ -44,10 +46,11 @@ const item = {
 }
 
 export const Navigation = () => {
+    const router = useRouter();
     const size = useWindowSize();
     const { user } = useContext(UserContext);
     const user_funds = user.available_funds;
-
+   
     return (
         <motion.nav
             initial="hidden"
@@ -59,7 +62,7 @@ export const Navigation = () => {
                 {user.role !== 'admin'
                     ? <ul className='flex items-center gap-3 md:border-r-2 md:border-gray-800 mr-6 md:pr-6'>
                         <motion.li variants={item}>
-                            <ButtonLink to={ROUTES.ADMIN}>
+                            <ButtonLink active={router.pathname === ROUTES.ADMIN} to={ROUTES.ADMIN}>
                                 {size.width < MEDIA_QUERIES_BREAKPOINTS.md
                                     ? <SecureSpace />
                                     : 'Admin'
@@ -71,10 +74,10 @@ export const Navigation = () => {
                 }
                 <ul className='flex items-center gap-6 border-r-2 border-gray-800 mr-6 pr-6'>
                     <motion.li variants={item}>
-                        <ButtonLink to={ROUTES.EXPLORE}>Explore</ButtonLink>
+                        <ButtonLink active={router.pathname === ROUTES.EXPLORE} to={ROUTES.EXPLORE}>Explore</ButtonLink>
                     </motion.li>
                     <motion.li variants={item}>
-                        <ButtonLink to={ROUTES.USER_ACTIVITY}>Activity</ButtonLink>
+                        <ButtonLink active={router.pathname === ROUTES.USER_ACTIVITY} to={ROUTES.USER_ACTIVITY}>Activity</ButtonLink>
                     </motion.li>
                 </ul>
                 <ul className='flex items-center md:gap-3 gap-6'>

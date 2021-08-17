@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { motion } from 'framer-motion';
 
-export const ButtonLink = ({ to, children }) => {
+export const ButtonLink = ({ to, active, children }) => {
     return (
-        <Link to={to} className='text-sm transition duration-300 ease-in-out outline-none text-gray-700 font-medium hover:text-white'>
+        <Link to={to} className={`text-sm transition duration-300 ease-in-out outline-none ${active ? 'text-white' : 'text-gray-700'} font-medium hover:text-white`}>
             {children}
         </Link>
     );
