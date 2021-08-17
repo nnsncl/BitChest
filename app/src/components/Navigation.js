@@ -6,6 +6,8 @@ import * as ROUTES from '../constants/routes';
 import { UserContext } from '../hooks/use-user';
 import { useWindowSize } from '../hooks/use-window-size'
 
+import { MEDIA_QUERIES_BREAKPOINTS } from '../constants/media-breakpoints';
+
 import { ButtonLink, ButtonSecondary, ButtonTertiary } from './Button';
 import { Wallet, Market, SecureSpace } from './Icons';
 
@@ -40,6 +42,7 @@ const item = {
         },
     }
 }
+
 export const Navigation = () => {
     const size = useWindowSize();
     const { user } = useContext(UserContext);
@@ -50,20 +53,23 @@ export const Navigation = () => {
             initial="hidden"
             animate="visible"
             variants={list}
-            className='fixed w-full flex-row text-white bg-filter--blur flex items-center justify-between px-6 py-3' >
+            className='fixed w-full flex-row text-white bg-filter--blur flex items-center justify-between px-6 py-6' >
             <p className='text-sm md:flex hidden items-center'>Bit<b>Chest</b></p>
             <div className="flex items-center w-full md:justify-end justify-between" >
-                <ul className='flex items-center gap-3 md:border-r-2 md:border-gray-800 mr-3 md:pr-3'>
-                    <motion.li variants={item}>
-                        <ButtonLink to={ROUTES.ADMIN}>
-                            {size.width < 768
-                                ? <SecureSpace />
-                                : 'Admin'
-                            }
-                        </ButtonLink>
-                    </motion.li>
-                </ul>
-                <ul className='flex items-center gap-3 border-r-2 border-gray-800 md:mr-6 mr-3 pr-3'>
+                {user.role !== 'admin'
+                    ? <ul className='flex items-center gap-3 md:border-r-2 md:border-gray-800 mr-6 md:pr-6'>
+                        <motion.li variants={item}>
+                            <ButtonLink to={ROUTES.ADMIN}>
+                                {size.width < MEDIA_QUERIES_BREAKPOINTS.md
+                                    ? <SecureSpace />
+                                    : 'Admin'
+                                }
+                            </ButtonLink>
+                        </motion.li>
+                    </ul>
+                    : null
+                }
+                <ul className='flex items-center gap-6 border-r-2 border-gray-800 mr-6 pr-6'>
                     <motion.li variants={item}>
                         <ButtonLink to={ROUTES.EXPLORE}>Explore</ButtonLink>
                     </motion.li>
@@ -73,7 +79,7 @@ export const Navigation = () => {
                 </ul>
                 <ul className='flex items-center md:gap-3 gap-6'>
                     <motion.li variants={item} >
-                        {size.width < 768
+                        {size.width < MEDIA_QUERIES_BREAKPOINTS.md
                             ? <Link to={ROUTES.MARKETPLACE} >
                                 <Market />
                             </Link>
@@ -81,7 +87,7 @@ export const Navigation = () => {
                         }
                     </motion.li>
                     <motion.li variants={item}>
-                        {size.width < 768
+                        {size.width < MEDIA_QUERIES_BREAKPOINTS.md
                             ? <Link to={ROUTES.USER_WALLET} >
                                 <Wallet />
                             </Link>

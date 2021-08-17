@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export const ButtonLink = ({ to, children }) => {
     return (
-        <Link to={to} className='p-3 rounded-lg text-sm transition duration-300 ease-in-out outline-none text-gray-700 font-medium hover:text-white'>
+        <Link to={to} className='text-sm transition duration-300 ease-in-out outline-none text-gray-700 font-medium hover:text-white'>
             {children}
         </Link>
     );

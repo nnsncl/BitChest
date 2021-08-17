@@ -11,6 +11,7 @@ export const UserProvider = ({ children }) => {
             id: '12345-azerty',
             name: "Warner",
             email: "mail@mail.com",
+            role: "admin",
             wallet: {
                 currencies: []
             },
