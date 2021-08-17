@@ -16,7 +16,7 @@ const container = {
     },
 }
 
-export default function Explore() {
+export default function Activity() {
     return (
         <>
             <Navigation />
@@ -26,8 +26,8 @@ export default function Explore() {
                     animate='visible'
                     variants={container}
                     className='flex justify-center flex-col md:py-10 py-9 w-full px-6 mt-20'>
-                    <h1 className='text-3xl font-bold mb-2'>Your cryptocurrency portfolio</h1>
-                    <p className='text-gray-700' >Manage your every coin with ease</p>
+                    <h1 className='text-3xl font-bold mb-2'>Your activity summary</h1>
+                    <p className='text-gray-700' >Your personnal informations and transations activity summary</p>
                 </motion.section>
             </main>
         </>
