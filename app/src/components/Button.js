@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export const ButtonLink = ({ to, children }) => {
     return (
-        <Link to={to} className='p-3 rounded-lg transition duration-300 ease-in-out'>
+        <Link to={to} className='p-3 rounded-lg transition duration-300 ease-in-out outline-none'>
             {children}
         </Link>
     );
@@ -27,7 +27,7 @@ export const ButtonGhost = ({ onClick, children }) => {
                     mass: 2
                 }
             }}
-            className='px-4 py-2 border-2 border-gray-800 rounded-xl font-bold'
+            className='px-4 py-2 border-2 border-gray-800 rounded-xl font-bold outline-none'
             onClick={onClick}>
             {children}
         </motion.button>

@@ -9,3 +9,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+.gradient-bg {
+    background: -webkit-linear-gradient(45deg, rgb(46, 105, 255) 0%, rgb(255, 116, 241) 66.6%);
+}
