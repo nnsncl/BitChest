@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Explore from './pages/Explore';
+import Wallet from './pages/Wallet';
 import GetUsers from './pages/Admin/GetUsers';
 
 import * as ROUTES from './constants/routes'
@@ -25,7 +26,7 @@ export default function App() {
           Activity
         </Route>
         <Route exact path={ROUTES.USER_WALLET}>
-          Wallet
+          <Wallet />
         </Route>
 
         {/* Public routes */}

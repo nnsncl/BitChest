@@ -86,7 +86,7 @@ export const Navigation = () => {
                             ? <Link to={ROUTES.MARKETPLACE} >
                                 <Market />
                             </Link>
-                            : <ButtonSecondary to={ROUTES.MARKETPLACE} >Marketplace</ButtonSecondary>
+                            : <ButtonSecondary active={router.pathname === ROUTES.MARKETPLACE} to={ROUTES.MARKETPLACE} >Marketplace</ButtonSecondary>
                         }
                     </motion.li>
                     <motion.li variants={item}>
@@ -94,7 +94,7 @@ export const Navigation = () => {
                             ? <Link to={ROUTES.USER_WALLET} >
                                 <Wallet />
                             </Link>
-                            : <ButtonTertiary to={ROUTES.USER_WALLET} >{user_funds}€</ButtonTertiary>
+                            : <ButtonTertiary active={router.pathname === ROUTES.USER_WALLET} to={ROUTES.USER_WALLET} >{user_funds}€</ButtonTertiary>
                         }
                     </motion.li>
                 </ul>
