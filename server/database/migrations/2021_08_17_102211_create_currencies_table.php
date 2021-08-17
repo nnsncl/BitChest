@@ -14,7 +14,7 @@ class CreateCurrenciesTable extends Migration
     public function up()
     {
         Schema::create('currencies', function (Blueprint $table) {
-            $table->id();
+            $table->integerIncrements("id");
             $table->integer("ath");
             $table->decimal("ath_change_percentage");
             $table->string("ath_date");
