@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { motion } from "framer-motion"
 
 import * as ROUTES from '../constants/routes';
+import { UserContext } from '../hooks/use-user';
 
 import { ButtonLink, ButtonSecondary, ButtonTertiary } from './Button';
 
@@ -24,26 +25,22 @@ const list = {
 const item = {
     visible: {
         opacity: 1,
-        x: 0,
-        scale: 1,
         transition: {
-            type: "spring",
-            mass: 1.3,
-            bounce: 0.3,
-            duration: 0.1
+            type: 'spring',
+            duration: 0.3
         },
     },
     hidden: {
         opacity: 0,
-        x: -100,
-        scale: 0,
         transition: {
-            staggerChildren: 0.05,
-            duration: 0.3
+            staggerChildren: 0.05
         },
     }
 }
 export const Navigation = () => {
+    const { user } = useContext(UserContext);
+    const user_funds = user.available_funds;
+
     return (
         <motion.nav
             initial="hidden"
@@ -72,7 +69,7 @@ export const Navigation = () => {
                         <ButtonSecondary to={ROUTES.MARKETPLACE} >Marketplace</ButtonSecondary>
                     </motion.li>
                     <motion.li variants={item}>
-                        <ButtonTertiary to={ROUTES.USER_WALLET} >564.32€</ButtonTertiary>
+                        <ButtonTertiary to={ROUTES.USER_WALLET} >{user_funds}€</ButtonTertiary>
                     </motion.li>
                 </ul>
             </div>

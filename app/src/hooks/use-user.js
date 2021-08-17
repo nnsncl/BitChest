@@ -8,12 +8,13 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => {
         setUser({
-            name: "Sami",
+            id: '12345-azerty',
+            name: "Warner",
             email: "mail@mail.com",
             wallet: {
-                currencies: [],
-                total: 1000,
+                currencies: []
             },
+            available_funds: 2537.56,
         })
     }, []);
 
