@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TableRow({ icon, data, error }) {
+export default function TableRow({ icon, data, error, children }) {
     return (
         <>
             <tr>
@@ -12,7 +12,7 @@ export default function TableRow({ icon, data, error }) {
                                 <p>{item}</p>
                             </td>
                         )
-                    } 
+                    }
                     else {
                         return (
                             <td className="text-white pt-3">
@@ -21,6 +21,7 @@ export default function TableRow({ icon, data, error }) {
                         )
                     }
                 })}
+                {children}
             </tr>
         </>
     )

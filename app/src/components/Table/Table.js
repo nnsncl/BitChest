@@ -18,7 +18,7 @@ export default function Table({ columnTitles, children }) {
                         ))}
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="text-white">
                     {children}
                 </tbody>
             </table>
