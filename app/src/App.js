@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import Wallet from './pages/Wallet';
+import Explore from './pages/Explore';
 import GetUsers from './pages/Admin/GetUsers';
 
 import * as ROUTES from './constants/routes'
@@ -10,13 +10,32 @@ export default function App() {
   return (
     <Router>
       <Switch>
-      <Route path={ROUTES.ADMIN_GET_USERS}>
+
+        {/* Admin routes */}
+
+        <Route exact path={ROUTES.ADMIN_GET_USERS}>
           <GetUsers />
         </Route>
-        <Route path={ROUTES.ADMIN}>
-          <Wallet />
+        <Route exact path={ROUTES.ADMIN}>
+          Admin
         </Route>
-        <Route path={ROUTES.HOME}>
+
+        {/* Auth routes */}
+        <Route exact path={ROUTES.USER_ACTIVITY}>
+          Activity
+        </Route>
+        <Route exact path={ROUTES.USER_WALLET}>
+          Wallet
+        </Route>
+
+        {/* Public routes */}
+        <Route exact path={ROUTES.EXPLORE}>
+          <Explore />
+        </Route>
+        <Route exact path={ROUTES.MARKETPLACE}>
+          Marketplace
+        </Route>
+        <Route exact path={ROUTES.HOME}>
           Home
         </Route>
       </Switch>
