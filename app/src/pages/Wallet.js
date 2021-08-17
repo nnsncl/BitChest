@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
 
-import { coingeckoEndpoints } from '../constants/api-endpoints';
+import { CoinsContext } from '../hooks/use-currencies';
 
 import { Navigation } from '../components/Navigation';
 import { ButtonGhost } from '../components/Button';
 import { GraphUp, GraphDown } from '../components/Icons';
-// import Table from '../components/Table/Table';
-
 
 const container = {
     visible: {
@@ -38,30 +35,7 @@ const article = {
 
 export default function Wallet() {
     const [topCoinsVisible, setTopCoinsVisible] = useState(true);
-    const [topCoins, setTopCoins] = useState([]);
-
-    useEffect(() => {
-        axios
-            .all([
-                coingeckoEndpoints.GET_BTC_SET,
-                coingeckoEndpoints.GET_ETH_SET,
-                coingeckoEndpoints.GET_XRP_SET,
-                coingeckoEndpoints.GET_BCH_SET,
-                coingeckoEndpoints.GET_ADA_SET,
-                coingeckoEndpoints.GET_LTC_SET,
-                coingeckoEndpoints.GET_XEM_SET,
-                coingeckoEndpoints.GET_XLM_SET,
-                coingeckoEndpoints.GET_MIOTA_SET,
-                coingeckoEndpoints.GET_DASH_SET
-            ])
-            .then(
-                axios.spread((...responses) => {
-                    setTopCoins(responses)
-                }))
-            .catch(function (error) {
-                console.error(error.message);
-            })
-    }, [])
+    const { coins } = useContext(CoinsContext);
 
     return (
         <main className='text-white md:flex md:h-screen h-full p-6' >
@@ -100,8 +74,8 @@ export default function Wallet() {
                         variants={container}
                         className='mt-12 flex flex-wrap gap-10' >
                         {
-                            topCoins &&
-                            topCoins.map((item) => (
+                            coins &&
+                            coins.map((item) => (
                                 <motion.article
                                     key={item.data[0].id}
                                     variants={article}
@@ -130,8 +104,6 @@ export default function Wallet() {
                     </motion.section>
                 }
             </motion.section>
-
-            {/* <Table /> */}
         </main>
     );
 }
