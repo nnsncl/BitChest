@@ -42,7 +42,7 @@ const item = {
         },
     }
 }
-export default function Navigation() {
+export const Navigation = () => {
     return (
         <motion.nav
             initial="hidden"

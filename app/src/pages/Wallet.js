@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
-import Navigation from '../components/Navigation';
+import { coingeckoEndpoints } from '../constants/api-endpoints';
+
+import { Navigation } from '../components/Navigation';
 import { ButtonGhost } from '../components/Button';
 import { GraphUp, GraphDown } from '../components/Icons';
 // import Table from '../components/Table/Table';
@@ -39,10 +41,23 @@ export default function Wallet() {
     const [topCoins, setTopCoins] = useState([]);
 
     useEffect(() => {
-        axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false')
-            .then(function (response) {
-                setTopCoins(response.data);
-            })
+        axios
+            .all([
+                coingeckoEndpoints.GET_BTC_SET,
+                coingeckoEndpoints.GET_ETH_SET,
+                coingeckoEndpoints.GET_XRP_SET,
+                coingeckoEndpoints.GET_BCH_SET,
+                coingeckoEndpoints.GET_ADA_SET,
+                coingeckoEndpoints.GET_LTC_SET,
+                coingeckoEndpoints.GET_XEM_SET,
+                coingeckoEndpoints.GET_XLM_SET,
+                coingeckoEndpoints.GET_MIOTA_SET,
+                coingeckoEndpoints.GET_DASH_SET
+            ])
+            .then(
+                axios.spread((...responses) => {
+                    setTopCoins(responses)
+                }))
             .catch(function (error) {
                 console.error(error.message);
             })
@@ -50,6 +65,7 @@ export default function Wallet() {
 
     return (
         <main className='text-white md:flex md:h-screen h-full p-6' >
+            {console.log(topCoins)}
             <Navigation />
             <motion.section
                 initial='hidden'
@@ -78,23 +94,26 @@ export default function Wallet() {
                             topCoins &&
                             topCoins.map((item) => (
                                 <motion.article
-                                    key={item.id}
+                                    key={item.data[0].id}
                                     variants={article}
                                     exit={article.hidden}
-                                    className="flex items-center gap-3 md:w-56 w-full">
-                                    <span className='text-gray-700 text-xs font-bold'>{item.market_cap_rank}</span>
-                                    <img className='w-10 h-10 bg-transparent rounded-full' src={item.image} alt={`${item.name}-logo`} />
+                                    className="flex items-center gap-3 md:w-64 w-full">
+                                    <span className='text-gray-700 text-xs font-bold'>{item.data[0].market_cap_rank}</span>
+                                    <img className='w-10 h-10 bg-white rounded-full' src={item.data[0].image} alt={`${item.data[0].name}-logo`} />
                                     <div>
-                                        <p className='flex-1 flex items-center justify-between gap-3 text-sm font-bold uppercase' >
-                                            {item.name}&nbsp;/&nbsp;{item.symbol}
+                                        <p className='flex items-center justify-between gap-3 text-xs font-bold uppercase' >
+                                            {item.data[0].name}
+                                            <small className='text-gray-700 text-xs'>
+                                                {item.data[0].symbol}
+                                            </small>
                                             {
-                                                item.price_change_percentage_24h > 0
+                                                item.data[0].price_change_percentage_24h > 0
                                                     ? <GraphUp />
                                                     : <GraphDown />
                                             }
                                         </p>
                                         <small className='text-gray-700 text-xs'>
-                                            {item.current_price}
+                                            {item.data[0].current_price}
                                         </small>
                                     </div>
                                 </motion.article>
