@@ -16,6 +16,7 @@ class AlterUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedInteger("wallet_id")->nullable();
             $table->foreign("wallet_id")->references("id")->on("wallet");
+            $table->boolean("admin");
         });
     }
 
