@@ -16,7 +16,7 @@ const container = {
     },
 }
 
-export default function Explore() {
+export default function Wallet() {
     return (
         <>
             <Navigation />

@@ -59,7 +59,7 @@ export const Navigation = () => {
             className='fixed w-full flex-row text-white bg-filter--blur flex items-center justify-between px-6 py-6' >
             <p className='text-sm md:flex hidden items-center'>Bit<b>Chest</b></p>
             <div className="flex items-center w-full md:justify-end justify-between" >
-                {user.role !== 'admin'
+                {user.role === 'admin'
                     ? <ul className='flex items-center gap-3 md:border-r-2 md:border-gray-800 mr-6 md:pr-6'>
                         <motion.li variants={item}>
                             <ButtonLink active={router.pathname === ROUTES.ADMIN} to={ROUTES.ADMIN}>

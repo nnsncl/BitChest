@@ -1,4 +1,5 @@
 export const HOME = '/'
+export const LOGIN = '/login'
 export const EXPLORE = '/explore'
 export const MARKETPLACE = '/marketplace'
 
