@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TransactionsController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +22,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Public Routes
+Route::get('/transactions', [TransactionsController::class, 'index']);
+Route::get('/transaction/{id}', [TransactionsController::class, 'show']);
+Route::post('/transactions', [TransactionsController::class, 'store']);
+Route::delete('/transaction/{id}', [TransactionsController::class, 'destroy']);
+
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
