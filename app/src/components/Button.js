@@ -34,16 +34,16 @@ export const ButtonGhost = ({ onClick, children }) => {
     );
 }
 
-export const ButtonSecondary = ({ to, children }) => {
+export const ButtonSecondary = ({ to, active, children }) => {
     return (
-        <Link to={to} className="text-sm hover:bg-blue-200 bg-blue-100 text-blue-900 py-2 md:px-6 px-3 rounded-full font-bold flex gap-3 transition duration-300 ease-in-out outline-none" >
+        <Link to={to} className={`${active ? 'bg-blue-200' : 'bg-blue-100'} text-sm hover:bg-blue-200 text-blue-900 py-2 md:px-6 px-3 rounded-full font-bold flex gap-3 transition duration-300 ease-in-out outline-none`} >
             {children}
         </Link>
     );
 }
-export const ButtonTertiary = ({ to, children }) => {
+export const ButtonTertiary = ({ to, active, children }) => {
     return (
-        <Link to={to} className="text-sm hover:bg-gray-800 border-2 border-gray-800 py-2 md:px-6 px-3 rounded-full font-bold flex gap-3 transition duration-300 ease-in-out outline-none" >
+        <Link to={to} className={`${active ? 'bg-gray-800' : 'bg-transparent'} text-sm hover:bg-gray-800 border-2 border-gray-800 py-2 md:px-6 px-3 rounded-full font-bold flex gap-3 transition duration-300 ease-in-out outline-none`} >
             {children}
         </Link>
     );

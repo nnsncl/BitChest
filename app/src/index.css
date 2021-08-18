@@ -25,3 +25,11 @@
       backdrop-filter: blur(23px);
     }
 }
+
+.side-hero-section {
+    background-size: cover;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: rgba(255, 255, 255, 0.6);
+}

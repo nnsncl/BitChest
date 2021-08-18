@@ -49,7 +49,7 @@ export default function Explore() {
                     <div className='flex items-start gap-6 mt-20' >
                         <div>
                             <h1 className='text-3xl font-bold mb-2'>
-                                <span className='gradient-text' >Today's</span> most profitable Coins
+                                <span className='gradient-text' >Today's</span> most profitable<br /><span className='gradient-text' >cryptocurrencies</span>
                             </h1>
                             <p className='text-gray-700' >The most profitable cryptocurrencies</p>
                         </div>
