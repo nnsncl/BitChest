@@ -71,7 +71,7 @@ function useAuthProvider() {
     };
 
     const getAuthUser = () => {
-        if (!user) {
+        if (!user && getSessionTokenCookie) {
             axios({
                 method: "GET",
                 url: `${baseUrl}/api/user/${user && user.id ? user.id : getUserIDCookie}`,
@@ -85,7 +85,6 @@ function useAuthProvider() {
             })
                 .then((response) => {
                     setUser(response.data);
-                    console.log(response.data)
                     return {
                         user: response.data.user
                     };
