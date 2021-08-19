@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from "react-router-dom";
 import { motion } from 'framer-motion';
 
+import { Link } from "react-router-dom";
 import * as ROUTES from '../../constants/routes';
 
-// import { Navigation } from '../components/Navigation';
+import { useAuth } from '../../hooks/use-auth';
 
 
 const container = {
@@ -18,10 +18,11 @@ const container = {
     hidden: {
         opacity: 0
     },
-}
+};
 
 export default function Login() {
-
+    const auth = useAuth();
+    console.log(auth.user, auth.token)
     return (
         <>
             <main className='text-white flex relative gap-36' >
@@ -33,9 +34,12 @@ export default function Login() {
                     animate='visible'
                     variants={container}
                     className='flex flex-col justify-center w-ful px-6 py-9 h-screen justify-center'>
-                    <Link className='mb-6 text-sm font-bold' to={ROUTES.HOME} >&larr;&nbsp;Go back</Link>
+                    <Link className='mb-6 text-sm font-bold' to={ROUTES.EXPLORE} >&larr;&nbsp;Go back</Link>
                     <h1 className='text-3xl font-bold mb-12'>Log in to access your<br /><span className='gradient-text' >cryptocurrencies portfolio</span></h1>
-                    <form>
+                    <form onSubmit={(event) => {
+                        event.preventDefault();
+                        auth.login();
+                    }} >
                         <fieldset className='border-0 flex flex-col mb-6' >
                             <label className='text-xs font-bold mb-2' >Email</label>
                             <input

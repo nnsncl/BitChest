@@ -3,17 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { CoinsProvider } from './hooks/use-currencies';
-
-
-import { UserProvider } from "./hooks/use-user";
+import { AuthProvider } from "./hooks/use-auth";
 
 ReactDOM.render(
   <React.StrictMode>
-    <CoinsProvider>
-      <UserProvider>
+    <AuthProvider>
+      <CoinsProvider>
         <App />
-      </UserProvider>
-    </CoinsProvider>
+      </CoinsProvider>
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
