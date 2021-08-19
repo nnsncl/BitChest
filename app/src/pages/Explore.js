@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
 
 import { CoinsContext } from '../hooks/use-currencies';
+import { useAuth } from '../hooks/use-auth';
 
 import { Navigation } from '../components/Navigation';
 import { ButtonGhost } from '../components/Button';
@@ -36,6 +37,9 @@ const article = {
 export default function Explore() {
     const [topCoinsVisible, setTopCoinsVisible] = useState(true);
     const { coins } = useContext(CoinsContext);
+    const auth = useAuth();
+
+    console.log(auth)
 
     return (
         <>
