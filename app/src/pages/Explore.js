@@ -7,6 +7,9 @@ import { useAuth } from '../hooks/use-auth';
 import { Navigation } from '../components/Navigation';
 import { ButtonGhost } from '../components/Button';
 import { GraphUp, GraphDown } from '../components/Icons';
+import { Loader } from '../components/Loader';
+
+import { getSessionTokenCookie } from "../constants/session-storage-endpoints";
 
 const container = {
     visible: {
@@ -38,7 +41,11 @@ export default function Explore() {
     const [topCoinsVisible, setTopCoinsVisible] = useState(true);
     const { coins } = useContext(CoinsContext);
     const auth = useAuth();
-
+    
+    if ((getSessionTokenCookie && !auth.user) || coins.length === 0) {
+        auth.getAuthUser();
+        return <Loader />;
+    }
     return (
         <>
             <Navigation />
@@ -59,7 +66,7 @@ export default function Explore() {
                             <b>:</b>
                         </ButtonGhost>
                     </div>
-                    { topCoinsVisible
+                    {topCoinsVisible
                         && <motion.section
                             initial='hidden'
                             animate='visible'
