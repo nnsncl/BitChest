@@ -39,8 +39,6 @@ export default function Explore() {
     const { coins } = useContext(CoinsContext);
     const auth = useAuth();
 
-    console.log(auth)
-
     return (
         <>
             <Navigation />

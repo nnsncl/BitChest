@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 import { Link } from "react-router-dom";
 import * as ROUTES from '../../constants/routes';
 
 import { useAuth } from '../../hooks/use-auth';
+import { useRouter } from '../../hooks/use-router';
 
 
 const container = {
@@ -22,6 +23,12 @@ const container = {
 
 export default function Login() {
     const auth = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        auth.user && router.push(ROUTES.EXPLORE);
+    }, [auth])
+
     console.log(auth.user, auth.token)
     return (
         <>

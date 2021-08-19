@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -49,7 +49,11 @@ export const Navigation = () => {
     const auth = useAuth();
     const router = useRouter();
     const size = useWindowSize();
- 
+
+    useEffect(() => {
+        auth.getAuthUser();
+    }, [auth])
+
     return (
         <motion.nav
             initial="hidden"
@@ -97,7 +101,7 @@ export const Navigation = () => {
                                 <Wallet />
                             </Link>
                             : auth.user
-                                ? <ButtonTertiary active={router.pathname === ROUTES.USER_WALLET} to={ROUTES.USER_WALLET} >{auth.user.balance}€</ButtonTertiary>
+                                ? <ButtonTertiary active={router.pathname === ROUTES.USER_WALLET} to={auth.user ? ROUTES.USER_WALLET : ROUTES.LOGIN} >{auth.user.balance}€</ButtonTertiary>
                                 : <ButtonTertiary to={ROUTES.LOGIN} >Log in</ButtonTertiary>
                         }
                     </motion.li>

@@ -1,9 +1,5 @@
-import React, { useState, useContext, createContext,  } from "react";
-import { useHistory } from 'react-router-dom';
+import React, { useState, useContext, createContext, } from "react";
 import axios from "axios";
-
-import * as ROUTES from '../constants/routes';
-
 
 const authContext = createContext();
 export function AuthProvider({ children }) {
@@ -21,7 +17,6 @@ export const useAuth = () => {
 };
 
 function useAuthProvider() {
-    const history  = useHistory();
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
 
@@ -50,6 +45,8 @@ function useAuthProvider() {
                     .then(function (response) {
                         setUser(response.data.user);
                         setToken(response.data.token);
+                        sessionStorage.setItem('SESSION_TOKEN', response.data.token);
+                        sessionStorage.setItem('USER_ID', response.data.user.id);
                         return {
                             user: response.data.user,
                             token: response.data.token
@@ -60,9 +57,40 @@ function useAuthProvider() {
                     });
             });
     };
+
+    const getAuthUser = () => {
+        if (user) {
+            axios({
+                method: "GET",
+                url: `${baseUrl}/api/user/${user.id}`,
+                withCredentials: true,
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "true",
+                    "Authorization": `Bearer ${token}`
+                },
+                data: {
+                    email: "user75@mail.com",
+                    password: "foo",
+                },
+            })
+                .then(function (response) {
+                    setUser(response.data);
+                    // setToken(response.data.token);
+                    // return {
+                    //     user: response.data.user,
+                    //     token: response.data.token
+                    // };
+                })
+                .catch(function (error) {
+                    console.log(error.message);
+                });
+        }
+    }
     return {
         user,
-        token,
         login,
+        getAuthUser,
     };
 }
