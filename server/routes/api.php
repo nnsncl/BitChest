@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TransactionsController;
-
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +34,10 @@ Route::post('/register', [AuthController::class, 'register']);
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/users', [UsersController::class, 'index']);
+    Route::get('user/{id}', [UsersController::class, 'show']);
+    Route::post('user', [UsersController::class, 'store']);
+    Route::put('user/{id}', [UsersController::class, 'update']);
+    Route::delete('user/{id}', [UsersController::class, 'destroy']);
 });
