@@ -9,6 +9,7 @@ import { useWindowSize } from '../hooks/use-window-size';
 import { useAuth } from '../hooks/use-auth';
 
 import { MEDIA_QUERIES_BREAKPOINTS } from '../constants/media-breakpoints';
+import { getSessionTokenCookie, getUserIDCookie } from "../constants/session-storage-endpoints";
 
 import { ButtonLink, ButtonSecondary, ButtonTertiary } from './Button';
 import { Wallet, Market, SecureSpace } from './Icons';
@@ -51,8 +52,12 @@ export const Navigation = () => {
     const size = useWindowSize();
 
     useEffect(() => {
-        auth.getAuthUser();
+        if (getUserIDCookie && getSessionTokenCookie) {
+            auth.getAuthUser();
+        }
+        return;
     }, [auth])
+
 
     return (
         <motion.nav
@@ -61,6 +66,11 @@ export const Navigation = () => {
             variants={list}
             className='fixed w-full flex-row text-white bg-filter--blur flex items-center justify-between px-6 py-6' >
             <p className='text-sm md:flex hidden items-center'>Bit<b>Chest</b></p>
+
+            {
+                auth.user && <button onClick={() => auth.logout()} className='ml-3'>logout</button>
+            }
+           
             <div className="flex items-center w-full md:justify-end justify-between" >
                 {auth.user && auth.user.elevation === 'admin'
                     ? <ul className='flex items-center gap-3 md:border-r-2 md:border-gray-800 mr-6 md:pr-6'>
