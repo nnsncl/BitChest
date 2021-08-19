@@ -27,7 +27,7 @@ Route::get('/transaction/{id}', [TransactionsController::class, 'show']);
 Route::post('/transactions', [TransactionsController::class, 'store']);
 Route::delete('/transaction/{id}', [TransactionsController::class, 'destroy']);
 
-
+// Auth routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
