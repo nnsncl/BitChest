@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -9,9 +9,10 @@ import { useWindowSize } from '../hooks/use-window-size';
 import { useAuth } from '../hooks/use-auth';
 
 import { MEDIA_QUERIES_BREAKPOINTS } from '../constants/media-breakpoints';
+import { getSessionTokenCookie, getUserIDCookie } from "../constants/session-storage-endpoints";
 
 import { ButtonLink, ButtonSecondary, ButtonTertiary } from './Button';
-import { Wallet, Market, SecureSpace } from './Icons';
+import { Wallet, Market, SecureSpace, Signout, Processing } from './Icons';
 
 
 const list = {
@@ -49,7 +50,22 @@ export const Navigation = () => {
     const auth = useAuth();
     const router = useRouter();
     const size = useWindowSize();
- 
+
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [isLogoutPending, setIsLogoutPending] = useState(false);
+
+    useEffect(() => {
+        if (getUserIDCookie && getSessionTokenCookie) {
+            auth.getAuthUser();
+        }
+        return;
+    }, [auth])
+
+    const handleLogout = () => {
+        setIsLogoutPending(!isLogoutPending);
+        auth.logout();
+    }
+
     return (
         <motion.nav
             initial="hidden"
@@ -82,7 +98,7 @@ export const Navigation = () => {
                         : null
                     }
                 </ul>
-                <ul className='flex items-center md:gap-3 gap-6'>
+                <ul className='flex items-center justify-center md:gap-3 gap-6'>
                     <motion.li variants={item} >
                         {size.width < MEDIA_QUERIES_BREAKPOINTS.md
                             ? <Link to={ROUTES.MARKETPLACE} >
@@ -93,14 +109,42 @@ export const Navigation = () => {
                     </motion.li>
                     <motion.li variants={item}>
                         {size.width < MEDIA_QUERIES_BREAKPOINTS.md
-                            ? <Link to={ROUTES.USER_WALLET} >
+                            ? <Link to={auth.user ? ROUTES.USER_WALLET : ROUTES.LOGIN} >
                                 <Wallet />
                             </Link>
                             : auth.user
-                                ? <ButtonTertiary active={router.pathname === ROUTES.USER_WALLET} to={ROUTES.USER_WALLET} >{auth.user.balance}€</ButtonTertiary>
+                                ? <ButtonTertiary active={router.pathname === ROUTES.USER_WALLET} to={auth.user ? ROUTES.USER_WALLET : ROUTES.LOGIN} >{auth.user.balance}€</ButtonTertiary>
                                 : <ButtonTertiary to={ROUTES.LOGIN} >Log in</ButtonTertiary>
                         }
                     </motion.li>
+                    {auth.user &&
+                        <motion.li variants={item} className='flex flex-col items-center' >
+                            <button
+                                onMouseEnter={() => setIsDropdownVisible(true)}
+                                onClick={() => setIsDropdownVisible(!isDropdownVisible)}
+                                className='flex flex items-center gap-1 text-gray-700 hover:text-white  transition duration-300 ease-in-out relative'>
+                                <div className='w-10 h-10 bg-transparent rounded-full border-2 border-gray-800 overflow-hidden' >
+                                    <img className='w-full h-full' src='/132.jpg' alt='' />
+                                </div>
+                                <small className={`text-base origin-center transform transition ${isDropdownVisible ? '-rotate-90 text-white' : 'rotate-90'} duration-300 ease-in-out`} >&#x2023;</small>
+                            </button>
+                            {isDropdownVisible &&
+                                <motion.div onMouseLeave={() => setIsDropdownVisible(false)} className='rounded-lg flex flex-col w-52 p-4 gap-2 bg-filter--blur border-2 border-gray-800 absolute -bottom-48 right-6' >
+                                    <p className='text-sm text-gray-700 mb-3 pb-3 border-b-2 border-gray-800' >Change profile</p>
+                                    <p className='text-sm text-gray-700' >Account</p>
+                                    <p className='text-sm text-gray-700 mb-3 pb-3 border-b-2 border-gray-800' >Help center</p>
+                                    <button onClick={() => handleLogout()} className='w-full flex justify-between items-center text-sm text-white transition duration-300 ease-in-out '>
+                                        <span>Sign out of Bit<b>Chest</b></span>
+                                        {
+                                            isLogoutPending
+                                                ? <Processing />
+                                                : <Signout />
+                                        }
+                                    </button>
+                                </motion.div>
+                            }
+                        </motion.li>
+                    }
                 </ul>
             </div>
         </motion.nav>
