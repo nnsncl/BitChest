@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Explore from './pages/Explore';
 import Wallet from './pages/Wallet';
 import Marketplace from './pages/Marketplace';
 import Activity from './pages/Activity';
-import GetUsers from './pages/Admin/GetUsers';
 import Login from './pages/Auth/Login';
 
 import * as ROUTES from './routes/routes'
