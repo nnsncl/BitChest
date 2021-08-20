@@ -46,6 +46,7 @@ export default function Explore() {
         auth.getAuthUser();
         return <Loader />;
     }
+
     return (
         <>
             <main className='text-white md:h-screen max-w-screen-2xl flex flex-col mx-auto' >
