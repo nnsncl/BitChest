@@ -91,7 +91,7 @@ export const Navigation = () => {
                                             onClick={() => setIsDropdownVisible(!isDropdownVisible)}
                                             className={`flex flex items-center gap-1 text-gray-700 hover:text-white ${isDropdownVisible && 'text-white'} transition  ease-in-out relative`}>
                                             <div className='sm:w-10 w-8 sm:h-10 h-8 rounded-lg bg-transparent border-2 border-gray-800 overflow-hidden' >
-                                                <img className='w-full h-full' src='/avatar.jpg' alt='' />
+                                                <img className='w-full h-full' src={auth.user.elevation === 'admin' ? '/avatar_admin.jpg' : '/avatar.jpg'} alt='' />
                                             </div>
                                             <small className={`sm:inline-block hidden text-base origin-center transform transition ${isDropdownVisible ? '-rotate-90 text-white' : 'rotate-90'} ease-in-out`} >
                                                 &#x2023;
@@ -105,7 +105,7 @@ export const Navigation = () => {
                                                 className='rounded-lg flex flex-col w-52 p-4 gap-2 bg-gray-900 border-2 border-gray-800 absolute -bottom-60 right-6' >
                                                 <div className='flex items-center gap-3 mb-3 pb-3 border-b-2 border-gray-800' >
                                                     <div className='w-10 h-10 rounded-lg bg-transparent rounded-lg border-2 border-gray-800 overflow-hidden' >
-                                                        <img className='w-full h-full' src='/avatar.jpg' alt='' />
+                                                        <img className='w-full h-full' src={auth.user.elevation === 'admin' ? '/avatar_admin.jpg' : '/avatar.jpg'} alt='' />
                                                     </div>
                                                     <div>
                                                         <p className='text-xs font-bold capitalize' >{auth?.user?.name}</p>
