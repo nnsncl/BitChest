@@ -43,10 +43,7 @@ export const Navigation = () => {
     const [isLogoutPending, setIsLogoutPending] = useState(false);
 
     useEffect(() => {
-        if (!auth.user && getSessionTokenCookie) {
-            auth.getAuthUser();
-        }
-        return;
+        auth.getAuthUser();
     }, [auth])
 
     const handleLogout = () => {

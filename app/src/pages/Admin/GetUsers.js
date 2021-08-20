@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Navigation } from "../../components/Navigation";
 import { Loader } from "../../components/Loader";
@@ -13,9 +13,11 @@ import { column_titles, userCryptoData } from "../../constants/tableHeads";
 export default function GetUsers() {
     const auth = useAuth();
 
+    useEffect(() => {
+        auth.getAuthUser();
+    }, [auth])
 
     if (getSessionTokenCookie && !auth.user) {
-        auth.getAuthUser();
         return <Loader />;
     }
 

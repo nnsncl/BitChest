@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
 
 import { CoinsContext } from '../hooks/use-currencies';
@@ -42,8 +42,11 @@ export default function Explore() {
     const { coins } = useContext(CoinsContext);
     const auth = useAuth();
     
-    if ((getSessionTokenCookie && !auth.user) || coins.length === 0) {
+    useEffect(() => {
         auth.getAuthUser();
+    }, [auth])
+
+    if ((getSessionTokenCookie && !auth.user) || coins.length === 0) {
         return <Loader />;
     }
 

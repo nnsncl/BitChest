@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 import { useAuth } from '../hooks/use-auth';
@@ -23,8 +23,11 @@ const container = {
 export default function Marketplace() {
     const auth = useAuth();
 
-    if ((getSessionTokenCookie && !auth.user)) {
+    useEffect(() => {
         auth.getAuthUser();
+    }, [auth])
+
+    if ((getSessionTokenCookie && !auth.user)) {
         return <Loader />;
     }
 

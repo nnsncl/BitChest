@@ -71,26 +71,28 @@ function useAuthProvider() {
     };
 
     const getAuthUser = () => {
-        axios({
-            method: "GET",
-            url: `${baseUrl}/api/user/${user?.id ? user?.id : getUserIDCookie}`,
-            withCredentials: true,
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "true",
-                "Authorization": `Bearer ${token ? token : getSessionTokenCookie}`
-            }
-        })
-            .then((response) => {
-                setUser(response.data);
-                return {
-                    user: response.data.user
-                };
+        if (!user && getSessionTokenCookie) {
+            axios({
+                method: "GET",
+                url: `${baseUrl}/api/user/${user && user.id ? user.id : getUserIDCookie}`,
+                withCredentials: true,
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "true",
+                    "Authorization": `Bearer ${token ? token : getSessionTokenCookie}`
+                }
             })
-            .catch((error) => {
-                console.log(error.message);
-            });
+                .then((response) => {
+                    setUser(response.data);
+                    return {
+                        user: response.data.user
+                    };
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+        };
     };
 
     const logout = () => {
