@@ -7,7 +7,7 @@ import * as ROUTES from '../constants/routes';
 import { useRouter } from '../hooks/use-router';
 import { useAuth } from '../hooks/use-auth';
 
-import { getSessionTokenCookie, getUserIDCookie } from "../constants/session-storage-endpoints";
+import { getSessionTokenCookie } from "../constants/session-storage-endpoints";
 
 import { ButtonLink, ButtonTertiary } from './Button';
 import { Diamond, Signout, Processing } from './Icons';
@@ -43,7 +43,7 @@ export const Navigation = () => {
     const [isLogoutPending, setIsLogoutPending] = useState(false);
 
     useEffect(() => {
-        if (getUserIDCookie && getSessionTokenCookie) {
+        if (!auth.user && getSessionTokenCookie) {
             auth.getAuthUser();
         }
         return;
