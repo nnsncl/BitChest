@@ -63,8 +63,9 @@ class UsersController extends Controller
         $user = User::find($id);
 
         $request->validate([
+            "name" => "required",
+            "email" => "required",
             "elevation" => "required",
-            "balance" => "required"
         ]);
 
         $user->update($request->all());
