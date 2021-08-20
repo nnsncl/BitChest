@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-function App() {
+import Explore from './pages/Explore';
+import Wallet from './pages/Wallet';
+import Marketplace from './pages/Marketplace';
+import Activity from './pages/Activity';
+import Login from './pages/Auth/Login';
+
+import * as ROUTES from './routes/routes'
+import { ProtectedRoute } from './routes/protected-routes';
+
+import { useAuth } from './hooks/use-auth';
+import { getSessionTokenCookie } from './constants/session-storage-endpoints';
+
+export default function App() {
+  const auth =  useAuth();
+  const isAuthenticated = (!auth.user && getSessionTokenCookie) || auth.user;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <Router>
+      <Switch>
+        {/* <ProtectedRoute exact path={ROUTES.ADMIN_GET_USERS}>
+          <GetUsers />
+        </ProtectedRoute> */}
 
-export default App;
+        <ProtectedRoute exact auth={isAuthenticated && (auth.user && auth.user.elevation === 'admin')} path={ROUTES.ADMIN}>
+          Admin
+        </ProtectedRoute>
+        <ProtectedRoute auth={isAuthenticated} exact path={ROUTES.USER_ACTIVITY}>
+          <Activity />
+        </ProtectedRoute>
+        <ProtectedRoute auth={isAuthenticated} exact path={ROUTES.USER_WALLET}>
+          <Wallet />
+        </ProtectedRoute>
+
+
+        {/* Public routes */}
+        <Route exact path={ROUTES.LOGIN}>
+          <Login />
+        </Route>
+        <Route exact path={ROUTES.EXPLORE}>
+          <Explore />
+        </Route>
+        <Route exact path={ROUTES.MARKETPLACE}>
+          <Marketplace />
+        </Route>
+        <Route exact path={ROUTES.HOME}>
+          Home
+        </Route>
+      </Switch>
+    </Router>
+  );
+};
