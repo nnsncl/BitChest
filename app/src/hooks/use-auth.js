@@ -7,6 +7,7 @@ import {
     getSessionTokenCookie,
     getUserIDCookie
 } from "../constants/session-storage-endpoints";
+import { baseApiUrl } from '../constants/api-endpoints';
 
 
 const authContext = createContext();
@@ -28,17 +29,16 @@ function useAuthProvider() {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
 
-    const baseUrl = "http://localhost:8000";
     const login = (email, password) => {
         axios
-            .get(`${baseUrl}/sanctum/csrf-cookie`, {
+            .get(`${baseApiUrl}/sanctum/csrf-cookie`, {
                 method: "GET",
                 withCredentials: true,
             })
             .then(() => {
                 axios({
                     method: "POST",
-                    url: `${baseUrl}/api/login`,
+                    url: `${baseApiUrl}/api/login`,
                     withCredentials: true,
                     headers: {
                         Accept: "application/json",
@@ -74,7 +74,7 @@ function useAuthProvider() {
         if (!user && getSessionTokenCookie) {
             axios({
                 method: "GET",
-                url: `${baseUrl}/api/user/${user && user.id ? user.id : getUserIDCookie}`,
+                url: `${baseApiUrl}/api/user/${user && user.id ? user.id : getUserIDCookie}`,
                 withCredentials: true,
                 headers: {
                     "Accept": "application/json",
@@ -98,7 +98,7 @@ function useAuthProvider() {
     const logout = () => {
         axios({
             method: "POST",
-            url: `${baseUrl}/api/logout`,
+            url: `${baseApiUrl}/api/logout`,
             withCredentials: true,
             headers: {
                 "Accept": "application/json",
@@ -108,12 +108,12 @@ function useAuthProvider() {
             }
         })
             .then(() => {
-                setUser(null);
-                setToken(null);
                 sessionStorage.clear();
             })
             .then(() => {
-                document.location.reload();
+                setUser(null);
+                setToken(null);
+                window.location.reload();
             })
             .catch((error) => {
                 console.log(error.message);

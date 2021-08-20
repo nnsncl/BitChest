@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
 
 import { CoinsContext } from '../hooks/use-currencies';
@@ -42,20 +42,24 @@ export default function Explore() {
     const { coins } = useContext(CoinsContext);
     const auth = useAuth();
     
-    if ((getSessionTokenCookie && !auth.user) || coins.length === 0) {
+    useEffect(() => {
         auth.getAuthUser();
+    }, [auth])
+
+    if ((getSessionTokenCookie && !auth.user) || coins.length === 0) {
         return <Loader />;
     }
+
     return (
         <>
-            <Navigation />
             <main className='text-white md:h-screen max-w-screen-2xl flex flex-col mx-auto' >
+            <Navigation />
                 <motion.section
                     initial='hidden'
                     animate='visible'
                     variants={container}
                     className='flex justify-center flex-col md:py-10 py-9 w-full px-6'>
-                    <div className='flex items-start gap-6 mt-20' >
+                    <div className='flex items-start gap-6 mt-6' >
                         <div>
                             <h1 className='text-3xl font-bold mb-2'>
                                 <span className='gradient-text' >Today's</span> most profitable<br /><span className='gradient-text' >cryptocurrencies</span>

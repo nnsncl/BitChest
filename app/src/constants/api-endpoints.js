@@ -12,3 +12,5 @@ export const coingeckoEndpoints = {
     GET_MIOTA_SET: axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=iota&order=market_cap_desc&per_page=10&page=1&sparkline=false'),
     GET_DASH_SET: axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=dash&order=market_cap_desc&per_page=10&page=1&sparkline=false'),
 };
+
+export const baseApiUrl = 'http://localhost:8000';

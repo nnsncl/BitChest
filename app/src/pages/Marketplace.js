@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
+import { useAuth } from '../hooks/use-auth';
+import { getSessionTokenCookie } from '../constants/session-storage-endpoints';
+
 import { Navigation } from '../components/Navigation';
+import { Loader } from '../components/Loader';
 
 const container = {
     visible: {
@@ -17,6 +21,16 @@ const container = {
 }
 
 export default function Marketplace() {
+    const auth = useAuth();
+
+    useEffect(() => {
+        auth.getAuthUser();
+    }, [auth])
+
+    if (getSessionTokenCookie && !auth.user) {
+        return <Loader />;
+    }
+
     return (
         <>
             <Navigation />
