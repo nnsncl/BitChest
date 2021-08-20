@@ -27,7 +27,7 @@ export default function Marketplace() {
         auth.getAuthUser();
     }, [auth])
 
-    if ((getSessionTokenCookie && !auth.user)) {
+    if (getSessionTokenCookie && !auth.user) {
         return <Loader />;
     }
 

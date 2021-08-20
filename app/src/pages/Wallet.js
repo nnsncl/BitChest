@@ -27,7 +27,7 @@ export default function Wallet() {
         auth.getAuthUser();
     }, [auth])
 
-    if ((getSessionTokenCookie && !auth.user)) {
+    if (getSessionTokenCookie && !auth.user) {
         return <Loader />;
     }
 

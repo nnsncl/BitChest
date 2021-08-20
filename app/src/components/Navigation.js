@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 
-import * as ROUTES from '../constants/routes';
+import * as ROUTES from '../routes/routes';
 
 import { useRouter } from '../hooks/use-router';
 import { useAuth } from '../hooks/use-auth';
-
-import { getSessionTokenCookie } from "../constants/session-storage-endpoints";
 
 import { ButtonLink, ButtonTertiary } from './Button';
 import { Diamond, Signout, Processing } from './Icons';
