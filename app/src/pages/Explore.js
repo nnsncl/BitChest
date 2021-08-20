@@ -48,14 +48,14 @@ export default function Explore() {
     }
     return (
         <>
-            <Navigation />
             <main className='text-white md:h-screen max-w-screen-2xl flex flex-col mx-auto' >
+            <Navigation />
                 <motion.section
                     initial='hidden'
                     animate='visible'
                     variants={container}
                     className='flex justify-center flex-col md:py-10 py-9 w-full px-6'>
-                    <div className='flex items-start gap-6 mt-20' >
+                    <div className='flex items-start gap-6 mt-6' >
                         <div>
                             <h1 className='text-3xl font-bold mb-2'>
                                 <span className='gradient-text' >Today's</span> most profitable<br /><span className='gradient-text' >cryptocurrencies</span>

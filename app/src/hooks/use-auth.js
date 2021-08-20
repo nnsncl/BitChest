@@ -112,9 +112,6 @@ function useAuthProvider() {
                 setToken(null);
                 sessionStorage.clear();
             })
-            .then(() => {
-                document.location.reload();
-            })
             .catch((error) => {
                 console.log(error.message);
             });
