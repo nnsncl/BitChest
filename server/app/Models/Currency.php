@@ -38,4 +38,8 @@ class Currency extends Model
         "total_supply",
         "total_volume"
     ];
+
+    public function transactions() {
+        return $this->belongsTo(Transactions::class);
+    }
 }

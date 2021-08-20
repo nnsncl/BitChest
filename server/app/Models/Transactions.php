@@ -15,4 +15,12 @@ class Transactions extends Model
         "user_id",
         "transaction_amount"
     ];
+
+    public function users() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function currencies() {
+        return $this->hasOne(Currency::class);
+    }
 }
