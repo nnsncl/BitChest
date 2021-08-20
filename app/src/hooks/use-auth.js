@@ -71,28 +71,26 @@ function useAuthProvider() {
     };
 
     const getAuthUser = () => {
-        if (!user && getSessionTokenCookie) {
-            axios({
-                method: "GET",
-                url: `${baseUrl}/api/user/${user && user.id ? user.id : getUserIDCookie}`,
-                withCredentials: true,
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "true",
-                    "Authorization": `Bearer ${token ? token : getSessionTokenCookie}`
-                }
+        axios({
+            method: "GET",
+            url: `${baseUrl}/api/user/${user?.id ? user?.id : getUserIDCookie}`,
+            withCredentials: true,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "true",
+                "Authorization": `Bearer ${token ? token : getSessionTokenCookie}`
+            }
+        })
+            .then((response) => {
+                setUser(response.data);
+                return {
+                    user: response.data.user
+                };
             })
-                .then((response) => {
-                    setUser(response.data);
-                    return {
-                        user: response.data.user
-                    };
-                })
-                .catch((error) => {
-                    console.log(error.message);
-                });
-        };
+            .catch((error) => {
+                console.log(error.message);
+            });
     };
 
     const logout = () => {
@@ -108,9 +106,12 @@ function useAuthProvider() {
             }
         })
             .then(() => {
+                sessionStorage.clear();
+            })
+            .then(() => {
                 setUser(null);
                 setToken(null);
-                sessionStorage.clear();
+                window.location.reload();
             })
             .catch((error) => {
                 console.log(error.message);
