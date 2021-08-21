@@ -19,6 +19,11 @@
     backdrop-filter: saturate(180%) blur(23px);
 }
 
+.bg-gradient--dark {
+    background-image: linear-gradient(to right, rgba(19, 21, 23, 0), rgb(19, 21, 23) 100%);
+}
+
+
 @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
     .bg-filter--blur {
       -webkit-backdrop-filter: blur(23px);
