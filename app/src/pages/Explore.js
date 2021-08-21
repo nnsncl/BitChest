@@ -5,6 +5,7 @@ import { CoinsContext } from '../hooks/use-currencies';
 import { useAuth } from '../hooks/use-auth';
 
 import { Navigation } from '../components/Navigation';
+import { Banner } from '../components/Banner';
 import { ButtonGhost } from '../components/Button';
 import { GraphUp, GraphDown } from '../components/Icons';
 import { Loader } from '../components/Loader';
@@ -51,10 +52,10 @@ export default function Explore() {
     }
 
     console.log(market.status)
-
     return (
         <>
             <main className='text-white md:h-screen max-w-screen-2xl flex flex-col mx-auto' >
+            <Banner />
             <Navigation />
                 <motion.section
                     initial='hidden'
@@ -64,12 +65,19 @@ export default function Explore() {
                     <div className='flex items-start gap-6 mt-6' >
                         <div>
                             <h1 className='text-3xl font-bold mb-2'>
-                                <span className='gradient-text' >Today's</span> most profitable<br /><span className='gradient-text' >cryptocurrencies</span>
+                                <span className='gradient-text' >Today's</span> Cryptocurrency<br />market prices
                             </h1>
                             <p className='text-gray-700' >
-                                The total market cap has <span className='text-white' >increased by</span>&nbsp;
-                                {market.status && <b className='text-green-900 text-sm' >{Math.floor(market.status.market_cap_change_percentage_24h_usd)}%</b>}
-                                &nbsp;over the <span className='text-white' >last day</span>.
+                                The total market cap has&nbsp;
+                                    <span className='text-white' >
+                                        {market.status.data.market_cap_change_percentage_24h_usd >= 0 ? 'increased' : 'decreased'}
+                                    </span>&nbsp;by&nbsp;
+                                {market.status &&
+                                    <b className={`${market.status.data.market_cap_change_percentage_24h_usd >= 0 ? 'text-green-900' : 'text-red-900'} text-sm`} >
+                                        {market.status.data.market_cap_change_percentage_24h_usd.toFixed(2)}%
+                                    </b>
+                                }
+                                &nbsp;over the&nbsp;<span className='text-white'>last day</span>.
                             </p>
                         </div>
                         <ButtonGhost onClick={() => setTopCoinsVisible(!topCoinsVisible)}>

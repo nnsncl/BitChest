@@ -52,7 +52,7 @@ export const Navigation = () => {
     return (
         <>
             <nav className='w-full bg-filter--blur z-10' >
-                <div className='w-full flex-row flex items-center justify-between px-6 py-6 text-white' >
+                <div className='w-full flex-row flex items-center justify-between px-6 pt-2 pb-6 text-white' >
                     <div className='flex items-center gap-4' >
                         <p className='text-sm sm:inline-block hidden'>Bit<b>Chest</b></p>
                         <ul className='flex items-center gap-4 pl-0 sm:gap-6 sm:pl-6 sm:border-l-2 sm:border-gray-800'>
