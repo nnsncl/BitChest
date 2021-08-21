@@ -40,18 +40,27 @@ export const CoinsProvider = ({ children }) => {
 
 function useCoinsProvider() {
     const [status, setStatus] = useState({});
+    const [exchangesList, setExchangesList] = useState([]);
+
 
     useEffect(() => {
-        coingeckoEndpoints.GET_MARKET_STATUS
-            .then((response) => {
-                setStatus(response.data.data)
+        axios
+            .all([
+                coingeckoEndpoints.GET_MARKET_STATUS,
+                coingeckoEndpoints.GET_EXCHANGES_LIST,
+            ])
+            .then(
+                axios.spread((...responses) => {
+                    setStatus(responses[0].data)
+                    setExchangesList(responses[1].data)
+                }))
+            .catch(function (error) {
+                console.error(error.message);
             })
-            .catch((error) => {
-                console.log(error.message);
-            });
     }, [])
 
     return {
-        status
+        status,
+        exchangesList
     }
 }
