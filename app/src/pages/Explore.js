@@ -39,7 +39,7 @@ const article = {
 
 export default function Explore() {
     const [topCoinsVisible, setTopCoinsVisible] = useState(true);
-    const { coins } = useContext(CoinsContext);
+    const { coins, market } = useContext(CoinsContext);
     const auth = useAuth();
     
     useEffect(() => {
@@ -49,6 +49,8 @@ export default function Explore() {
     if ((getSessionTokenCookie && !auth.user) || coins.length === 0) {
         return <Loader />;
     }
+
+    console.log(market.status)
 
     return (
         <>
@@ -64,7 +66,11 @@ export default function Explore() {
                             <h1 className='text-3xl font-bold mb-2'>
                                 <span className='gradient-text' >Today's</span> most profitable<br /><span className='gradient-text' >cryptocurrencies</span>
                             </h1>
-                            <p className='text-gray-700' >The most profitable cryptocurrencies</p>
+                            <p className='text-gray-700' >
+                                The total market cap has <span className='text-white' >increased by</span>&nbsp;
+                                {market.status && <b className='text-green-900 text-sm' >{Math.floor(market.status.market_cap_change_percentage_24h_usd)}%</b>}
+                                &nbsp;over the <span className='text-white' >last day</span>.
+                            </p>
                         </div>
                         <ButtonGhost onClick={() => setTopCoinsVisible(!topCoinsVisible)}>
                             <b>:</b>
