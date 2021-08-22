@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 
 import { useAuth } from '../hooks/use-auth';
+import { getSessionTokenCookie } from '../constants/session-storage-endpoints';
 
 import { Layout } from '../components/Layout';
 import { Loader } from '../components/Loader';
 
-import { getSessionTokenCookie } from "../constants/session-storage-endpoints";
-
-export default function Activity() {
+export default function Portfolio() {
     const auth = useAuth();
 
     useEffect(() => {
@@ -20,8 +19,8 @@ export default function Activity() {
 
     return (
         <Layout>
-            <h1 className='text-3xl font-bold mb-2'>Your activity summary</h1>
-            <p className='text-gray-700' >Your personnal informations and transations activity summary</p>
+            <h1 className='text-3xl font-bold mb-2'>Your cryptocurrency portfolio</h1>
+            <p className='text-gray-700' >Manage your every coin with ease</p>
         </Layout>
     );
 }

@@ -57,13 +57,8 @@ export const Navigation = () => {
                         <p className='text-sm sm:inline-block hidden'>Bit<b>Chest</b></p>
                         <ul className='flex items-center gap-4 pl-0 sm:gap-6 sm:pl-6 sm:border-l-2 sm:border-gray-800'>
                             <li className="flex items-center" >
-                                <ButtonLink active={router.pathname === ROUTES.EXPLORE} to={ROUTES.EXPLORE}>
-                                    Explore
-                                </ButtonLink>
-                            </li>
-                            <li className="flex items-center"  >
-                                <ButtonLink active={router.pathname === ROUTES.MARKETPLACE} to={ROUTES.MARKETPLACE} >
-                                    Market
+                                <ButtonLink active={router.pathname === ROUTES.MARKETPLACE} to={ROUTES.MARKETPLACE}>
+                                    Marketplace
                                 </ButtonLink>
                             </li>
                             {auth.user &&
@@ -80,11 +75,7 @@ export const Navigation = () => {
                             {auth.user
                                 ? <>
                                     <li className="flex items-center" >
-                                        <Link
-                                            className='flex items-center gap-2 text-sm text-gray-700 hover:text-white transition ease-in-out'
-                                            to={auth.user ? ROUTES.USER_WALLET : ROUTES.LOGIN} >
-                                            <Diamond />
-                                        </Link>
+                                        <ButtonTertiary to={ROUTES.USER_PORTFOLIO} >Portfolio</ButtonTertiary>
                                     </li>
                                     <li className="flex flex-col items-center">
                                         <button
