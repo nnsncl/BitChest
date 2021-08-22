@@ -5,8 +5,9 @@ import { CoinsContext } from '../hooks/use-currencies';
 import { useAuth } from '../hooks/use-auth';
 
 import { Layout } from '../components/Layout';
-import { ButtonGhost } from '../components/Button';
+import { ButtonGhost } from '../components/Buttons';
 import { GraphUp, GraphDown } from '../components/Icons';
+import { Table } from '../components/Table';
 import { Loader } from '../components/Loader';
 
 import { container, article } from '../animations/motion';
@@ -23,11 +24,10 @@ export default function Marketplace() {
         auth.getAuthUser();
     }, [auth])
 
-    if ((getSessionTokenCookie && !auth.user) || coins.length === 0) {
+    if ((getSessionTokenCookie && !auth.user) || coins.length === 0 || !market.status.data) {
         return <Loader />;
     }
 
-    console.log(market.status)
     return (
         <>
             <Layout>
@@ -44,7 +44,7 @@ export default function Marketplace() {
                                 }
                             </span>&nbsp;by&nbsp;
                             {market.status.data &&
-                                <b className={`${market.status.data.market_cap_change_percentage_24h_usd >= 0 ? 'text-green-900' : 'text-red-900'} text-sm`} >
+                                <b className={`${market.status.data.market_cap_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} text-sm`} >
                                     {market.status.data.market_cap_change_percentage_24h_usd.toFixed(2)}%
                                 </b>
                             }
@@ -66,7 +66,6 @@ export default function Marketplace() {
                                 <motion.article
                                     key={item.data[0].id}
                                     variants={article}
-                                    exit={article.hidden}
                                     className="flex items-center gap-3 md:w-48 w-full">
                                     <img className='w-10 h-10 bg-white rounded-full' src={item.data[0].image} alt={`${item.data[0].name}-logo`} />
                                     <span>
@@ -86,6 +85,74 @@ export default function Marketplace() {
                         }
                     </motion.section>
                 }
+
+                <section className='mt-12' >
+                    <Table headings={[
+                        "Name",
+                        "Price",
+                        "Price Change 24h",
+                        "Market Cap",
+                        "Circulating Supply",
+                        "24h %"
+                    ]} >
+                        {coins &&
+                            coins.map((item, key) => (
+                                <motion.tr
+                                    key={key}
+                                    initial='hidden'
+                                    animate='visible'
+                                    variants={container}
+                                    className='flex items-center gap-3 justify-between text-white py-6 px-4 gap-3 border-b-2 border-gray-800 transition hover:bg-gray-800'>
+                                    <motion.td variants={article} className='text-left w-2/12 flex items-start gap-3' >
+                                        <img className='w-8 h-8 bg-white rounded-full' src={item.data[0].image} alt={`${item.data[0].name}-logo`} />
+                                        <p className='flex flex-col text-sm font-bold uppercase' >
+                                            {item.data[0].name}
+                                            <span className='text-gray-700 text-xs'>{item.data[0].symbol}</span>
+                                        </p>
+                                    </motion.td>
+                                    <motion.td variants={article} className='text-left w-2/12' >
+                                        <p className='flex items-center text-sm font-bold uppercase mb-1' >
+                                            {item.data[0].current_price}
+                                        </p>
+                                    </motion.td>
+                                    <motion.td variants={article} className='text-left w-2/12' >
+                                        <p className={`${item.data[0].price_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} text-sm flex gap-1`} >
+                                            {item.data[0].price_change_percentage_24h >= 0
+                                                ? <>
+                                                    <small>&#x25B2;</small>
+                                                    {item.data[0].price_change_percentage_24h.toFixed(2)}%
+                                                </>
+                                                : <>
+                                                    <small>&#x25BC;</small>
+                                                    {item.data[0].price_change_percentage_24h.toFixed(2) * -1}%
+                                                </>
+
+                                            }
+                                        </p>
+                                    </motion.td>
+                                    <motion.td variants={article} className='text-left w-2/12' >
+                                        <p className='flex items-center text-sm font-bold uppercase mb-1' >
+                                            {item.data[0].market_cap}€
+                                        </p>
+                                    </motion.td>
+                                    <motion.td variants={article} className='text-left w-2/12' >
+                                        <p className='flex items-center text-sm font-bold uppercase mb-1' >
+                                            {item.data[0].circulating_supply}&nbsp;<span className='text-gray-700 text-xs'>&nbsp;{item.data[0].symbol}</span>
+                                        </p>
+                                    </motion.td>
+                                    <motion.td variants={article} className='text-left w-2/12  bg-gray-800' >
+                                        <p className='mb-1 text-sm' >
+                                            {item.data[0].price_change_percentage_24h > 0
+                                                ? <GraphUp />
+                                                : <GraphDown />
+                                            }
+                                        </p>
+                                    </motion.td>
+                                </motion.tr>
+                            ))
+                        }
+                    </Table>
+                </section>
             </Layout>
         </>
     );

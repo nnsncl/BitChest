@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 
 import * as ROUTES from '../routes/routes';
@@ -7,31 +6,11 @@ import * as ROUTES from '../routes/routes';
 import { useRouter } from '../hooks/use-router';
 import { useAuth } from '../hooks/use-auth';
 
-import { ButtonLink, ButtonTertiary } from './Button';
-import { Diamond, Signout, Processing } from './Icons';
+import { ButtonLink, ButtonTertiary } from './Buttons';
+import { Signout, Processing } from './Icons';
 
+import { list, item } from '../animations/motion';
 
-const list = {
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.03
-        },
-    },
-    hidden: {
-        opacity: 0
-    },
-}
-
-const item = {
-    visible: {
-        opacity: 1,
-        y: 0,
-    },
-    hidden: {
-        opacity: 0
-    }
-}
 
 export const Navigation = () => {
     const auth = useAuth();
@@ -51,8 +30,8 @@ export const Navigation = () => {
 
     return (
         <>
-            <nav className='w-full bg-filter--blur z-10' >
-                <div className='w-full flex-row flex items-center justify-between px-6 pt-2 pb-6 text-white' >
+            <nav className='w-full bg-filter--blur z-10 pt-2 pb-6' >
+                <div className='w-full flex-row flex items-center justify-between  text-white' >
                     <div className='flex items-center gap-4' >
                         <p className='text-sm sm:inline-block hidden'>Bit<b>Chest</b></p>
                         <ul className='flex items-center gap-4 pl-0 sm:gap-6 sm:pl-6 sm:border-l-2 sm:border-gray-800'>
@@ -81,7 +60,7 @@ export const Navigation = () => {
                                         <button
                                             onClick={() => setIsDropdownVisible(!isDropdownVisible)}
                                             className={`flex flex items-center gap-1 text-gray-700 hover:text-white ${isDropdownVisible && 'text-white'} transition  ease-in-out relative`}>
-                                            <div className='sm:w-10 w-8 sm:h-10 h-8 rounded-lg bg-transparent border-2 border-gray-800 overflow-hidden' >
+                                            <div className='w-10 h-10 rounded-lg bg-transparent border-2 border-gray-800 overflow-hidden' >
                                                 <img className='w-full h-full' src={auth.user.elevation === 'admin' ? '/avatar_admin.jpg' : '/avatar.jpg'} alt='' />
                                             </div>
                                             <small className={`sm:inline-block hidden text-base origin-center transform transition ${isDropdownVisible ? '-rotate-90 text-white' : 'rotate-90'} ease-in-out`} >
