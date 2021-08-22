@@ -14,7 +14,7 @@ export const Layout = ({ children }) => {
 
     return (
         <>
-            <main className='relative text-white max-w-screen-2xl flex flex-col mx-auto sm:px-12 px-4 overflow-hidden' >
+            <main className='relative text-white max-w-screen-2xl flex flex-col mx-auto sm:px-12 px-4' >
                 <Banner />
                 <Navigation />
                 <motion.section
