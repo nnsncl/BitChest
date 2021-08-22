@@ -7,7 +7,7 @@ export const Banner = () => {
 
     return (
         <section className='w-full py-3 px-6 flex items-center justify-between w-100 text-gray-700 overflow-hidden relative' >
-            {market.status && market.exchangesList
+            {market.status.data && market.exchangesList
                 ? <>
                     <div className="sm:hidden absolute h-full w-12 bg-gradient--dark right-0 top-0" />
                     <ul className='flex items-center gap-6' >
