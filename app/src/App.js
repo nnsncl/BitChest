@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import Marketplace from './pages/Marketplace';
 import Portfolio from './pages/Portfolio';
@@ -18,7 +18,6 @@ export default function App() {
   const isAuthenticated = (!auth.user && getSessionTokenCookie) || auth.user;
 
   return (
-    <Router>
       <Switch>
         <ProtectedRoute exact auth={isAuthenticated && (auth.user && auth.user.elevation === 'admin')} path={ROUTES.ADMIN}>
         <Admin />
@@ -41,6 +40,5 @@ export default function App() {
           Home
         </Route>
       </Switch>
-    </Router>
   );
 };
