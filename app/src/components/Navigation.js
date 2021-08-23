@@ -72,7 +72,7 @@ export const Navigation = () => {
                                                 initial="hidden"
                                                 animate="visible"
                                                 variants={list}
-                                                className='rounded-lg flex flex-col w-52 p-4 gap-2 bg-gray-900 border-2 border-gray-800 absolute -bottom-60 right-6' >
+                                                className={`rounded-lg flex flex-col w-52 p-4 gap-2 bg-gray-900 border-2 border-gray-800 absolute ${auth.user.elevation === 'admin' ? '-bottom-60' : '-bottom-52'} right-3`} >
                                                 <div className='flex items-center gap-3 mb-3 pb-3 border-b-2 border-gray-800' >
                                                     <div className='w-10 h-10 rounded-lg bg-transparent rounded-lg border-2 border-gray-800 overflow-hidden' >
                                                         <img className='w-full h-full' src={auth.user.elevation === 'admin' ? '/avatar_admin.jpg' : '/avatar.jpg'} alt='' />
