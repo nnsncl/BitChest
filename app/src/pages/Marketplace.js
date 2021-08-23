@@ -44,7 +44,7 @@ export default function Marketplace() {
                                 }
                             </span>&nbsp;by&nbsp;
                             {market.status.data &&
-                                <b className={`${market.status.data.market_cap_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} text-sm`} >
+                                <b className={`${market.status.data.market_cap_change_percentage_24h_usd >= 0 ? 'text-green-900' : 'text-red-900'} text-sm`} >
                                     {market.status.data.market_cap_change_percentage_24h_usd.toFixed(2)}%
                                 </b>
                             }
@@ -64,17 +64,17 @@ export default function Marketplace() {
                         {coins &&
                             coins.map((item) => (
                                 <motion.article
-                                    key={item.data[0].id}
+                                    key={item.id}
                                     variants={article}
                                     className="flex items-center gap-3 md:w-48 w-full">
-                                    <img className='w-10 h-10 bg-white rounded-full' src={item.data[0].image} alt={`${item.data[0].name}-logo`} />
+                                    <img className='w-10 h-10 bg-white rounded-full' src={item.image} alt={`${item.name}-logo`} />
                                     <span>
                                         <p className='flex items-center text-xs font-bold uppercase mb-1' >
-                                            {item.data[0].name}<span className='text-gray-700 text-xs'>&nbsp;/&nbsp;{item.data[0].symbol}</span>
+                                            {item.name}<span className='text-gray-700 text-xs'>&nbsp;/&nbsp;{item.symbol}</span>
                                         </p>
                                         <small className='text-gray-700 text-xs flex gap-2'>
-                                            {(item.data[0].current_price.toLocaleString(undefined, { maximumFractionDigits: 2 }))}€
-                                            {item.data[0].price_change_percentage_24h > 0
+                                            {(item.current_price.toLocaleString(undefined, { maximumFractionDigits: 2 }))}€
+                                            {item.price_change_percentage_24h > 0
                                                 ? <GraphUp />
                                                 : <GraphDown />
                                             }
@@ -106,57 +106,57 @@ export default function Marketplace() {
                                     variants={container}
                                     className='flex items-center justify-between gap-3 text-white py-6 px-4 gap-6 border-b-2 border-gray-800 transition hover:bg-gray-800'>
                                     <motion.td variants={article} className='w-1/3 flex items-start gap-3' >
-                                        <img className='w-8 h-8 bg-white rounded-full' src={item.data[0].image} alt={`${item.data[0].name}-logo`} />
+                                        <img className='w-8 h-8 bg-white rounded-full' src={item.image} alt={`${item.name}-logo`} />
                                         <p className='flex flex-col text-sm' >
-                                            {item.data[0].name}
-                                            <span className='text-gray-700 text-xs uppercase'>{item.data[0].symbol}</span>
+                                            {item.name}
+                                            <span className='text-gray-700 text-xs uppercase'>{item.symbol}</span>
                                         </p>
                                     </motion.td>
                                     <motion.td variants={article} className='w-1/3 flex items-start' >
-                                        <p className={`${item.data[0].price_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} flex items-center text-sm uppercase`} >
-                                            {item.data[0].price_change_percentage_24h >= 0
+                                        <p className={`${item.price_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} flex items-center text-sm uppercase`} >
+                                            {item.price_change_percentage_24h >= 0
                                                 ? <>
                                                     <small>&#x25B2;</small>&nbsp;
-                                                    {item.data[0].current_price.toLocaleString()}€
+                                                    {item.current_price.toLocaleString()}€
                                                 </>
                                                 : <>
                                                     <small>&#x25BC;</small>&nbsp;
-                                                    {item.data[0].current_price.toLocaleString()}€
+                                                    {item.current_price.toLocaleString()}€
                                                 </>
                                             }
                                         </p>
                                     </motion.td>
                                     <motion.td variants={article} className='w-1/3 flex items-start' >
-                                        <p className={`${item.data[0].price_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} text-sm flex gap-1`} >
-                                            {item.data[0].price_change_percentage_24h >= 0
+                                        <p className={`${item.price_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} text-sm flex gap-1`} >
+                                            {item.price_change_percentage_24h >= 0
                                                 ? <>
                                                     <small>&#x25B2;</small>&nbsp;
-                                                    {item.data[0].price_change_percentage_24h.toFixed(2)}%
+                                                    {item.price_change_percentage_24h.toFixed(2)}%
                                                 </>
                                                 : <>
                                                     <small>&#x25BC;</small>&nbsp;
-                                                    {item.data[0].price_change_percentage_24h.toFixed(2) * -1}%
+                                                    {item.price_change_percentage_24h.toFixed(2) * -1}%
                                                 </>
                                             }
                                         </p>
                                     </motion.td>
                                     <motion.td variants={article} className='w-1/3 flex items-start md:block hidden' >
-                                        <p className={`${item.data[0].price_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} flex items-center text-sm uppercase`} >
-                                        {item.data[0].market_cap_change_percentage_24h >= 0
+                                        <p className={`${item.price_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} flex items-center text-sm uppercase`} >
+                                        {item.market_cap_change_percentage_24h >= 0
                                                 ? <small>&#x25B2;</small>
                                                 :  <small>&#x25BC;</small>
                                             }
-                                            &nbsp;{item.data[0].market_cap.toLocaleString()}€
+                                            &nbsp;{item.market_cap.toLocaleString()}€
                                         </p>
                                     </motion.td>
                                     <motion.td variants={article} className='w-1/3 flex items-start md:block hidden' >
                                         <p className='flex items-center text-sm' >
-                                            {item.data[0].circulating_supply.toLocaleString()}&nbsp;<span className='uppercase text-gray-700 text-xs'>&nbsp;{item.data[0].symbol}</span>
+                                            {item.circulating_supply.toLocaleString()}&nbsp;<span className='uppercase text-gray-700 text-xs'>&nbsp;{item.symbol}</span>
                                         </p>
                                     </motion.td>
                                     <motion.td variants={article} className='w-1/3 flex items-start bg-gray-800 md:block hidden' >
                                         <p className='text-sm' >
-                                            {item.data[0].price_change_percentage_24h > 0
+                                            {item.price_change_percentage_24h > 0
                                                 ? <GraphUp />
                                                 : <GraphDown />
                                             }
