@@ -6,7 +6,7 @@ export const Banner = () => {
     const { market } = useContext(CoinsContext);
 
     return (
-        <section className='w-full py-3 flex items-center justify-between w-100 text-gray-700 overflow-hidden relative' >
+        <section className='w-full py-3 flex items-center justify-between w-100 text-gray-700 overflow-hidden relative overflow-x-auto overflow-y-hidden scrollbar--hidden gap-6' >
             {market.status.data && market.exchangesList
                 ? <>
                     <div className="sm:hidden absolute h-full w-12 bg-gradient--dark right-0 top-0" />
