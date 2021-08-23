@@ -5,7 +5,8 @@ import axios from 'axios';
 export const CoinsContext = createContext([])
 
 export const CoinsProvider = ({ children }) => {
-    const [coins, setCoins] = useState([])
+    const market = useCoinsProvider();
+    const [coins, setCoins] = useState([]);
 
     useEffect(() => {
         axios
@@ -23,7 +24,10 @@ export const CoinsProvider = ({ children }) => {
             ])
             .then(
                 axios.spread((...responses) => {
-                    setCoins(responses)
+                    const newCoinArray = responses.map(item => {
+                        return item.data[0]
+                    });
+                    setCoins(newCoinArray);
                 }))
             .catch(function (error) {
                 console.error(error.message);
@@ -31,8 +35,35 @@ export const CoinsProvider = ({ children }) => {
     }, [])
 
     return (
-        <CoinsContext.Provider value={{ coins }}>
+        <CoinsContext.Provider value={{ coins, market }}>
             {children}
         </CoinsContext.Provider>
     )
+}
+
+function useCoinsProvider() {
+    const [status, setStatus] = useState({});
+    const [exchangesList, setExchangesList] = useState([]);
+
+
+    useEffect(() => {
+        axios
+            .all([
+                coingeckoEndpoints.GET_MARKET_STATUS,
+                coingeckoEndpoints.GET_EXCHANGES_LIST,
+            ])
+            .then(
+                axios.spread((...responses) => {
+                    setStatus(responses[0].data)
+                    setExchangesList(responses[1].data)
+                }))
+            .catch(function (error) {
+                console.error(error.message);
+            })
+    }, [])
+
+    return {
+        status,
+        exchangesList
+    }
 }

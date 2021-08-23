@@ -43,7 +43,7 @@ export const ButtonSecondary = ({ to, active, children }) => {
 }
 export const ButtonTertiary = ({ to, active, children }) => {
     return (
-        <Link to={to} className={`${active ? 'bg-gray-800' : 'bg-transparent'} text-xs hover:bg-gray-800 border-2 border-gray-800 ptext-white py-3 md:px-6 px-3 rounded-lg transition duration-300 ease-in-out outline-none`} >
+        <Link to={to} className={`${active ? 'bg-gray-800' : 'bg-transparent'} text-sm hover:bg-gray-800 border-2 border-gray-800 ptext-white py-3 md:px-6 px-3 rounded-lg transition duration-300 ease-in-out outline-none`} >
             {children}
         </Link>
     );

@@ -30,7 +30,7 @@ export default function Login() {
     const [isLoginPending, setIsLoginPending] = useState(false);
 
     useEffect(() => {
-        auth.user && router.push(ROUTES.EXPLORE);
+        auth.user && router.push(ROUTES.MARKETPLACE);
         //eslint-disable-next-line
     }, [auth])
 
@@ -51,7 +51,7 @@ export default function Login() {
                     animate='visible'
                     variants={container}
                     className='flex flex-col justify-center w-ful px-6 py-9 h-screen justify-center'>
-                    <Link className='mb-6 text-sm font-bold' to={ROUTES.EXPLORE} >&larr;&nbsp;Go back</Link>
+                    <Link className='mb-6 text-sm font-bold' to={ROUTES.MARKETPLACE} >&larr;&nbsp;Go back</Link>
                     <h1 className='text-3xl font-bold mb-12'>Log in to access your<br /><span className='gradient-text' >cryptocurrencies portfolio</span></h1>
                     <form onSubmit={(event) => handleLogin(event)} >
                         <fieldset className='border-0 flex flex-col mb-6' >

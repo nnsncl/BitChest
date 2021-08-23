@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { MARKETPLACE } from '../routes/routes';
 
 export function ProtectedRoute({ auth, children, ...restProps }) {
     return (
@@ -13,7 +14,7 @@ export function ProtectedRoute({ auth, children, ...restProps }) {
                 if (!auth) {
                     return (
                         <Redirect
-                            to={'/explore'}
+                            to={MARKETPLACE}
                         />
                     );
                 }

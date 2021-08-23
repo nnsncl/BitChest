@@ -4,6 +4,14 @@
 @tailwind utilities;
 
 
+.scrollbar--hidden::-webkit-scrollbar {
+    display: none;
+  }
+.scrollbar--hidden{
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
+  }
+
 .gradient-text{
     background: -webkit-linear-gradient(45deg, rgb(46, 105, 255) 0%, rgb(255, 116, 241) 66.6%);
     -webkit-background-clip: text;
@@ -18,6 +26,11 @@
     background: rgba(19,21,23,0.8);
     backdrop-filter: saturate(180%) blur(23px);
 }
+
+.bg-gradient--dark {
+    background-image: linear-gradient(to right, rgba(19, 21, 23, 0), rgb(19, 21, 23) 100%);
+}
+
 
 @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
     .bg-filter--blur {

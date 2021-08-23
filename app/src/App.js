@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import Explore from './pages/Explore';
-import Wallet from './pages/Wallet';
 import Marketplace from './pages/Marketplace';
+import Portfolio from './pages/Portfolio';
 import Activity from './pages/Activity';
 import Login from './pages/Auth/Login';
+import Admin from './pages/Admin/Admin';
 
 import * as ROUTES from './routes/routes'
 import { ProtectedRoute } from './routes/protected-routes';
@@ -20,27 +20,19 @@ export default function App() {
   return (
     <Router>
       <Switch>
-        {/* <ProtectedRoute exact path={ROUTES.ADMIN_GET_USERS}>
-          <GetUsers />
-        </ProtectedRoute> */}
-
         <ProtectedRoute exact auth={isAuthenticated && (auth.user && auth.user.elevation === 'admin')} path={ROUTES.ADMIN}>
-          Admin
+        <Admin />
         </ProtectedRoute>
         <ProtectedRoute auth={isAuthenticated} exact path={ROUTES.USER_ACTIVITY}>
           <Activity />
         </ProtectedRoute>
-        <ProtectedRoute auth={isAuthenticated} exact path={ROUTES.USER_WALLET}>
-          <Wallet />
+        <ProtectedRoute auth={isAuthenticated} exact path={ROUTES.USER_PORTFOLIO}>
+          <Portfolio />
         </ProtectedRoute>
-
 
         {/* Public routes */}
         <Route exact path={ROUTES.LOGIN}>
           <Login />
-        </Route>
-        <Route exact path={ROUTES.EXPLORE}>
-          <Explore />
         </Route>
         <Route exact path={ROUTES.MARKETPLACE}>
           <Marketplace />
