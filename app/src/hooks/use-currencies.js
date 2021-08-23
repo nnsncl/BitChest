@@ -24,7 +24,10 @@ export const CoinsProvider = ({ children }) => {
             ])
             .then(
                 axios.spread((...responses) => {
-                    setCoins(responses)
+                    const newCoinArray = responses.map(item => {
+                        return item.data[0]
+                    });
+                    setCoins(newCoinArray);
                 }))
             .catch(function (error) {
                 console.error(error.message);
