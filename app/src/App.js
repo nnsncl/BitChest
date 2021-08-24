@@ -12,33 +12,55 @@ import { ProtectedRoute } from './routes/protected-routes';
 
 import { useAuth } from './hooks/use-auth';
 import { getSessionTokenCookie } from './constants/session-storage-endpoints';
+import Currency from './pages/Currency';
+
 
 export default function App() {
-  const auth =  useAuth();
+  const auth = useAuth();
   const isAuthenticated = (!auth.user && getSessionTokenCookie) || auth.user;
 
   return (
-      <Switch>
-        <ProtectedRoute exact auth={isAuthenticated && (auth.user && auth.user.elevation === 'admin')} path={ROUTES.ADMIN}>
-        <Admin />
-        </ProtectedRoute>
-        <ProtectedRoute auth={isAuthenticated} exact path={ROUTES.USER_ACTIVITY}>
-          <Activity />
-        </ProtectedRoute>
-        <ProtectedRoute auth={isAuthenticated} exact path={ROUTES.USER_PORTFOLIO}>
-          <Portfolio />
-        </ProtectedRoute>
+    <Switch>
+      <ProtectedRoute
+        exact
+        auth={isAuthenticated && (auth.user && auth.user.elevation === 'admin')}
+        path={ROUTES.ADMIN}
+        component={Admin}
+      />
+      <ProtectedRoute
+        exact
+        auth={isAuthenticated}
+        path={ROUTES.USER_ACTIVITY}
+        component={Activity}
+      />
+      <ProtectedRoute
+        exact
+        auth={isAuthenticated}
+        path={ROUTES.USER_PORTFOLIO}
+        component={Portfolio}
+      />
 
-        {/* Public routes */}
-        <Route exact path={ROUTES.LOGIN}>
-          <Login />
-        </Route>
-        <Route exact path={ROUTES.MARKETPLACE}>
-          <Marketplace />
-        </Route>
-        <Route exact path={ROUTES.HOME}>
-          Home
-        </Route>
-      </Switch>
+      {/* Public routes */}
+      <Route
+        exact
+        path='/currency/:id'
+        component={Currency}
+      />
+      <Route
+        exact
+        path={ROUTES.LOGIN}
+        component={Login}
+      />
+      <Route
+        exact
+        path={ROUTES.MARKETPLACE}
+        component={Marketplace}
+      />
+      <Route
+        exact
+        path={ROUTES.HOME}
+        component={Marketplace}
+      />
+    </Switch>
   );
 };
