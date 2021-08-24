@@ -6,7 +6,7 @@ import { CoinsContext } from '../hooks/use-currencies';
 import { useAuth } from '../hooks/use-auth';
 
 import { Layout } from '../components/Layout';
-import { ButtonGhost, ButtonTertiary } from '../components/Buttons';
+import { ButtonGhost } from '../components/Buttons';
 import { GraphUp, GraphDown } from '../components/Icons';
 import { Table } from '../components/Table';
 import { Loader } from '../components/Loader';
