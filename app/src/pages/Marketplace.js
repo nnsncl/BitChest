@@ -28,11 +28,11 @@ export default function Marketplace() {
     if ((getSessionTokenCookie && !auth.user) || coins.length === 0 || !market.status.data) {
         return <Loader />;
     }
-    console.log(coins)
+    
     return (
         <>
             <Layout>
-                <div className='flex items-start gap-6 mt-6' >
+                <div className='flex items-start gap-6' >
                     <div>
                         <h1 className='text-3xl font-bold mb-2'>
                             <span className='gradient-text' >Today's</span> Cryptocurrency<br />market prices
@@ -63,9 +63,9 @@ export default function Marketplace() {
                         variants={container}
                         className='mt-12 flex flex-wrap gap-8' >
                         {coins &&
-                            coins.map((item) => (
+                            coins.map((item, key) => (
                                 <motion.article
-                                    key={item.id}
+                                    key={key}
                                     variants={article}
                                     className="flex items-center gap-3 md:w-48 w-full">
                                     <img className='w-10 h-10 bg-white rounded-full' src={item.image} alt={`${item.name}-logo`} />
