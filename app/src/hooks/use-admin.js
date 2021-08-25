@@ -46,9 +46,25 @@ function useAdminProvider() {
     const updateUser = () => {
         console.log('update user')
     }
-    const deleteUser = () => {
-        console.log('delete user')
-    }
+  const deleteUser = (id) => {
+    axios({
+      method: "DELETE",
+      url: `${baseApiUrl}/api/user/${id}`,
+      withCredentials: true,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "true",
+        "Authorization": `Bearer ${getSessionTokenCookie}`
+      }
+    })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
 
   return {
     createUser,

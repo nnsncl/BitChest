@@ -86,13 +86,12 @@ export default function Admin() {
                                     />
                                 </motion.td>
                                 <motion.td variants={article} className='w-1/3 flex items-start gap-3' >
-                                    <button className='bg-red-900 py-1 px-3 rounded-lg text-sm' >
+                                    <button onClick={() => admin.actions.deleteUser(user.id)} className='bg-red-900 py-1 px-3 rounded-lg text-sm' >
                                         Delete
                                     </button>
                                 </motion.td>
 
                             </motion.tr>
-
                         ))
                     }
 
