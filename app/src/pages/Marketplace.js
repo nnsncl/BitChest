@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { CoinsContext } from '../hooks/use-currencies';
@@ -27,7 +28,7 @@ export default function Marketplace() {
     if ((getSessionTokenCookie && !auth.user) || coins.length === 0 || !market.status.data) {
         return <Loader />;
     }
-
+    console.log(coins)
     return (
         <>
             <Layout>
@@ -94,7 +95,7 @@ export default function Marketplace() {
                             <th className="w-1/3 text-left text-xs" >Price Change 24h</th>
                             <th className="w-1/3 text-left text-xs md:block hidden" >Market Cap</th>
                             <th className="w-1/3 text-left text-xs md:block hidden" >Circulating Supply</th>
-                            <th className="w-1/3 text-left text-xs md:block hidden" >24h %</th>
+                            <th className="w-1/3 text-left text-xs md:block hidden" ></th>
                         </>
                     }>
                         {coins &&
@@ -115,15 +116,10 @@ export default function Marketplace() {
                                     <motion.td variants={article} className='w-1/3 flex items-start' >
                                         <p className={`${item.price_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} flex items-center text-sm uppercase`} >
                                             {item.price_change_percentage_24h >= 0
-                                                ? <>
-                                                    <small>&#x25B2;</small>&nbsp;
-                                                    {item.current_price.toLocaleString()}€
-                                                </>
-                                                : <>
-                                                    <small>&#x25BC;</small>&nbsp;
-                                                    {item.current_price.toLocaleString()}€
-                                                </>
+                                                ? <small>&#x25B2;</small>
+                                                : <small>&#x25BC;</small>
                                             }
+                                            &nbsp;{item.current_price.toLocaleString()}€
                                         </p>
                                     </motion.td>
                                     <motion.td variants={article} className='w-1/3 flex items-start' >
@@ -142,9 +138,9 @@ export default function Marketplace() {
                                     </motion.td>
                                     <motion.td variants={article} className='w-1/3 flex items-start md:block hidden' >
                                         <p className={`${item.price_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} flex items-center text-sm uppercase`} >
-                                        {item.market_cap_change_percentage_24h >= 0
+                                            {item.market_cap_change_percentage_24h >= 0
                                                 ? <small>&#x25B2;</small>
-                                                :  <small>&#x25BC;</small>
+                                                : <small>&#x25BC;</small>
                                             }
                                             &nbsp;{item.market_cap.toLocaleString()}€
                                         </p>
@@ -154,13 +150,8 @@ export default function Marketplace() {
                                             {item.circulating_supply.toLocaleString()}&nbsp;<span className='uppercase text-gray-700 text-xs'>&nbsp;{item.symbol}</span>
                                         </p>
                                     </motion.td>
-                                    <motion.td variants={article} className='w-1/3 flex items-start bg-gray-800 md:block hidden' >
-                                        <p className='text-sm' >
-                                            {item.price_change_percentage_24h > 0
-                                                ? <GraphUp />
-                                                : <GraphDown />
-                                            }
-                                        </p>
+                                    <motion.td variants={article} className='w-1/3 flex items-start md:block hidden' >
+                                        <Link className='text-xs bg-blue-900 px-6 py-3 rounded-lg' to={`/currency/${item.id}`} >Buy</Link>
                                     </motion.td>
                                 </motion.tr>
                             ))
