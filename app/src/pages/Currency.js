@@ -39,11 +39,10 @@ export default function Currency() {
 
     return (
         <Layout>
-            {console.log(currency)}
             <header className='flex md:flex-row flex-col items-start gap-6 mb-6 pb-6 border-gray-800 border-b-2' >
                 <section className='md:w-1/3 w-full' >
                     <div className='flex items-center gap-3 mb-3'>
-                        <img className='w-9 h-9 bg-white rounded-full' src={currency.image} alt={`${currency.name}-logo`} />
+                        <img className='w-9 h-9 bg-white rounded-full' src={currency.image && currency.image} alt={`${currency.name}-logo`} />
                         <h1 className='text-3xl font-bold'>{currency.name}</h1>
                         <span className='block text-xs font-bold border-2 border-gray-800 rounded-lg px-2 py-1 uppercase text-gray-700 '>{currency.symbol}</span>
                     </div>

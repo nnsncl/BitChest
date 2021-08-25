@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/use-auth';
 
 import { Layout } from '../components/Layout';
 import { ButtonGhost } from '../components/Buttons';
-import { GraphUp, GraphDown } from '../components/Icons';
+import { GraphUp, GraphDown, Swap } from '../components/Icons';
 import { Table } from '../components/Table';
 import { Loader } from '../components/Loader';
 
@@ -28,7 +28,7 @@ export default function Marketplace() {
     if ((getSessionTokenCookie && !auth.user) || coins.length === 0 || !market.status.data) {
         return <Loader />;
     }
-    
+
     return (
         <>
             <Layout>
@@ -151,13 +151,19 @@ export default function Marketplace() {
                                         </p>
                                     </motion.td>
                                     <motion.td variants={article} className='w-1/3 flex items-start md:block hidden' >
-                                        <Link className='text-xs bg-blue-900 px-6 py-3 rounded-lg' to={`/currency/${item.id}`} >Buy</Link>
+                                        <Link className='text-xs bg-blue-900 px-6 py-3 rounded-lg' to={`/currency/${item.coin_id}`} >Buy</Link>
                                     </motion.td>
                                 </motion.tr>
                             ))
                         }
                     </Table>
                 </section>
+                {auth.user &&
+                    <button className='flex items-center gap-2 bg-blue-900 text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' >
+                        <Swap />
+                        {auth.user.balance}€
+                    </button>
+                }
             </Layout>
         </>
     );
