@@ -5,7 +5,7 @@ import { useAuth } from '../hooks/use-auth';
 import { Layout } from '../components/Layout';
 import { Loader } from '../components/Loader';
 
-import { getSessionTokenCookie } from "../constants/session-storage-endpoints";
+import { SESSION_TOKEN } from "../constants/session-storage-endpoints";
 
 export default function Activity() {
     const auth = useAuth();
@@ -14,7 +14,7 @@ export default function Activity() {
         auth.getAuthUser();
     }, [auth])
 
-    if (getSessionTokenCookie && !auth.user) {
+    if (SESSION_TOKEN && !auth.user) {
         return <Loader />;
     }
 

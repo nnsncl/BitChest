@@ -1,71 +1,54 @@
-import React from 'react';
-import { Switch, Route } from "react-router-dom";
+import React from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
 
-import Marketplace from './pages/Marketplace';
-import Portfolio from './pages/Portfolio';
-import Activity from './pages/Activity';
-import Login from './pages/Auth/Login';
-import Admin from './pages/Admin/Admin';
+import Marketplace from "./pages/Marketplace";
+import Portfolio from "./pages/Portfolio";
+import Activity from "./pages/Activity";
+import Login from "./pages/Auth/Login";
+import Admin from "./pages/Admin/Admin";
+import Currency from "./pages/Currency";
 
-import * as ROUTES from './routes/routes'
-import { ProtectedRoute } from './routes/protected-routes';
+import * as ROUTES from "./routes/routes";
+import { ProtectedRoute } from "./routes/protected-routes";
 
-import { useAuth } from './hooks/use-auth';
+import { useAuth } from "./hooks/use-auth";
 import { AdminProvider } from "./hooks/use-admin";
 
-import { getSessionTokenCookie } from './constants/session-storage-endpoints';
-import Currency from './pages/Currency';
+import { SESSION_TOKEN } from "./constants/session-storage-endpoints";
 
 
 export default function App() {
   const auth = useAuth();
-  const isAuthenticated = (!auth.user && getSessionTokenCookie) || auth.user;
+  const isAuthenticated = (!auth.user && SESSION_TOKEN) || auth.user;
+  const isAdmin = auth.user && auth.user.elevation === 'admin';
 
   return (
-      <Switch>
-        <ProtectedRoute
-          exact
-          auth={isAuthenticated && (auth.user && auth.user.elevation === 'admin')}
-          path={ROUTES.ADMIN}
-        >
-          <AdminProvider>
-            <Admin />
-          </AdminProvider>
-        </ProtectedRoute>
-        <ProtectedRoute
-          exact
-          auth={isAuthenticated}
-          path={ROUTES.USER_ACTIVITY}
-          component={Activity}
-        />
-        <ProtectedRoute
-          exact
-          auth={isAuthenticated}
-          path={ROUTES.USER_PORTFOLIO}
-          component={Portfolio}
-        />
+    <Switch>
+      <ProtectedRoute exact auth={isAuthenticated && isAdmin} path={ROUTES.ADMIN} >
+        <AdminProvider>
+          <Admin />
+        </AdminProvider>
+      </ProtectedRoute>
+      <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.USER_ACTIVITY} >
+        <Activity />
+      </ProtectedRoute>
+      <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.USER_PORTFOLIO}>
+        <Portfolio />
+      </ProtectedRoute>
+      <ProtectedRoute exact auth={isAuthenticated} path="/currency/:id" >
+        <Currency />
+      </ProtectedRoute>
+      <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.MARKETPLACE}>
+        <Marketplace />
+      </ProtectedRoute>
 
-        {/* Public routes */}
-        <Route
-          exact
-          path='/currency/:id'
-          component={Currency}
-        />
-        <Route
-          exact
-          path={ROUTES.LOGIN}
-          component={Login}
-        />
-        <Route
-          exact
-          path={ROUTES.MARKETPLACE}
-          component={Marketplace}
-        />
-        <Route
-          exact
-          path={ROUTES.HOME}
-          component={Marketplace}
-        />
-      </Switch>
+      {/* Public routes */}
+      <Route exact path={ROUTES.LOGIN}>
+        <Login />
+      </Route>
+      <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.HOME}>
+        <Redirect to={ROUTES.MARKETPLACE} />
+      </ProtectedRoute>
+    </Switch>
   );
-};
+}

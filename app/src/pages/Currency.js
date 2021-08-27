@@ -8,7 +8,7 @@ import { CoinsContext } from '../hooks/use-currencies';
 import { Layout } from '../components/Layout';
 import { Loader } from '../components/Loader';
 
-import { getSessionTokenCookie } from "../constants/session-storage-endpoints";
+import { SESSION_TOKEN } from "../constants/session-storage-endpoints";
 
 export default function Currency() {
     const auth = useAuth();
@@ -33,7 +33,7 @@ export default function Currency() {
     }, [id, coins])
 
 
-    if (getSessionTokenCookie && !auth.user) {
+    if (SESSION_TOKEN && !auth.user) {
         return <Loader />;
     }
 

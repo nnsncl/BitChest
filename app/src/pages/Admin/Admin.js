@@ -5,12 +5,12 @@ import { useAuth } from '../../hooks/use-auth';
 import { AdminContext } from '../../hooks/use-admin';
 
 import { Layout } from '../../components/Layout';
-import { Loader } from '../../components/Loader';
+// import { Loader } from '../../components/Loader';
 import { Table } from '../../components/Table';
 
 import { container, article } from '../../animations/motion';
 
-import { getSessionTokenCookie } from "../../constants/session-storage-endpoints";
+// import { getSessionTokenCookie } from "../../constants/session-storage-endpoints";
 
 
 export default function Admin() {
@@ -21,11 +21,10 @@ export default function Admin() {
         auth.getAuthUser();
     }, [auth])
 
-    if (getSessionTokenCookie && !auth.user) {
-        return <Loader />;
-    }
+    // if (getSessionTokenCookie && !auth.user) {
+    //     return <Loader />;
+    // }
 
-    console.log(admin.users)
 
     return (
         <Layout>
