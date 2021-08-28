@@ -33,7 +33,7 @@ export default function Login() {
     const [userEmail, setUserEmail] = useState();
     const [userPassword, setUserPassword] = useState();
 
-    const error = auth.error
+    const error = auth.error;
 
     useEffect(() => {
         (auth.user || SESSION_TOKEN) && router.push(ROUTES.MARKETPLACE);
@@ -48,15 +48,15 @@ export default function Login() {
 
     return (
         <>
-            <main className='text-white flex relative gap-36' >
-                <header style={{ backgroundImage: 'url(/132.jpg)' }} className="hidden md:flex side-hero-section w-96 h-screen p-6 items-start fixed left-0 bottom-0" >
+            <main className='text-white flex relative gap-12' >
+                <header style={{ backgroundImage: 'url(/login.jpg)' }} className="hidden md:flex side-hero-section w-96 h-screen p-6 items-start fixed left-0 bottom-0" >
                     <p className='text-sm text-white items-center'>Bit<b>Chest</b></p>
                 </header>
                 <motion.section
                     initial='hidden'
                     animate='visible'
                     variants={container}
-                    className='flex flex-col justify-center w-ful px-6 py-9 h-screen justify-center'>
+                    className='flex flex-col justify-center px-6 py-9 h-screen'>
                     <Link className='mb-6 text-sm font-bold' to={ROUTES.MARKETPLACE} >&larr;&nbsp;Go back</Link>
                     <h1 className='text-3xl font-bold mb-12'>Log in to access your<br /><span className='gradient-text' >cryptocurrencies portfolio</span></h1>
                     <form onSubmit={(event) => handleLogin(event)} >
@@ -94,6 +94,7 @@ export default function Login() {
                             }
                         </button>
                     </form>
+                    
                 </motion.section>
             </main>
         </>
