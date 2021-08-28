@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useAuth } from '../hooks/use-auth';
-import { getSessionTokenCookie } from '../constants/session-storage-endpoints';
+import { SESSION_TOKEN } from '../constants/session-storage-endpoints';
 
 import { Layout } from '../components/Layout';
 import { Loader } from '../components/Loader';
@@ -13,7 +13,7 @@ export default function Portfolio() {
         auth.getAuthUser();
     }, [auth])
 
-    if (getSessionTokenCookie && !auth.user) {
+    if (SESSION_TOKEN && !auth.user) {
         return <Loader />;
     }
 

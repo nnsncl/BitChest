@@ -13,7 +13,7 @@ import { Loader } from '../components/Loader';
 
 import { container, article } from '../animations/motion';
 
-import { getSessionTokenCookie } from "../constants/session-storage-endpoints";
+import { SESSION_TOKEN } from "../constants/session-storage-endpoints";
 
 
 export default function Marketplace() {
@@ -25,9 +25,9 @@ export default function Marketplace() {
         auth.getAuthUser();
     }, [auth])
 
-    if ((getSessionTokenCookie && !auth.user) || coins.length === 0 || !market.status.data) {
-        return <Loader />;
-    }
+    // if ((SESSION_TOKEN && !auth.user) || coins.length === 0 || !market.status.data) {
+    //     return <Loader />;
+    // }
 
     return (
         <>

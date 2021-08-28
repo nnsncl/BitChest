@@ -1,17 +1,21 @@
 import { useState, useEffect, createContext } from "react";
-import { baseApiUrl } from "../constants/api-endpoints";
 import axios from "axios";
 
-import { getSessionTokenCookie } from "../constants/session-storage-endpoints";
+import { baseApiUrl } from "../constants/api-endpoints";
+import { SESSION_TOKEN } from "../constants/session-storage-endpoints";
+
+import { useAuth } from "./use-auth";
 
 export const AdminContext = createContext([]);
 
 export const AdminProvider = ({ children }) => {
+  const auth = useAuth();
   const actions = useAdminProvider();
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    axios({
+    // auth.user.elevation === 'admin' ??
+      axios({
         method: "GET",
         url: `${baseApiUrl}/api/users`,
         withCredentials: true,
@@ -19,17 +23,16 @@ export const AdminProvider = ({ children }) => {
           "Accept": "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "true",
-          "Authorization": `Bearer ${getSessionTokenCookie}`
+          "Authorization": `Bearer ${SESSION_TOKEN}`
         }
       })
         .then((response) => {
-            setUsers(response.data)
+          setUsers(response.data)
         })
         .catch((error) => {
           console.log(error.message);
         });
-
-  }, [])
+  }, [auth])
 
   return (
     <AdminContext.Provider value={{ users, actions }}>
@@ -40,12 +43,12 @@ export const AdminProvider = ({ children }) => {
 
 function useAdminProvider() {
 
-    const createUser = () => {
-        console.log('create user')
-    }
-    const updateUser = () => {
-        console.log('update user')
-    }
+  const createUser = () => {
+    console.log('create user')
+  }
+  const updateUser = () => {
+    console.log('update user')
+  }
   const deleteUser = (id) => {
     axios({
       method: "DELETE",
@@ -55,7 +58,7 @@ function useAdminProvider() {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "true",
-        "Authorization": `Bearer ${getSessionTokenCookie}`
+        "Authorization": `Bearer ${SESSION_TOKEN}`
       }
     })
       .then((response) => {

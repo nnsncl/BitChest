@@ -2,10 +2,10 @@ import React, { useState, useContext, createContext, } from "react";
 import axios from "axios";
 
 import {
-    SESSION_TOKEN_COOKIE_KEY,
-    USER_ID_COOKIE_KEY,
-    getSessionTokenCookie,
-    getUserIDCookie
+    SESSION_KEY,
+    _ID_KEY,
+    SESSION_TOKEN,
+    _ID
 } from "../constants/session-storage-endpoints";
 import { baseApiUrl } from '../constants/api-endpoints';
 
@@ -28,8 +28,11 @@ export const useAuth = () => {
 function useAuthProvider() {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
+    const [error, setError] = useState();
+    const [pending, setPending] = useState();
 
     const login = (email, password) => {
+        setPending(true);
         axios
             .get(`${baseApiUrl}/sanctum/csrf-cookie`, {
                 method: "GET",
@@ -46,56 +49,62 @@ function useAuthProvider() {
                         "Access-Control-Allow-Origin": "true",
                     },
                     data: {
-                        email: "nuni@nuni.fr",
-                        password: "nuni",
+                        email: email,
+                        password: password,
                     },
                 })
                     .then((response) => {
-                        if (getSessionTokenCookie) {
+                        if (SESSION_TOKEN) {
                             setUser(null);
                             sessionStorage.clear();
                         }
                         setUser(response.data.user);
                         setToken(response.data.token);
-                        sessionStorage.setItem(SESSION_TOKEN_COOKIE_KEY, response.data.token);
-                        sessionStorage.setItem(USER_ID_COOKIE_KEY, response.data.user.id);
+                        sessionStorage.setItem(SESSION_KEY, response.data.token);
+                        sessionStorage.setItem(_ID_KEY, response.data.user.id);
+                        setPending(false);
                         return {
                             user: response.data.user,
                             token: response.data.token
                         };
                     })
                     .catch((error) => {
-                        console.log(error.message);
+                        setError(error.message);
+                        setPending(false);
                     });
             });
     };
 
     const getAuthUser = () => {
-        if (!user && getSessionTokenCookie) {
+        setPending(true);
+        if (!user && SESSION_TOKEN) {
             axios({
                 method: "GET",
-                url: `${baseApiUrl}/api/user/${user && user.id ? user.id : getUserIDCookie}`,
+                url: `${baseApiUrl}/api/user/${user && user.id ? user.id : _ID}`,
                 withCredentials: true,
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "true",
-                    "Authorization": `Bearer ${token ? token : getSessionTokenCookie}`
+                    "Authorization": `Bearer ${token ? token : SESSION_TOKEN}`
                 }
             })
                 .then((response) => {
                     setUser(response.data);
+                    setPending(false);
                     return {
                         user: response.data.user
                     };
                 })
                 .catch((error) => {
-                    console.log(error.message);
+                    setError(error.message);
+                    setPending(false);
                 });
         };
     };
 
     const logout = () => {
+        setPending(true);
         axios({
             method: "POST",
             url: `${baseApiUrl}/api/logout`,
@@ -104,7 +113,7 @@ function useAuthProvider() {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "true",
-                "Authorization": `Bearer ${token ? token : getSessionTokenCookie}`
+                "Authorization": `Bearer ${token ? token : SESSION_TOKEN}`
             }
         })
             .then(() => {
@@ -113,15 +122,19 @@ function useAuthProvider() {
             .then(() => {
                 setUser(null);
                 setToken(null);
+                setPending(false);
                 window.location.reload();
             })
             .catch((error) => {
-                console.log(error.message);
+                setError(error.message);
+                setPending(false);
             });
     };
 
     return {
         user,
+        error,
+        pending,
         getAuthUser,
         login,
         logout
