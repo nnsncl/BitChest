@@ -6,6 +6,7 @@ import Portfolio from "./pages/Portfolio";
 import Activity from "./pages/Activity";
 import Login from "./pages/Auth/Login";
 import Admin from "./pages/Admin/Admin";
+import AddUser from "./pages/Admin/AddUser";
 import Currency from "./pages/Currency";
 
 import * as ROUTES from "./routes/routes";
@@ -24,11 +25,14 @@ export default function App() {
 
   return (
     <Switch>
-      <ProtectedRoute exact auth={isAuthenticated && isAdmin} path={ROUTES.ADMIN} >
-        <AdminProvider>
-          <Admin />
-        </AdminProvider>
+
+      <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.ADD_USER} >
+        <AddUser />
       </ProtectedRoute>
+      <ProtectedRoute exact auth={isAuthenticated && isAdmin} path={ROUTES.ADMIN} >
+        <Admin />
+      </ProtectedRoute>
+
       <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.USER_ACTIVITY} >
         <Activity />
       </ProtectedRoute>
@@ -42,7 +46,6 @@ export default function App() {
         <Marketplace />
       </ProtectedRoute>
 
-      {/* Public routes */}
       <Route exact path={ROUTES.LOGIN}>
         <Login />
       </Route>

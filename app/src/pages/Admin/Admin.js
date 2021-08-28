@@ -1,10 +1,13 @@
 import React, { useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
 
+import * as ROUTES from '../../routes/routes';
+
 import { useAuth } from '../../hooks/use-auth';
 import { AdminContext } from '../../hooks/use-admin';
 
 import { Layout } from '../../components/Layout';
+import { ButtonSecondary } from '../../components/Buttons';
 // import { Loader } from '../../components/Loader';
 import { Table } from '../../components/Table';
 
@@ -30,7 +33,8 @@ export default function Admin() {
         <Layout>
             <header className='mb-12' >
                 <h1 className='text-3xl font-bold mb-2'>Hi, {auth.user && auth.user.name}</h1>
-                <p className='text-gray-700' >Manage users informations and permissions.</p>
+                <p className='text-gray-700 mb-6' >Manage users informations and permissions.</p>
+                <ButtonSecondary to={ROUTES.ADD_USER} className='bg-blue-900' >Add user</ButtonSecondary>
             </header>
 
             <section>

@@ -15,23 +15,23 @@ export const AdminProvider = ({ children }) => {
 
   useEffect(() => {
     // auth.user.elevation === 'admin' ??
-      axios({
-        method: "GET",
-        url: `${baseApiUrl}/api/users`,
-        withCredentials: true,
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "true",
-          "Authorization": `Bearer ${SESSION_TOKEN}`
-        }
+    axios({
+      method: "GET",
+      url: `${baseApiUrl}/api/users`,
+      withCredentials: true,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "true",
+        "Authorization": `Bearer ${SESSION_TOKEN}`
+      }
+    })
+      .then((response) => {
+        setUsers(response.data)
       })
-        .then((response) => {
-          setUsers(response.data)
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+      .catch((error) => {
+        console.log(error.message);
+      });
   }, [auth])
 
   return (
@@ -42,9 +42,32 @@ export const AdminProvider = ({ children }) => {
 };
 
 function useAdminProvider() {
+  const [success, setSuccess] = useState();
+  const [error, setError] = useState();
+  const [pending, setPending] = useState();
 
-  const createUser = () => {
-    console.log('create user')
+  const createUser = (user) => {
+    setPending(true);
+    axios({
+      method: "POST",
+      url: `${baseApiUrl}/api/user`,
+      withCredentials: true,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "true",
+        "Authorization": `Bearer ${SESSION_TOKEN}`
+      },
+      data: user,
+    })
+      .then((response) => {
+        setPending(false);
+        setSuccess(true);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setPending(false);
+      });
   }
   const updateUser = () => {
     console.log('update user')
@@ -63,13 +86,20 @@ function useAdminProvider() {
     })
       .then((response) => {
         console.log(response)
+        setPending(true);
+        setSuccess(true);
       })
       .catch((error) => {
-        console.log(error.message);
+        setError(error.message);
+        setPending(false);
+        setSuccess(false);
       });
   }
 
   return {
+    success,
+    error,
+    pending,
     createUser,
     updateUser,
     deleteUser

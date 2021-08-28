@@ -7,16 +7,19 @@ import App from './App';
 
 import { CoinsProvider } from './hooks/use-currencies';
 import { AuthProvider } from "./hooks/use-auth";
+import { AdminProvider } from "./hooks/use-admin";
 
 ReactDOM.render(
   <React.StrictMode>
-  <Router>
-  <AuthProvider>
-      <CoinsProvider>
-        <App />
-      </CoinsProvider>
-    </AuthProvider>
-  </Router>
+    <Router>
+      <AuthProvider>
+        <AdminProvider>
+          <CoinsProvider>
+            <App />
+          </CoinsProvider>
+        </AdminProvider>
+      </AuthProvider>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
