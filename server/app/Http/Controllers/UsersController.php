@@ -18,29 +18,6 @@ class UsersController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            "name" => "required",
-            "email" => "required",
-            "password" => "required",
-            "elevation" => "required",
-        ]);
-
-        $user = User::create($request->all());
-
-        return [
-            "user" => $user,
-            "message" => "User created"
-        ];
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
