@@ -2,7 +2,7 @@ import { useState, useEffect, createContext } from "react";
 import axios from "axios";
 
 import { baseApiUrl } from "../constants/api-endpoints";
-import { SESSION_TOKEN } from "../constants/session-storage-endpoints";
+import { SESSION_TOKEN } from "../constants/session";
 
 import { useAuth } from "./use-auth";
 
@@ -14,7 +14,7 @@ export const AdminProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    // auth.user.elevation === 'admin' ??
+    (auth.user && auth.user.elevation === 'admin') &&
     axios({
       method: "GET",
       url: `${baseApiUrl}/api/users`,
@@ -69,8 +69,28 @@ function useAdminProvider() {
         setPending(false);
       });
   }
-  const updateUser = () => {
-    console.log('update user')
+  const updateUser = (id, user) => {
+    setPending(true);
+    axios({
+      method: "PUT",
+      url: `${baseApiUrl}/api/user/${id}`,
+      withCredentials: true,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "true",
+        "Authorization": `Bearer ${SESSION_TOKEN}`
+      },
+      data: user,
+    })
+      .then((response) => {
+        setPending(false);
+        setSuccess(true);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setPending(false);
+      });
   }
   const deleteUser = (id) => {
     axios({

@@ -6,7 +6,7 @@ import {
     _ID_KEY,
     SESSION_TOKEN,
     _ID
-} from "../constants/session-storage-endpoints";
+} from "../constants/session";
 import { baseApiUrl } from '../constants/api-endpoints';
 
 

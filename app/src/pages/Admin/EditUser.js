@@ -1,20 +1,26 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from "react-router-dom";
+import axios from 'axios';
+import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import * as ROUTES from '../../routes/routes';
 
 import { useAuth } from '../../hooks/use-auth';
 import { AdminContext } from '../../hooks/use-admin';
 
-import { BASE_USER } from '../../constants/user';
+import { SESSION_TOKEN } from '../../constants/session';
+import { baseApiUrl } from '../../constants/api-endpoints';
+
+import { USER_ROLES } from '../../constants/user';
 
 import { Processing, SecureSpace } from '../../components/Icons';
 
-
-export default function AddUser() {
+export default function EditUser() {
     const auth = useAuth();
     const admin = useContext(AdminContext);
-    const [user, setUser] = useState(BASE_USER);
+    const { id } = useParams();
+
+    const [user, setUser] = useState({});
 
     const success = admin.actions.success;
     const error = admin.actions.error;
@@ -22,7 +28,28 @@ export default function AddUser() {
 
     useEffect(() => {
         auth.getAuthUser();
-    }, [auth]);
+    }, [auth])
+
+    useEffect(() => {
+        admin.users &&
+            axios({
+                method: "GET",
+                url: `${baseApiUrl}/api/user/${id}`,
+                withCredentials: true,
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "true",
+                    "Authorization": `Bearer ${SESSION_TOKEN}`
+                }
+            })
+                .then((response) => {
+                    setUser(response.data);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+    }, [id, admin.users])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -32,23 +59,22 @@ export default function AddUser() {
         }));
     };
 
-    const handleRegistration = (e) => {
+    const handleEdition = (e) => {
         e.preventDefault();
-        admin.actions.createUser(user);
+        admin.actions.updateUser(id, user);
     };
 
     return (
         <main className='text-white flex relative gap-12' >
-            <header style={{ backgroundImage: 'url(/add_user.jpg)' }} className="hidden md:flex side-hero-section w-96 h-screen p-6 items-start fixed left-0 bottom-0" >
-                <p className='text-sm text-white items-center'>Bit<b>Chest</b></p>
-            </header>
-            <section className='flex flex-col md:w-1/3 w-full justify-center px-6 py-9 h-screen'>
-                <Link className='mb-3 text-sm font-bold' to={ROUTES.ADMIN} >&larr;&nbsp;Go back to admin</Link>
-                <h1 className='text-3xl font-bold mb-9'>
-                    <span className='gradient-text' >Create</span> a new user.
-                </h1>
-                <form onSubmit={(e) => handleRegistration(e)} >
-                    {error &&
+            <section className='flex flex-col items-center md:w-1/3 w-full mx-auto justify-center px-6 py-9 h-screen'>
+                <div className='w-full flex flex-col items-start'>
+                    <Link className='mb-3 text-sm font-bold' to={ROUTES.ADMIN} >&larr;&nbsp;Go back to admin</Link>
+                    <h1 className='text-3xl font-bold mb-9'>
+                        <span className='gradient-text' >Edit</span> <span className='capitalize'>{user.name}</span>'s<br />personal informations.
+                    </h1>
+                </div>
+                <form className='w-full' onSubmit={(e) => handleEdition(e)} >
+                {error &&
                         <div className='bg-red-900 p-3 mb-6 rounded-lg' >
                             <h6 className='font-bold mb-1' >Something went wrong</h6>
                             <p className='text-sm' >{error}</p>
@@ -57,7 +83,7 @@ export default function AddUser() {
                     {success &&
                         <div className='bg-blue-100 p-3 mb-6 rounded-lg flex items-center gap-3' >
                             <SecureSpace />
-                            <h6 className='text-blue-900' >User successfully created</h6>
+                            <h6 className='text-blue-900' >User successfully updated</h6>
                         </div>
                     }
                     <fieldset className='border-0 flex flex-col mb-6' >
@@ -83,31 +109,30 @@ export default function AddUser() {
                         />
                     </fieldset>
                     <fieldset className='border-0 flex flex-col mb-6' >
-                        <label htmlFor='password' className='text-xs font-bold mb-2' >Password</label>
-                        <input
-                            type='password'
-                            name='password'
-                            placeholder=''
-                            defaultValue={user.password}
+                        <label htmlFor='elevation-select' className='text-xs font-bold mb-2' >Elevation</label>
+                        <select
                             onChange={(e) => handleChange(e)}
+                            defaultValue={user.elevation}
+                            name='elevation'
+                            id="elevation-select"
                             className='rounded-lg border-2 border-gray-800 hover:bg-gray-800 focus:bg-gray-800 bg-transparent py-3 px-3 outline-none text-sm transition duration-300 ease-in-out'
-                        />
-                    </fieldset>
-                    <fieldset className='border-0 flex flex-col mb-6' >
-                        <label htmlFor='password_confirmation' className='text-xs font-bold mb-2' >Confirm Password</label>
-                        <input
-                            type='password'
-                            name='password_confirmation'
-                            placeholder=''
-                            defaultValue={user.password_confirmation}
-                            onChange={(e) => handleChange(e)}
-                            className='rounded-lg border-2 border-gray-800 hover:bg-gray-800 focus:bg-gray-800 bg-transparent py-3 px-3 outline-none text-sm transition duration-300 ease-in-out'
-                        />
+                        >
+                            <option value="" disabled >--Please choose an option--</option>
+                            { USER_ROLES.map((role, key) => (
+                                <option
+                                    key={key}
+                                    className='capitalize'
+                                    defaultValue={role}
+                                    selected={role === user.elevation}>
+                                    {role}
+                                </option>
+                            )) }
+                        </select>
                     </fieldset>
                     <button className='text-xs font-bold bg-blue-900 py-3 px-12 rounded-lg transition duration-300 ease-in-out outline-none' >
                         {pending
                             ? <Processing />
-                            : 'Create user'
+                            : 'Edit User'
                         }
                     </button>
                 </form>

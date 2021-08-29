@@ -7,15 +7,15 @@ import Activity from "./pages/Activity";
 import Login from "./pages/Auth/Login";
 import Admin from "./pages/Admin/Admin";
 import AddUser from "./pages/Admin/AddUser";
+import EditUser from "./pages/Admin/EditUser";
 import Currency from "./pages/Currency";
 
 import * as ROUTES from "./routes/routes";
 import { ProtectedRoute } from "./routes/protected-routes";
 
 import { useAuth } from "./hooks/use-auth";
-import { AdminProvider } from "./hooks/use-admin";
 
-import { SESSION_TOKEN } from "./constants/session-storage-endpoints";
+import { SESSION_TOKEN } from "./constants/session";
 
 
 export default function App() {
@@ -25,9 +25,11 @@ export default function App() {
 
   return (
     <Switch>
-
       <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.ADD_USER} >
         <AddUser />
+      </ProtectedRoute>
+      <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.EDIt_USER} >
+        <EditUser />
       </ProtectedRoute>
       <ProtectedRoute exact auth={isAuthenticated && isAdmin} path={ROUTES.ADMIN} >
         <Admin />
@@ -39,7 +41,7 @@ export default function App() {
       <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.USER_PORTFOLIO}>
         <Portfolio />
       </ProtectedRoute>
-      <ProtectedRoute exact auth={isAuthenticated} path="/currency/:id" >
+      <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.CURRENCY} >
         <Currency />
       </ProtectedRoute>
       <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.MARKETPLACE}>
