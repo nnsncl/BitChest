@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useAuth } from '../hooks/use-auth';
-import { SESSION_TOKEN } from '../constants/session-storage-endpoints';
+import { SESSION_TOKEN } from '../constants/session';
 
 import { Layout } from '../components/Layout';
 import { Loader } from '../components/Loader';

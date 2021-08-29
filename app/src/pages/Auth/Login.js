@@ -7,7 +7,7 @@ import * as ROUTES from '../../routes/routes';
 import { useAuth } from '../../hooks/use-auth';
 import { useRouter } from '../../hooks/use-router';
 
-import { SESSION_TOKEN } from '../../constants/session-storage-endpoints';
+import { SESSION_TOKEN } from '../../constants/session';
 
 import { Processing } from '../../components/Icons';
 

@@ -8,7 +8,7 @@ import { CoinsContext } from '../hooks/use-currencies';
 import { Layout } from '../components/Layout';
 import { Loader } from '../components/Loader';
 
-import { SESSION_TOKEN } from "../constants/session-storage-endpoints";
+import { SESSION_TOKEN } from "../constants/session";
 
 export default function Currency() {
     const auth = useAuth();
