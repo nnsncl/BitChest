@@ -32,10 +32,6 @@ class CurrencyTableSeeder extends Seeder
             $GET_LTC_SET, $GET_XEM_SET, $GET_XLM_SET, $GET_MIOTA_SET, $GET_DASH_SET
         ];
 
-        // $response = Http::get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=bitcoin&order=market_cap_desc&per_page=10&page=1&sparkline=false');
-
-        // $object = $response->object();
-
         $makeRequests = function ($value) {
             return Http::get($value);
         };
