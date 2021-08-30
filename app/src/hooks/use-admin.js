@@ -116,6 +116,7 @@ function useAdminProvider() {
       });
   }
   const deleteUser = (id) => {
+    setPending(true);
     axios({
       method: "DELETE",
       url: `${baseApiUrl}/api/user/${id}`,
@@ -128,7 +129,7 @@ function useAdminProvider() {
       }
     })
       .then(() => {
-        setPending(true);
+        setPending(false);
         setSuccess(true);
         getUsers();
       })
