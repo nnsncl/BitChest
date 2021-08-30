@@ -18,6 +18,10 @@ export default function Marketplace() {
     const { coins, market } = useContext(CoinsContext);
     const auth = useAuth();
 
+    const [displayWallet, setDisplayWallet] = useState(false);
+    const [walletMode, setWalletMode] = useState(true);
+    const [selectedCoin, setSelectedCoin] = useState();
+
     useEffect(() => {
         auth.getAuthUser();
     }, [auth])
@@ -159,12 +163,53 @@ export default function Marketplace() {
                         }
                     </Table>
                 </section>
-                {auth.user &&
-                    <button className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' >
+                {auth.user && 
+                    <button className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' onClick={() => setDisplayWallet(!displayWallet)} >
                         <Swap />
                         {auth.user.balance}€
                     </button>
                 }
+                {displayWallet && 
+                <div className='bg-gray-800 text-gray-700 rounded fixed bottom-20 right-6'>
+                        <div className='flex w-full' >
+                            <div className={`py-5 px-14 ${walletMode ? "border-b text-blue-900" : "border-r border-b"}`}>
+                                <button className='hover:text-blue-900 ' onClick={() => setWalletMode(true)}>Buy</button>
+                            </div>
+                            <div className={`py-5 px-14 ${!walletMode ? "border-b text-blue-900" : "border-l border-b"}`}>
+                                <button className='hover:text-blue-900 ' onClick={() => setWalletMode(false)}>Sell</button>
+                            </div>
+                        </div>
+                        {walletMode ? 
+                            <form className='p-5 flex flex-col gap-5'>
+                            <select 
+                                className='w-full rounded-lg border-2 border-gray-700 hover:bg-gray-900 focus:bg-gray-800 bg-transparent py-3 px-3 outline-none text-sm transition duration-300 ease-in-out' 
+                                onChange={(e) => setSelectedCoin(e.target.value)}
+                            >
+                                <option>Select currency ...</option>
+                                {coins && coins.map((item, key) => (
+                                    <option
+                                        key={key}
+                                        value={item.id}
+                                        className='capitalize'
+                                    >{item.name}</option>
+                                ))}
+                            </select>
+                            <input 
+                                type="number"
+                                placeholder="Amount (EUR)"
+                                className='rounded-lg bg-gray-800 border-2 border-gray-700 py-2 px-4'
+                            />
+                            Currency quantity
+                            <button 
+                            className='bg-blue-900 py-2 rounded-lg text-white'
+                            >Buy</button>
+                        </form>
+                        :
+                        <form className='py-32 text-center'>
+                                Sell
+                        </form>
+                        }
+                    </div>}
             </Layout>
         </>
     );
