@@ -23,7 +23,7 @@
 }
 
 .bg-filter--blur {
-    background: rgba(19,21,23,0.8);
+    background: rgba(19,21,23,0.9);
     backdrop-filter: saturate(180%) blur(23px);
 }
 
