@@ -8,17 +8,12 @@ import { CoinsContext } from '../hooks/use-currencies';
 import { Layout } from '../components/Layout';
 import { Loader } from '../components/Loader';
 
-import { SESSION_TOKEN } from "../constants/session";
 
 export default function Currency() {
     const auth = useAuth();
     const { coins } = useContext(CoinsContext);
     const { id } = useParams();
     const [currency, setCurrency] = useState({});
-
-    useEffect(() => {
-        auth.getAuthUser();
-    }, [auth])
 
     useEffect(() => {
         coins &&
@@ -33,7 +28,7 @@ export default function Currency() {
     }, [id, coins])
 
 
-    if (SESSION_TOKEN && !auth.user) {
+    if (!auth.storedUser) {
         return <Loader />;
     }
 

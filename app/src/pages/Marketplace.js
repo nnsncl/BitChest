@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -17,14 +17,6 @@ export default function Marketplace() {
     const [topCoinsVisible, setTopCoinsVisible] = useState(true);
     const { coins, market } = useContext(CoinsContext);
     const auth = useAuth();
-
-    useEffect(() => {
-        auth.getAuthUser();
-    }, [auth])
-
-    // if ((SESSION_TOKEN && !auth.user) || coins.length === 0 || !market.status.data) {
-    //     return <Loader />;
-    // }
 
     return (
         <>
@@ -159,10 +151,10 @@ export default function Marketplace() {
                         }
                     </Table>
                 </section>
-                {auth.user &&
+                {auth.storedUser &&
                     <button className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' >
                         <Swap />
-                        {auth.user.balance}€
+                        {auth.storedUser.balance}€
                     </button>
                 }
             </Layout>

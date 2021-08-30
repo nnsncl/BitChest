@@ -5,16 +5,10 @@ import { useAuth } from '../hooks/use-auth';
 import { Layout } from '../components/Layout';
 import { Loader } from '../components/Loader';
 
-import { SESSION_TOKEN } from "../constants/session";
-
 export default function Activity() {
     const auth = useAuth();
 
-    useEffect(() => {
-        auth.getAuthUser();
-    }, [auth])
-
-    if (SESSION_TOKEN && !auth.user) {
+    if (!auth.storedUser) {
         return <Loader />;
     }
 

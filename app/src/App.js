@@ -20,8 +20,8 @@ import { SESSION_TOKEN } from "./constants/session";
 
 export default function App() {
   const auth = useAuth();
-  const isAuthenticated = (!auth.user && SESSION_TOKEN) || auth.user;
-  const isAdmin = auth.user && auth.user.elevation === 'admin';
+  const isAuthenticated = (!auth.storedUser.id && SESSION_TOKEN) || auth.storedUser.id;
+  const isAdmin = auth.storedUser.id && auth.storedUser.elevation === 'admin';
 
   return (
     <Switch>

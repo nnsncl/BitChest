@@ -8,7 +8,7 @@ import { AdminContext } from '../../hooks/use-admin';
 
 import { BASE_USER } from '../../constants/user';
 
-import { Processing, SecureSpace } from '../../components/Icons';
+import { Processing } from '../../components/Icons';
 
 
 export default function AddUser() {
@@ -16,14 +16,9 @@ export default function AddUser() {
     const admin = useContext(AdminContext);
     const [user, setUser] = useState(BASE_USER);
 
-    const success = admin.actions.success;
     const error = admin.actions.error;
     const pending = admin.actions.pending;
-
-    useEffect(() => {
-        auth.getAuthUser();
-    }, [auth]);
-
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUser(prevState => ({
@@ -36,7 +31,7 @@ export default function AddUser() {
         e.preventDefault();
         admin.actions.createUser(user);
     };
-
+    
     return (
         <main className='text-white flex relative gap-12' >
             <header style={{ backgroundImage: 'url(/add_user.jpg)' }} className="hidden md:flex side-hero-section w-96 h-screen p-6 items-start fixed left-0 bottom-0" >
@@ -52,12 +47,6 @@ export default function AddUser() {
                         <div className='bg-red-900 p-3 mb-6 rounded-lg' >
                             <h6 className='font-bold mb-1' >Something went wrong</h6>
                             <p className='text-sm' >{error}</p>
-                        </div>
-                    }
-                    {success &&
-                        <div className='bg-blue-100 p-3 mb-6 rounded-lg flex items-center gap-3' >
-                            <SecureSpace />
-                            <h6 className='text-blue-900' >User successfully created</h6>
                         </div>
                     }
                     <fieldset className='border-0 flex flex-col mb-6' >

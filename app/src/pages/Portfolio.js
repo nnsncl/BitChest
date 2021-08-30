@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 
 import { useAuth } from '../hooks/use-auth';
-import { SESSION_TOKEN } from '../constants/session';
 
 import { Layout } from '../components/Layout';
 import { Loader } from '../components/Loader';
@@ -9,11 +8,7 @@ import { Loader } from '../components/Loader';
 export default function Portfolio() {
     const auth = useAuth();
 
-    useEffect(() => {
-        auth.getAuthUser();
-    }, [auth])
-
-    if (SESSION_TOKEN && !auth.user) {
+    if (!auth.storedUser) {
         return <Loader />;
     }
 
