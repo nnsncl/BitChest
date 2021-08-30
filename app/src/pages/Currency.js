@@ -192,7 +192,7 @@ export default function Currency() {
 
       <section className="flex md:flex-row flex-col items-start w-full justify-between gap-6">
         <div className="md:w-2/3 w-full">
-          {chartData.length !== 0 && <CurrencyChart data={chartData} />}
+          {chartData.length !== 0 && <CurrencyChart data={chartData} roi={currency.price_change_percentage_24h >= 0} />}
         </div>
         <article className="md:w-1/3 w-full bg-gray-800 p-6 rounded-xl">
           <h3 className="text-xl font-bold mb-9">
