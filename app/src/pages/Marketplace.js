@@ -20,7 +20,8 @@ export default function Marketplace() {
 
     const [displayWallet, setDisplayWallet] = useState(false);
     const [walletMode, setWalletMode] = useState(true);
-    const [selectedCoin, setSelectedCoin] = useState();
+    const [selectedCoin, setSelectedCoin] = useState(0);
+    const [moneyAmount, setMoneyAmount] = useState(0);
 
     useEffect(() => {
         auth.getAuthUser();
@@ -29,6 +30,8 @@ export default function Marketplace() {
     // if ((SESSION_TOKEN && !auth.user) || coins.length === 0 || !market.status.data) {
     //     return <Loader />;
     // }
+
+    console.log(coins, selectedCoin);
 
     return (
         <>
@@ -189,17 +192,18 @@ export default function Marketplace() {
                                 {coins && coins.map((item, key) => (
                                     <option
                                         key={key}
-                                        value={item.id}
+                                        value={key}
                                         className='capitalize'
                                     >{item.name}</option>
                                 ))}
                             </select>
                             <input 
                                 type="number"
+                                onChange={(e) => setMoneyAmount(e.target.value)}
                                 placeholder="Amount (EUR)"
                                 className='rounded-lg bg-gray-800 border-2 border-gray-700 py-2 px-4'
                             />
-                            Currency quantity
+                            Currency quantity: {moneyAmount && selectedCoin && moneyAmount / coins[selectedCoin].current_price}
                             <button 
                             className='bg-blue-900 py-2 rounded-lg text-white'
                             >Buy</button>
