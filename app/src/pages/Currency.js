@@ -10,6 +10,8 @@ import { Loader } from '../components/Loader';
 
 import { SESSION_TOKEN } from "../constants/session";
 
+import CurrencyChart from '../components/CurrencyChart';
+
 export default function Currency() {
     const auth = useAuth();
     const { coins } = useContext(CoinsContext);
@@ -110,7 +112,9 @@ export default function Currency() {
             </header>
 
             <section className='flex md:flex-row flex-col items-start w-full justify-between' >
-                <div className='md:w-2/3 w-full' >Graph</div>
+                <div className='md:w-2/3 w-full' >
+                    <CurrencyChart />
+                </div>
                 <article className='md:w-1/3 w-full bg-gray-800 p-6 rounded-xl' >
                     <h3 className='text-xl font-bold mb-9' >
                         <span className='uppercase'>{currency.symbol}</span>&nbsp;Price Statistics
