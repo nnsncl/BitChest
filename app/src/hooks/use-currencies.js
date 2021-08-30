@@ -1,12 +1,16 @@
 import { useState, useEffect, createContext } from "react";
-import { coingeckoEndpoints } from "../constants/api-endpoints";
 import axios from "axios";
+
+import { useLocalStorage } from "./use-local-storage";
+import { coingeckoEndpoints } from "../constants/api-endpoints";
+
 
 export const CoinsContext = createContext([]);
 
 export const CoinsProvider = ({ children }) => {
   const market = useCoinsProvider();
   const [coins, setCoins] = useState([]);
+  const [storedCoins, setStoredCoins] = useLocalStorage('_coins', []);
 
   useEffect(() => {
     axios
@@ -48,15 +52,17 @@ export const CoinsProvider = ({ children }) => {
             };
           });
           setCoins(formatedResponse);
+          setStoredCoins(formatedResponse);
         })
       )
       .catch(function (error) {
         console.error(error.message);
       });
+  //eslint-disable-next-line
   }, []);
 
   return (
-    <CoinsContext.Provider value={{ coins, market }}>
+    <CoinsContext.Provider value={{ coins, storedCoins, market }}>
       {children}
     </CoinsContext.Provider>
   );

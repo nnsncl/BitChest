@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import * as ROUTES from '../../routes/routes';
 
-import { useAuth } from '../../hooks/use-auth';
 import { AdminContext } from '../../hooks/use-admin';
 
 import { USER_ROLES } from '../../constants/user';
@@ -12,7 +11,6 @@ import { USER_ROLES } from '../../constants/user';
 import { Processing } from '../../components/Icons';
 
 export default function EditUser() {
-    const auth = useAuth();
     const admin = useContext(AdminContext);
     const { id } = useParams();
 
