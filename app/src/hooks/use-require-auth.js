@@ -7,7 +7,7 @@ export function useRequireAuth(redirectUrl = "/login") {
   const router = useRouter();
 
   useEffect(() => {
-    if (!auth.user) {
+    if (!auth.storedUser) {
       router.push(redirectUrl);
     }
     //eslint-disable-next-line

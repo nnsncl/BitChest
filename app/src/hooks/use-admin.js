@@ -5,16 +5,50 @@ import { baseApiUrl } from "../constants/api-endpoints";
 import { SESSION_TOKEN } from "../constants/session";
 
 import { useAuth } from "./use-auth";
-
+import { useLocalStorage } from "./use-local-storage";
 export const AdminContext = createContext([]);
 
 export const AdminProvider = ({ children }) => {
   const auth = useAuth();
   const actions = useAdminProvider();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useLocalStorage('_users', []);
 
   useEffect(() => {
-    (auth.user && auth.user.elevation === 'admin') &&
+    (auth.storedUser.elevation === 'admin' && users.length === 0) &&
+      axios({
+        method: "GET",
+        url: `${baseApiUrl}/api/users`,
+        withCredentials: true,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "true",
+          "Authorization": `Bearer ${SESSION_TOKEN}`
+        }
+      })
+        .then((response) => {
+          setUsers(response.data);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    //eslint-disable-next-line
+  }, [])
+
+  return (
+    <AdminContext.Provider value={{ actions }}>
+      {children}
+    </AdminContext.Provider>
+  );
+};
+
+function useAdminProvider() {
+  const [storedUsers, setStoredUsers] = useLocalStorage('_users', []);
+  const [success, setSuccess] = useState();
+  const [error, setError] = useState();
+  const [pending, setPending] = useState();
+
+  const getUsers = () => {
     axios({
       method: "GET",
       url: `${baseApiUrl}/api/users`,
@@ -27,30 +61,17 @@ export const AdminProvider = ({ children }) => {
       }
     })
       .then((response) => {
-        setUsers(response.data)
+        setStoredUsers(response.data);
       })
       .catch((error) => {
         console.log(error.message);
       });
-  }, [auth])
-
-  return (
-    <AdminContext.Provider value={{ users, actions }}>
-      {children}
-    </AdminContext.Provider>
-  );
-};
-
-function useAdminProvider() {
-  const [success, setSuccess] = useState();
-  const [error, setError] = useState();
-  const [pending, setPending] = useState();
-
+  }
   const createUser = (user) => {
     setPending(true);
     axios({
       method: "POST",
-      url: `${baseApiUrl}/api/user`,
+      url: `${baseApiUrl}/api/register`,
       withCredentials: true,
       headers: {
         "Accept": "application/json",
@@ -60,9 +81,10 @@ function useAdminProvider() {
       },
       data: user,
     })
-      .then((response) => {
+      .then(() => {
         setPending(false);
         setSuccess(true);
+        setStoredUsers([...storedUsers, user]);
       })
       .catch((error) => {
         setError(error.message);
@@ -83,9 +105,10 @@ function useAdminProvider() {
       },
       data: user,
     })
-      .then((response) => {
+      .then(() => {
         setPending(false);
         setSuccess(true);
+        getUsers();
       })
       .catch((error) => {
         setError(error.message);
@@ -93,6 +116,7 @@ function useAdminProvider() {
       });
   }
   const deleteUser = (id) => {
+    setPending(true);
     axios({
       method: "DELETE",
       url: `${baseApiUrl}/api/user/${id}`,
@@ -104,10 +128,10 @@ function useAdminProvider() {
         "Authorization": `Bearer ${SESSION_TOKEN}`
       }
     })
-      .then((response) => {
-        console.log(response)
-        setPending(true);
+      .then(() => {
+        setPending(false);
         setSuccess(true);
+        getUsers();
       })
       .catch((error) => {
         setError(error.message);
@@ -117,9 +141,11 @@ function useAdminProvider() {
   }
 
   return {
+    storedUsers,
     success,
     error,
     pending,
+    getUsers,
     createUser,
     updateUser,
     deleteUser

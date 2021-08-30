@@ -19,18 +19,14 @@ export default function Admin() {
     const admin = useContext(AdminContext);
 
     useEffect(() => {
-        auth.getAuthUser();
-    }, [auth])
-
-    // if (getSessionTokenCookie && !auth.user) {
-    //     return <Loader />;
-    // }
-
+        admin.actions.getUsers();
+    //eslint-disable-next-line
+    }, [])
 
     return (
         <Layout>
             <header className='mb-12' >
-                <h1 className='text-3xl font-bold mb-2'>Hi, {auth.user && auth.user.name}</h1>
+                <h1 className='text-3xl font-bold mb-2'>Hi, {auth.storedUser && auth.storedUser.name}</h1>
                 <p className='text-gray-700 mb-6' >Manage users informations and permissions.</p>
                 <ButtonSecondary to={ROUTES.ADD_USER} >Create a new user</ButtonSecondary>
             </header>
@@ -46,7 +42,7 @@ export default function Admin() {
                     </>
                 }>
                     {
-                        admin.users && admin.users.map((user, key) => (
+                        admin.actions.storedUsers && admin.actions.storedUsers.map((user, key) => (
                             <motion.tr
                                 key={key}
                                 initial='hidden'
@@ -70,7 +66,7 @@ export default function Admin() {
                                     <ButtonTertiary to={`${ROUTES.ADMIN}/user/${user.id}`}>
                                         Edit
                                     </ButtonTertiary>
-                                    <button onClick={() => admin.actions.deleteUser(user.id)} className='text-red-900 text-sm' >
+                                    <button onClick={() => admin.actions.deleteUser(user.id)} className='bg-red-900 py-3 px-3 rounded-lg text-sm' >
                                         Delete
                                     </button>
                                 </motion.td>

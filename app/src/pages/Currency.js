@@ -2,18 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 
-import { useAuth } from "../hooks/use-auth";
 import { CoinsContext } from "../hooks/use-currencies";
 
 import { Layout } from "../components/Layout";
-import { Loader } from "../components/Loader";
-
-import { SESSION_TOKEN } from "../constants/session";
-
 import CurrencyChart from "../components/CurrencyChart";
 
 export default function Currency() {
-  const auth = useAuth();
   const { coins } = useContext(CoinsContext);
   const { id } = useParams();
   const [currency, setCurrency] = useState({});
@@ -27,10 +21,6 @@ export default function Currency() {
       };
     });
   }
-
-  useEffect(() => {
-    auth.getAuthUser();
-  }, [auth]);
 
   useEffect(() => {
     coins &&
@@ -55,9 +45,6 @@ export default function Currency() {
       .catch((error) => console.log(error));
   }, [id, coins]);
 
-  if (SESSION_TOKEN && !auth.user) {
-    return <Loader />;
-  }
 
   return (
     <Layout>
