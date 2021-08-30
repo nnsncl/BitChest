@@ -8,7 +8,7 @@ import {
   LinearScale,
 } from "chart.js";
 
-export default function CurrencyChart() {
+export default function CurrencyChart({ data }) {
   const chartRef = useRef();
 
   useEffect(() => {
@@ -21,18 +21,10 @@ export default function CurrencyChart() {
         LinearScale
       );
 
-      const data = [];
-      let prev = 100;
-      for (let i = 0; i < 1000; i++) {
-        prev += 5 - Math.random() * 10;
-        data.push({ x: i, y: prev });
-      }
-
-      console.log(data);
-
-      const chartInstance = new Chart(chartRef.current, {
+      new Chart(chartRef.current, {
         type: "line",
         data: {
+          labels: [],
           datasets: [
             {
               borderColor: "cornflowerblue",
@@ -43,11 +35,12 @@ export default function CurrencyChart() {
           ],
         },
         options: {
+          responsive: true,
           interaction: {
             intersect: false,
           },
           plugins: {
-            legend: false,
+            legend: true,
           },
           scales: {
             x: {
