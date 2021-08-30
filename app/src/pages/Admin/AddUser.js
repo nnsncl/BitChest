@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from "react-router-dom";
 
 import * as ROUTES from '../../routes/routes';
-
-import { useAuth } from '../../hooks/use-auth';
 import { AdminContext } from '../../hooks/use-admin';
 
 import { BASE_USER } from '../../constants/user';
@@ -12,7 +10,6 @@ import { Processing } from '../../components/Icons';
 
 
 export default function AddUser() {
-    const auth = useAuth();
     const admin = useContext(AdminContext);
     const [user, setUser] = useState(BASE_USER);
 

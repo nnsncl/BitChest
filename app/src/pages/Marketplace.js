@@ -23,16 +23,6 @@ export default function Marketplace() {
     const [selectedCoin, setSelectedCoin] = useState(0);
     const [moneyAmount, setMoneyAmount] = useState(0);
 
-    useEffect(() => {
-        auth.getAuthUser();
-    }, [auth])
-
-    // if ((SESSION_TOKEN && !auth.user) || coins.length === 0 || !market.status.data) {
-    //     return <Loader />;
-    // }
-
-    console.log(coins, selectedCoin);
-
     return (
         <>
             <Layout>
@@ -166,13 +156,8 @@ export default function Marketplace() {
                         }
                     </Table>
                 </section>
-<<<<<<< HEAD
-                {auth.user && 
-                    <button className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' onClick={() => setDisplayWallet(!displayWallet)} >
-=======
                 {auth.storedUser &&
-                    <button className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' >
->>>>>>> da61e04432fce41e7be65972e42bd0e8f1505bb7
+                    <button  onClick={() => setDisplayWallet(!displayWallet)} className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' >
                         <Swap />
                         {auth.storedUser.balance}€
                     </button>

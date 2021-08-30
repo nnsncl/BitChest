@@ -59,6 +59,7 @@ export default function CurrencyChart({ data, roi }) {
         },
       });
     }
+    //eslint-disable-next-line
   }, []);
 
   return <canvas ref={chartRef} id="myChart"></canvas>;
