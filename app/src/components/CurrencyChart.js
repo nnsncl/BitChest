@@ -6,7 +6,10 @@ import {
   PointElement,
   CategoryScale,
   LinearScale,
+  TimeScale,
+  Tooltip
 } from "chart.js";
+import "chartjs-adapter-moment";
 
 export default function CurrencyChart({ data }) {
   const chartRef = useRef();
@@ -18,16 +21,18 @@ export default function CurrencyChart({ data }) {
         LineElement,
         PointElement,
         CategoryScale,
-        LinearScale
+        LinearScale,
+        TimeScale,
+        Tooltip
       );
 
       new Chart(chartRef.current, {
         type: "line",
         data: {
-          labels: [],
           datasets: [
             {
-              borderColor: "cornflowerblue",
+              label: "Price",
+              borderColor: 'cornflowerblue',
               borderWidth: 1,
               radius: 0,
               data: data,
@@ -38,13 +43,17 @@ export default function CurrencyChart({ data }) {
           responsive: true,
           interaction: {
             intersect: false,
+            mode: 'nearest',
           },
           plugins: {
-            legend: true,
+            tooltip: {
+              enabled: true,
+              position: "nearest",
+            },
           },
           scales: {
             x: {
-              type: "linear",
+              type: "time",
             },
           },
         },
