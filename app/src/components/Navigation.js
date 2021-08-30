@@ -19,10 +19,6 @@ export const Navigation = () => {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [isLogoutPending, setIsLogoutPending] = useState(false);
 
-    useEffect(() => {
-        auth.getAuthUser();
-    }, [auth])
-
     const handleLogout = () => {
         setIsLogoutPending(!isLogoutPending);
         auth.logout();
@@ -40,7 +36,7 @@ export const Navigation = () => {
                                     Marketplace
                                 </ButtonLink>
                             </li>
-                            {auth.user &&
+                            {auth.storedUser &&
                                 <li className="flex items-center" >
                                     <ButtonLink active={router.pathname === ROUTES.USER_ACTIVITY} to={ROUTES.USER_ACTIVITY}>
                                         Activity
@@ -51,7 +47,7 @@ export const Navigation = () => {
                     </div>
                     <div className="flex items-center w-full justify-end" >
                         <ul className='flex items-center justify-center sm:gap-6 gap-4'>
-                            {auth.user
+                            {auth.storedUser
                                 ? <>
                                     <li className="flex items-center" >
                                         <ButtonTertiary to={ROUTES.USER_PORTFOLIO} >Portfolio</ButtonTertiary>
@@ -61,7 +57,7 @@ export const Navigation = () => {
                                             onClick={() => setIsDropdownVisible(!isDropdownVisible)}
                                             className={`flex flex items-center gap-1 text-gray-700 hover:text-white ${isDropdownVisible && 'text-white'} transition  ease-in-out relative`}>
                                             <div className='w-10 h-10 rounded-lg bg-transparent border-2 border-gray-800 overflow-hidden' >
-                                                <img className='w-full h-full' src={auth.user.elevation === 'admin' ? '/avatar_admin.jpg' : '/avatar.jpg'} alt='' />
+                                                <img className='w-full h-full' src={auth.storedUser.elevation === 'admin' ? '/avatar_admin.jpg' : '/avatar.jpg'} alt='' />
                                             </div>
                                             <small className={`sm:inline-block hidden text-base origin-center transform transition ${isDropdownVisible ? '-rotate-90 text-white' : 'rotate-90'} ease-in-out`} >
                                                 &#x2023;
@@ -72,17 +68,17 @@ export const Navigation = () => {
                                                 initial="hidden"
                                                 animate="visible"
                                                 variants={list}
-                                                className={`rounded-lg flex flex-col w-52 p-4 gap-2 bg-gray-900 border-2 border-gray-800 absolute ${auth.user.elevation === 'admin' ? '-bottom-60' : '-bottom-52'} right-3`} >
+                                                className={`rounded-lg flex flex-col w-52 p-4 gap-2 bg-gray-900 border-2 border-gray-800 absolute ${auth.storedUser.elevation === 'admin' ? '-bottom-60' : '-bottom-52'} right-3`} >
                                                 <div className='flex items-center gap-3 mb-3 pb-3 border-b-2 border-gray-800' >
                                                     <div className='w-10 h-10 rounded-lg bg-transparent rounded-lg border-2 border-gray-800 overflow-hidden' >
-                                                        <img className='w-full h-full' src={auth.user.elevation === 'admin' ? '/avatar_admin.jpg' : '/avatar.jpg'} alt='' />
+                                                        <img className='w-full h-full' src={auth.storedUser.elevation === 'admin' ? '/avatar_admin.jpg' : '/avatar.jpg'} alt='' />
                                                     </div>
                                                     <div>
-                                                        <p className='text-xs font-bold capitalize' >{auth?.user?.name}</p>
-                                                        <p className='text-xs text-gray-700' >{auth?.user?.email}</p>
+                                                        <p className='text-xs font-bold capitalize' >{auth.storedUser.name}</p>
+                                                        <p className='text-xs text-gray-700' >{auth.storedUser.email}</p>
                                                     </div>
                                                 </div>
-                                                {auth.user && auth.user.elevation === 'admin'
+                                                {auth.storedUser && auth.storedUser.elevation === 'admin'
                                                     ? <ButtonLink active={router.pathname === ROUTES.ADMIN} to={ROUTES.ADMIN}>Admin</ButtonLink>
                                                     : null
                                                 }

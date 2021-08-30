@@ -7,8 +7,6 @@ import * as ROUTES from '../../routes/routes';
 import { useAuth } from '../../hooks/use-auth';
 import { useRouter } from '../../hooks/use-router';
 
-import { SESSION_TOKEN } from '../../constants/session';
-
 import { Processing } from '../../components/Icons';
 
 
@@ -36,7 +34,7 @@ export default function Login() {
     const error = auth.error;
 
     useEffect(() => {
-        (auth.user || SESSION_TOKEN) && router.push(ROUTES.MARKETPLACE);
+        (auth.storedUser.id) && router.push(ROUTES.MARKETPLACE);
         auth.pending && setIsLoginPending(!isLoginPending);
         //eslint-disable-next-line
     }, [auth])

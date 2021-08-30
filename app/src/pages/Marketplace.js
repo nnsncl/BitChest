@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -166,10 +166,15 @@ export default function Marketplace() {
                         }
                     </Table>
                 </section>
+<<<<<<< HEAD
                 {auth.user && 
                     <button className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' onClick={() => setDisplayWallet(!displayWallet)} >
+=======
+                {auth.storedUser &&
+                    <button className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' >
+>>>>>>> da61e04432fce41e7be65972e42bd0e8f1505bb7
                         <Swap />
-                        {auth.user.balance}€
+                        {auth.storedUser.balance}€
                     </button>
                 }
                 {displayWallet && 
