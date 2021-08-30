@@ -11,7 +11,7 @@ import {
 } from "chart.js";
 import "chartjs-adapter-moment";
 
-export default function CurrencyChart({ data }) {
+export default function CurrencyChart({ data, roi }) {
   const chartRef = useRef();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function CurrencyChart({ data }) {
           datasets: [
             {
               label: "Price",
-              borderColor: 'cornflowerblue',
+              borderColor: roi ? '#16c784' : '#ea3943',
               borderWidth: 1,
               radius: 0,
               data: data,
