@@ -19,7 +19,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedInteger("currency_id")->nullable();
             $table->foreign("currency_id")->references("id")->on("currencies");
 
-            $table->integer("currency_value");
+            $table->float("currency_value");
 
             $table->boolean("type");
 
