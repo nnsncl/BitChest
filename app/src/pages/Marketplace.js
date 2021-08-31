@@ -218,7 +218,7 @@ export default function Marketplace() {
                                     </label>
                                     <div className='flex w-full justify-between items-center ' >
                                         <p className='bg-transparent text-xs font-bold text-white appearance-none outline-none'>
-                                            {(balanceAmount && selectedCoin && balanceAmount / storedCoins[selectedCoin].current_price).toFixed(2)}
+                                            {((balanceAmount && selectedCoin && balanceAmount) / storedCoins[selectedCoin].current_price).toFixed(2)}
                                         </p>
                                         <small className='text-white text-xs' ><Diamond /></small>
                                     </div>
