@@ -7,9 +7,8 @@ import { useAuth } from '../hooks/use-auth';
 
 import { Layout } from '../components/Layout';
 import { ButtonGhost } from '../components/Buttons';
-import { GraphUp, GraphDown, Swap } from '../components/Icons';
+import { GraphUp, GraphDown, Swap, Diamond } from '../components/Icons';
 import { Table } from '../components/Table';
-import { TransactionsModule } from '../components/TransactionModule';
 
 import { container, article } from '../animations/motion';
 
@@ -20,6 +19,10 @@ export default function Marketplace() {
     const auth = useAuth();
 
     const [displayWallet, setDisplayWallet] = useState(false);
+    const [selectedCoin, setSelectedCoin] = useState(0);
+
+    const [transactionMode, settransactionMode] = useState(true);
+    const [balanceAmount, setbalanceAmount] = useState(0);
 
     return (
         <>
@@ -78,7 +81,6 @@ export default function Marketplace() {
                         }
                     </motion.section>
                 }
-
                 <section className='mt-12' >
                     <Table headings={
                         <>
@@ -154,7 +156,6 @@ export default function Marketplace() {
                         }
                     </Table>
                 </section>
-
                 {auth.storedUser &&
                     <button
                         onClick={() => setDisplayWallet(!displayWallet)}
@@ -163,8 +164,70 @@ export default function Marketplace() {
                         {auth.storedUser.balance}€
                     </button>
                 }
-                {displayWallet &&
-                    <TransactionsModule />
+                {(displayWallet && storedCoins) &&
+                    <article className='bg-black text-gray-700 fixed bottom-20 right-6 rounded-2xl shadow-xl w-auto z-90'>
+                        <ul className='flex w-full' >
+                            <li className={`w-1/2 py-6 flex items-center justify-center ${transactionMode && "border-b-2 text-blue-900"}`}>
+                                <button className='hover:text-blue-900 text-sm' onClick={() => settransactionMode(true)}>Buy</button>
+                            </li>
+                            <li className={`w-1/2 py-6 flex items-center justify-center ${!transactionMode && "border-b-2 text-blue-900"}`}>
+                                <button className='hover:text-blue-900 text-sm' onClick={() => settransactionMode(false)}>Sell</button>
+                            </li>
+                        </ul>
+                        {transactionMode
+                            ? <form className='px-6 py-9 flex flex-col gap-6' >
+                                <fieldset className='flex flex-col rounded-lg border-2 border-gray-800 bg-gray-900 py-4 px-3 outline-none' >
+                                    <label htmlFor='coin' className='text-xs mb-1' >Coin Name</label>
+                                    <div className='flex w-full justify-between items-center ' >
+                                        <select
+                                            onChange={(e) => setSelectedCoin(e.target.value)}
+                                            name='coin'
+                                            id="coin-select"
+                                            className='bg-transparent text-base font-bold text-white appearance-none'
+                                        >
+                                            <option value="" disabled >--Please choose a currency--</option>
+                                            {storedCoins && storedCoins.map((item, key) => (
+                                                <option
+                                                    key={key}
+                                                    value={key}
+                                                    className='capitalize font-bold text-white py-3' >
+                                                    {item.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        <small className='text-white text-xs' >▼</small>
+                                    </div>
+                                </fieldset>
+                                <fieldset className='flex flex-col rounded-lg border-2 border-gray-800 bg-gray-900 py-4 px-3 outline-none' >
+                                    <label htmlFor='transaction_amount' className='text-xs mb-1' >Amount (EUR)</label>
+                                    <div className='flex w-full justify-between items-center ' >
+                                        <input
+                                            type='number'
+                                            onChange={(e) => setbalanceAmount(e.target.value)}
+                                            name='transaction_amount'
+                                            placeholder='10'
+                                            defaultValue=''
+                                            className='bg-transparent text-xs font-bold text-white appearance-none outline-none'
+                                        />
+                                        <small className='text-white text-xs' ><Swap /></small>
+                                    </div>
+                                </fieldset>
+                                <fieldset className='flex flex-col rounded-lg border-2 border-gray-800 bg-gray-900 py-4 px-3 outline-none' >
+                                    <label htmlFor='transaction_amount' className='text-xs mb-1' >
+                                        Amount&nbsp;<span className='uppercase' >({storedCoins[selectedCoin].symbol})</span>
+                                    </label>
+                                    <div className='flex w-full justify-between items-center ' >
+                                        <p className='bg-transparent text-xs font-bold text-white appearance-none outline-none'>
+                                            {(balanceAmount && selectedCoin && balanceAmount / storedCoins[selectedCoin].current_price).toFixed(2)}
+                                        </p>
+                                        <small className='text-white text-xs' ><Diamond /></small>
+                                    </div>
+                                </fieldset>
+                                <button className='bg-blue-900 py-2 rounded-lg text-white'>Buy</button>
+                            </form>
+                            : 'sell'
+                        }
+                    </article>
                 }
             </Layout>
         </>
