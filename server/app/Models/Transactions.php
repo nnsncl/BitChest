@@ -13,7 +13,8 @@ class Transactions extends Model
         "currency_value",
         "type",
         "user_id",
-        "transaction_amount"
+        "transaction_amount",
+        "currency_quantity"
     ];
 
     public function users() {

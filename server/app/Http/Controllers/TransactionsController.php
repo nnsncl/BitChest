@@ -31,10 +31,15 @@ class TransactionsController extends Controller
             "currency_value" => "required",
             "type" => "required",
             "user_id" => "required",
-            "transaction_amount" => "required"
+            "transaction_amount" => "required",
+            "currency_quantity" => "required",
         ]);
         
-        return Transactions::create($request->all());
+        Transactions::create($request->all());
+
+        return [
+            "message" => "Transaction created !",
+        ];
     }
 
     /**
