@@ -7,7 +7,7 @@ import { CoinsContext } from "../hooks/use-currencies";
 import { baseApiUrl } from "../constants/api-endpoints";
 
 import { Swap, Diamond, Processing } from "./Icons";
-import { transactions_container, transactions_article } from '../animations/motion';
+import { container, article, transactions_container, transactions_article } from '../animations/motion';
 
 
 export const TransactionsModule = ({ position }) => {
@@ -103,15 +103,19 @@ export const TransactionsModule = ({ position }) => {
                 {error}
               </section>}
             {success &&
-              <section className='border-2 border-gray-800  p-6 rounded-xl' >
+              <motion.section
+                            initial='hidden'
+              animate='visible'
+              variants={container}
+              className='border-2 border-gray-800  p-6 rounded-xl' >
                 <div className=' flex items-baseline gap-3' >
                   <Diamond />
-                  <div>
+                  <motion.div   variants={article}>
                     <h3 className='font-bold text-lg gradient-text mb-2' >{success}</h3>
                     <p className='text-sm text-white' >A new transaction has been added to your portfolio.</p>
-                  </div>
+                  </motion.div>
                 </div>
-              </section>}
+              </motion.section>}
 
             <motion.fieldset variants={transactions_article} className="flex flex-col rounded-lg border-2 border-gray-800 bg-gray-900 py-4 px-3 outline-none">
               <label htmlFor="coin" className="text-xs mb-1">
