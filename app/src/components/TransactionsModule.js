@@ -3,7 +3,7 @@ import React, { useState, useContext } from "react";
 import { CoinsContext } from "../hooks/use-currencies";
 import { baseApiUrl } from "../constants/api-endpoints";
 
-import { Swap, Diamond } from "./Icons";
+import { Swap, Diamond, Processing } from "./Icons";
 import { useAuth } from "../hooks/use-auth";
 
 export const TransactionsModule = ({ position }) => {
@@ -14,17 +14,21 @@ export const TransactionsModule = ({ position }) => {
   const [transactionMode, setTransactionMode] = useState(true);
   const [balanceAmount, setBalanceAmount] = useState(0);
 
-  const [transaction, setTransaction] = useState({
+  const BASE_TRANSACTION = {
     currency_value: null,
     currency_id: null,
     type: transactionMode,
     user_id: auth.storedUser.id,
     transaction_amount: null,
     currency_quantity: null,
-  });
+  }
+  const [transaction, setTransaction] = useState(BASE_TRANSACTION);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState(false);
 
   function handlePurchase(e) {
     e.preventDefault();
+    setPending(true);
     axios({
       method: "POST",
       url: `${baseApiUrl}/api/transactions`,
@@ -36,53 +40,51 @@ export const TransactionsModule = ({ position }) => {
       },
       data: transaction,
     })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    .then(() => {
+      setPending(false);
+      setError(false);
+    })
+    .then(() => {
+      setPending(false);
+      setError(false);
+    })
+    .catch((error) => {
+      setPending(false);
+      setError(error.message);
+    });
   }
 
   console.log(transaction);
+  console.log('PENDING: ' + pending);
 
   return (
-    <article
-      className={`${
-        position ? position : "bottom-20"
-      } right-6 bg-black text-gray-700 fixed rounded-2xl shadow-xl md:w-96 w-80 z-90`}
-    >
+    <article className={`${position ? position : "bottom-20"} right-6 bg-black text-gray-700 fixed rounded-2xl shadow-xl md:w-96 w-80 z-90`} >
       <ul className="flex w-full">
-        <li
-          className={`w-1/2 py-6 flex items-center justify-center ${
-            transactionMode && "border-b-2 text-blue-900"
-          }`}
-        >
+        <li className={`w-1/2 py-6 flex items-center justify-center ${transactionMode && "border-b-2 text-blue-900"}`} >
           <button
             className="hover:text-blue-900 text-sm"
-            onClick={() => setTransactionMode(true)}
-          >
+            onClick={() => setTransactionMode(true)} >
             Buy
           </button>
         </li>
-        <li
-          className={`w-1/2 py-6 flex items-center justify-center ${
-            !transactionMode && "border-b-2 text-blue-900"
-          }`}
-        >
+        <li className={`w-1/2 py-6 flex items-center justify-center ${!transactionMode && "border-b-2 text-blue-900"}`}>
           <button
             className="hover:text-blue-900 text-sm"
-            onClick={() => setTransactionMode(false)}
-          >
+            onClick={() => setTransactionMode(false)}>
             Sell
           </button>
         </li>
       </ul>
-      {transactionMode ? (
-        <form
+      {transactionMode
+        ? <form
           className="px-6 py-9 flex flex-col gap-6"
-          onSubmit={(e) => handlePurchase(e)}
-        >
+          onSubmit={(e) => handlePurchase(e)}>
+          {
+            error &&
+            <div className={`bg-red-900 text-sm p-6 rounded-xl `} >
+              {error}
+            </div>
+          }
           <fieldset className="flex flex-col rounded-lg border-2 border-gray-800 bg-gray-900 py-4 px-3 outline-none">
             <label htmlFor="coin" className="text-xs mb-1">
               Coin Name
@@ -108,27 +110,26 @@ export const TransactionsModule = ({ position }) => {
                       <option
                         key={key}
                         value={key}
-                        className="text-xs font-regular"
-                      >
+                        className="text-xs font-regular"  >
                         {item.name}
                       </option>
                     );
                   })}
               </select>
-              {storedCoins[selectedCoin] && storedCoins[selectedCoin].image ? (
-                <img
-                  className="w-8 h-8 bg-white rounded-full"
-                  src={storedCoins[selectedCoin].image}
-                  alt={`${storedCoins[selectedCoin].image.name}-logo`}
-                />
-              ) : (
-                <small className="text-white text-xs">▼</small>
-              )}
+              {storedCoins[selectedCoin] && storedCoins[selectedCoin].image
+                ? (
+                  <img
+                    className="w-8 h-8 bg-white rounded-full"
+                    src={storedCoins[selectedCoin].image}
+                    alt={`${storedCoins[selectedCoin].image.name}-logo`}
+                  />)
+                : <small className="text-white text-xs">▼</small>
+              }
             </div>
           </fieldset>
           <fieldset className="flex flex-col rounded-lg border-2 border-gray-800 bg-gray-900 py-4 px-3 outline-none">
             <label htmlFor="transaction_amount" className="text-xs mb-1">
-              Amount (EUR)
+              Amount&nbsp;(EUR)
             </label>
             <div className="flex w-full justify-between items-center ">
               <input
@@ -140,8 +141,8 @@ export const TransactionsModule = ({ position }) => {
                     transaction_amount: Number(e.target.value),
                     currency_quantity: Number(
                       e.target.value /
-                        (storedCoins[selectedCoin] &&
-                          storedCoins[selectedCoin].current_price)
+                      (storedCoins[selectedCoin] &&
+                        storedCoins[selectedCoin].current_price)
                     ),
                   });
                 }}
@@ -160,18 +161,17 @@ export const TransactionsModule = ({ position }) => {
             <label htmlFor="transaction_amount" className="text-xs mb-1">
               Amount&nbsp;
               <span className="uppercase">
-                ({storedCoins[selectedCoin] && storedCoins[selectedCoin].symbol}
-                )
+                ({storedCoins[selectedCoin] && storedCoins[selectedCoin].symbol} )
               </span>
             </label>
             <div className="flex w-full justify-between items-center ">
               <p className="bg-transparent text-xs font-bold text-white appearance-none outline-none">
                 {storedCoins[selectedCoin]
                   ? (
-                      (balanceAmount && selectedCoin && balanceAmount) /
-                      (storedCoins[selectedCoin] &&
-                        storedCoins[selectedCoin].current_price)
-                    ).toFixed(2)
+                    (balanceAmount && selectedCoin && balanceAmount) /
+                    (storedCoins[selectedCoin] &&
+                      storedCoins[selectedCoin].current_price)
+                  ).toFixed(2)
                   : 0}
               </p>
               <small className="text-white text-xs">
@@ -180,15 +180,18 @@ export const TransactionsModule = ({ position }) => {
             </div>
           </fieldset>
           <button
-            className="bg-blue-900 py-4 rounded-lg text-white disabled:opacity-30"
-            disabled={selectedCoin ? false : true}
-          >
-            Buy
+            className='bg-blue-900 py-4 rounded-lg text-white flex items-center justify-center disabled:opacity-30 text-xs uppercase font-bold'
+            disabled={!selectedCoin || pending ? true : false} >
+            {storedCoins[selectedCoin] && storedCoins[selectedCoin].name
+                ? pending
+                  ? <Processing />
+                  : `Buy ${storedCoins[selectedCoin].name}`
+                : 'Select a currency'
+            }
           </button>
         </form>
-      ) : (
-        "sell"
-      )}
+        : "sell"
+      }
     </article>
   );
 };
