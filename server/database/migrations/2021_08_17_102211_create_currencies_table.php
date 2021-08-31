@@ -15,9 +15,7 @@ class CreateCurrenciesTable extends Migration
     {
         Schema::create('currencies', function (Blueprint $table) {
             $table->integerIncrements("id");
-            $table->float("current_price", 100, 10)->default(0);
             $table->string("coin_id");
-            $table->string("last_updated");
             $table->string("name");
             $table->string("symbol");
         });

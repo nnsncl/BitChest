@@ -39,10 +39,8 @@ class CurrencyTableSeeder extends Seeder
         $returnValue = function ($value) {
             return [
                 "coin_id" => $value[0]["id"],
-                "current_price" => $value[0]["current_price"],
                 "name" => $value[0]["name"],
                 "symbol" => $value[0]["symbol"],
-                "last_updated" => $value[0]["last_updated"],
             ];
         };
 
