@@ -7,28 +7,28 @@ export const Banner = () => {
 
     return (
         <section className='w-full py-3 flex items-center justify-between w-100 text-gray-700 overflow-hidden relative overflow-x-auto overflow-y-hidden scrollbar--hidden gap-6' >
-            {market.status.data && market.exchangesList
+            {market.marketStatus.data && market.exchangesListStatus
                 ? <>
                     <div className="sm:hidden absolute h-full w-12 bg-gradient--dark right-0 top-0" />
                     <ul className='flex items-center gap-6' >
                         <li className='min-w-max' >
                             <p className='text-xs' >
-                                Active cryptocurrencies:&nbsp;<span className='text-blue-900' >{market.status.data.active_cryptocurrencies}</span>
+                                Active cryptocurrencies:&nbsp;<span className='text-blue-900' >{market.marketStatus.data.active_cryptocurrencies}</span>
                             </p>
                         </li>
                         <li className='min-w-max' >
                             <p className='text-xs' >
-                                Exchanges:&nbsp;<span className='text-blue-900' >{market.exchangesList.length}</span>
+                                Exchanges:&nbsp;<span className='text-blue-900' >{market.exchangesListStatus.length}</span>
                             </p>
                         </li>
                         <li className='min-w-max' >
                             <p className='text-xs' >
-                                Market cap:&nbsp;<span className='text-blue-900' >{market.status.data.total_market_cap.eur}€</span>
+                                Market cap:&nbsp;<span className='text-blue-900' >{market.marketStatus.data.total_market_cap.eur}€</span>
                             </p>
                         </li>
                         <li className='min-w-max' >
                             <p className='text-xs' >
-                                24h Volume:&nbsp;<span className='text-blue-900' >{market.status.data.total_volume.eur}€</span>
+                                24h Volume:&nbsp;<span className='text-blue-900' >{market.marketStatus.data.total_volume.eur}€</span>
                             </p>
                         </li>
                     </ul>

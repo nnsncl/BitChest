@@ -2,11 +2,6 @@ import React, { useState, useContext, createContext, } from "react";
 import axios from "axios";
 
 import { useLocalStorage } from "./use-local-storage";
-
-import {
-    SESSION_KEY,
-    SESSION_TOKEN,
-} from "../constants/session";
 import { baseApiUrl } from '../constants/api-endpoints';
 
 
@@ -32,6 +27,7 @@ function useAuthProvider() {
     const [pending, setPending] = useState();
 
     const [storedUser, setStoredUser] = useLocalStorage('_user', {});
+    const [storedToken, setStoredToken] = useLocalStorage('_token', {});
 
     const login = (email, password) => {
         setPending(true);
@@ -56,7 +52,7 @@ function useAuthProvider() {
                     },
                 })
                     .then((response) => {
-                        if (SESSION_TOKEN || storedUser) {
+                        if (storedToken || storedUser) {
                             setUser(null);
                             sessionStorage.clear();
                             localStorage.clear();
@@ -64,7 +60,7 @@ function useAuthProvider() {
                         setUser(response.data.user);
                         setStoredUser(response.data.user);
                         setToken(response.data.token);
-                        sessionStorage.setItem(SESSION_KEY, response.data.token);
+                        setStoredToken(response.data.token);
                         setPending(false);
                         return {
                             user: response.data.user,
@@ -88,7 +84,7 @@ function useAuthProvider() {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "true",
-                "Authorization": `Bearer ${token ? token : SESSION_TOKEN}`
+                "Authorization": `Bearer ${token ? token : storedToken}`
             }
         })
             .then(() => {
@@ -110,6 +106,7 @@ function useAuthProvider() {
     return {
         user,
         storedUser,
+        storedToken,
         error,
         pending,
         login,
