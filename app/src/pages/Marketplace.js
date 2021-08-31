@@ -19,7 +19,7 @@ export default function Marketplace() {
     const auth = useAuth();
 
     const [displayWallet, setDisplayWallet] = useState(false);
-    const [selectedCoin, setSelectedCoin] = useState(0);
+    const [selectedCoin, setSelectedCoin] = useState(null);
 
     const [transactionMode, settransactionMode] = useState(true);
     const [balanceAmount, setbalanceAmount] = useState(0);
@@ -165,7 +165,7 @@ export default function Marketplace() {
                     </button>
                 }
                 {(displayWallet && storedCoins) &&
-                    <article className='bg-black text-gray-700 fixed bottom-20 right-6 rounded-2xl shadow-xl w-auto z-90'>
+                    <article className='bg-black text-gray-700 fixed bottom-20 right-6 rounded-2xl shadow-xl md:w-96 w-80 z-90'>
                         <ul className='flex w-full' >
                             <li className={`w-1/2 py-6 flex items-center justify-center ${transactionMode && "border-b-2 text-blue-900"}`}>
                                 <button className='hover:text-blue-900 text-sm' onClick={() => settransactionMode(true)}>Buy</button>
@@ -183,19 +183,27 @@ export default function Marketplace() {
                                             onChange={(e) => setSelectedCoin(e.target.value)}
                                             name='coin'
                                             id="coin-select"
-                                            className='bg-transparent text-base font-bold text-white appearance-none'
+                                            className='bg-transparent w-full appearance-none outline-none text-white'
                                         >
-                                            <option value="" disabled >--Please choose a currency--</option>
+                                            <option value="" >Select a currency</option>
                                             {storedCoins && storedCoins.map((item, key) => (
                                                 <option
                                                     key={key}
                                                     value={key}
-                                                    className='capitalize font-bold text-white py-3' >
+                                                    className='text-xs font-regular' >
                                                     {item.name}
                                                 </option>
                                             ))}
                                         </select>
-                                        <small className='text-white text-xs' >▼</small>
+                                        {storedCoins[selectedCoin] &&
+                                            storedCoins[selectedCoin].image
+                                            ? <img
+                                                className='w-8 h-8 bg-white rounded-full'
+                                                src={storedCoins[selectedCoin].image}
+                                                alt={`${storedCoins[selectedCoin].image.name}-logo`}
+                                            />
+                                            : <small className='text-white text-xs' >▼</small>
+                                        }
                                     </div>
                                 </fieldset>
                                 <fieldset className='flex flex-col rounded-lg border-2 border-gray-800 bg-gray-900 py-4 px-3 outline-none' >
@@ -207,18 +215,25 @@ export default function Marketplace() {
                                             name='transaction_amount'
                                             placeholder='10'
                                             defaultValue=''
-                                            className='bg-transparent text-xs font-bold text-white appearance-none outline-none'
+                                            min={0}
+                                            className='w-full bg-transparent text-xs font-bold text-white appearance-none outline-none'
                                         />
                                         <small className='text-white text-xs' ><Swap /></small>
                                     </div>
                                 </fieldset>
                                 <fieldset className='flex flex-col rounded-lg border-2 border-gray-800 bg-gray-900 py-4 px-3 outline-none' >
                                     <label htmlFor='transaction_amount' className='text-xs mb-1' >
-                                        Amount&nbsp;<span className='uppercase' >({storedCoins[selectedCoin].symbol})</span>
+                                        Amount&nbsp;<span className='uppercase' >({storedCoins[selectedCoin] && storedCoins[selectedCoin].symbol})</span>
                                     </label>
                                     <div className='flex w-full justify-between items-center ' >
                                         <p className='bg-transparent text-xs font-bold text-white appearance-none outline-none'>
-                                            {((balanceAmount && selectedCoin && balanceAmount) / storedCoins[selectedCoin].current_price).toFixed(2)}
+                                            { storedCoins[selectedCoin]
+                                                ? ((balanceAmount && selectedCoin && balanceAmount)
+                                                    / (storedCoins[selectedCoin]
+                                                        && storedCoins[selectedCoin].current_price)
+                                                ).toFixed(2)
+                                                : 0
+                                            }
                                         </p>
                                         <small className='text-white text-xs' ><Diamond /></small>
                                     </div>
