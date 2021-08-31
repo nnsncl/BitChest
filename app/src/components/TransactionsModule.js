@@ -20,6 +20,7 @@ export const TransactionsModule = ({ position }) => {
     type: transactionMode,
     user_id: auth.storedUser.id,
     transaction_amount: null,
+    currency_quantity: null,
   });
 
   function handlePurchase(e) {
@@ -29,14 +30,14 @@ export const TransactionsModule = ({ position }) => {
       url: `${baseApiUrl}/api/transactions`,
       withCredentials: true,
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "true",
       },
       data: transaction,
     })
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -93,7 +94,7 @@ export const TransactionsModule = ({ position }) => {
                   setTransaction({
                     ...transaction,
                     currency_id: Number(e.target.value) + 1,
-                    currency_value: storedCoins[e.target.value].current_price,
+                    currency_value: storedCoins[e.target.value] ? storedCoins[e.target.value].current_price : null,
                   });
                 }}
                 name="coin"
@@ -137,6 +138,11 @@ export const TransactionsModule = ({ position }) => {
                   setTransaction({
                     ...transaction,
                     transaction_amount: Number(e.target.value),
+                    currency_quantity: Number(
+                      e.target.value /
+                        (storedCoins[selectedCoin] &&
+                          storedCoins[selectedCoin].current_price)
+                    ),
                   });
                 }}
                 name="transaction_amount"
@@ -173,7 +179,10 @@ export const TransactionsModule = ({ position }) => {
               </small>
             </div>
           </fieldset>
-          <button className="bg-blue-900 py-2 rounded-lg text-white">
+          <button
+            className="bg-blue-900 py-4 rounded-lg text-white disabled:opacity-30"
+            disabled={selectedCoin ? false : true}
+          >
             Buy
           </button>
         </form>
