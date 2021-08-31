@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
+import { motion } from 'framer-motion';
 import axios from "axios";
 
 import { useAuth } from "../hooks/use-auth";
@@ -90,7 +91,7 @@ export default function Currency() {
                 <div className='flex items-start justify-between' >
 
                   <div className="flex items-start gap-3 mb-3">
-                    <h2 className="text-6xl font-bold">
+                    <h2 className="text-5xl font-bold">
                       {currentCoin.current_price && currentCoin.current_price.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                       })}
@@ -114,13 +115,6 @@ export default function Currency() {
                       €
                     </span>
                   </div>
-
-                  <button
-                    onClick={() => setTransactionsModuleVisible(!transactionsModuleVisible)}
-                    className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg' >
-                    <Swap />
-                    {auth.storedUser.balance}€
-                  </button>
                 </div>
 
                 <ul className="flex items-baseline gap-3 text-xs">
@@ -272,8 +266,16 @@ export default function Currency() {
             </h3>
             <Market />
           </section>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setTransactionsModuleVisible(!transactionsModuleVisible)}
+            className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' >
+            <Swap />
+            {auth.storedUser.balance}€
+          </motion.button>
           {(transactionsModuleVisible && storedCoins) &&
-            <TransactionsModule position='bottom-4 right-4' />
+            <TransactionsModule />
           }
         </>
       }

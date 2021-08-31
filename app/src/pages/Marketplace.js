@@ -49,7 +49,7 @@ export default function Marketplace() {
                         <b>:</b>
                     </ButtonGhost>
                 </header>
-                { topCoinsVisible
+                {topCoinsVisible
                     && <Market />
                 }
                 <section className='mt-12' >
@@ -128,12 +128,14 @@ export default function Marketplace() {
                     </Table>
                 </section>
                 {auth.storedUser &&
-                    <button
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={() => setTransactionsModuleVisible(!transactionsModuleVisible)}
                         className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' >
                         <Swap />
                         {auth.storedUser.balance}€
-                    </button>
+                    </motion.button>
                 }
                 {(transactionsModuleVisible && storedCoins) &&
                     <TransactionsModule />
