@@ -15,19 +15,16 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->integerIncrements("id");
-
-            $table->unsignedInteger("currency_id")->nullable();
-            $table->foreign("currency_id")->references("id")->on("currencies");
-
-            $table->float("currency_value");
-
             $table->boolean("type");
-
             $table->unsignedInteger("user_id")->nullable();
             $table->foreign("user_id")->references("id")->on("users");
 
-            $table->integer("transaction_amount");
+            $table->unsignedInteger("currency_id")->nullable();
+            $table->foreign("currency_id")->references("id")->on("currencies");
+            $table->float("currency_value");
+            $table->float("currency_quantity");
 
+            $table->integer("transaction_amount");
             $table->timestamps();
         });
     }
