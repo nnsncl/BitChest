@@ -22,7 +22,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedInteger("currency_id")->nullable();
             $table->foreign("currency_id")->references("id")->on("currencies");
             $table->float("currency_value");
-            $table->float("currency_quantity");
+            $table->float("currency_quantity", 30, 20);
 
             $table->integer("transaction_amount");
             $table->timestamps();
