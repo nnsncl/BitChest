@@ -2,7 +2,6 @@ import { useState, useEffect, createContext } from "react";
 import axios from "axios";
 
 import { baseApiUrl } from "../constants/api-endpoints";
-import { SESSION_TOKEN } from "../constants/session";
 
 import { useAuth } from "./use-auth";
 import { useLocalStorage } from "./use-local-storage";
@@ -23,7 +22,7 @@ export const AdminProvider = ({ children }) => {
           "Accept": "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "true",
-          "Authorization": `Bearer ${SESSION_TOKEN}`
+          "Authorization": `Bearer ${auth.storedToken}`
         }
       })
         .then((response) => {
@@ -43,6 +42,7 @@ export const AdminProvider = ({ children }) => {
 };
 
 function useAdminProvider() {
+  const auth = useAuth();
   const [storedUsers, setStoredUsers] = useLocalStorage('_users', []);
   const [success, setSuccess] = useState();
   const [error, setError] = useState();
@@ -57,7 +57,7 @@ function useAdminProvider() {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "true",
-        "Authorization": `Bearer ${SESSION_TOKEN}`
+        "Authorization": `Bearer ${auth.storedToken}`
       }
     })
       .then((response) => {
@@ -77,7 +77,7 @@ function useAdminProvider() {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "true",
-        "Authorization": `Bearer ${SESSION_TOKEN}`
+        "Authorization": `Bearer ${auth.storedToken}`
       },
       data: user,
     })
@@ -101,7 +101,7 @@ function useAdminProvider() {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "true",
-        "Authorization": `Bearer ${SESSION_TOKEN}`
+        "Authorization": `Bearer ${auth.storedToken}`
       },
       data: user,
     })
@@ -125,7 +125,7 @@ function useAdminProvider() {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "true",
-        "Authorization": `Bearer ${SESSION_TOKEN}`
+        "Authorization": `Bearer ${auth.storedToken}`
       }
     })
       .then(() => {

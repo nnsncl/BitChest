@@ -15,13 +15,11 @@ import { ProtectedRoute } from "./routes/protected-routes";
 
 import { useAuth } from "./hooks/use-auth";
 
-import { SESSION_TOKEN } from "./constants/session";
-
 
 export default function App() {
   const auth = useAuth();
-  const isAuthenticated = (!auth.storedUser.id && SESSION_TOKEN) || auth.storedUser.id;
-  const isAdmin = auth.storedUser.id && auth.storedUser.elevation === 'admin';
+  const isAuthenticated = auth.storedUser.id && auth.storedToken;
+  const isAdmin = auth.storedUser.elevation === 'admin';
 
   return (
     <Switch>

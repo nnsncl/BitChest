@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from "react";
+import { useEffect, createContext } from "react";
 import axios from "axios";
 
 import { useLocalStorage } from "./use-local-storage";
@@ -9,7 +9,6 @@ export const CoinsContext = createContext([]);
 
 export const CoinsProvider = ({ children }) => {
   const market = useCoinsProvider();
-  const [coins, setCoins] = useState([]);
   const [storedCoins, setStoredCoins] = useLocalStorage('_coins', []);
 
   useEffect(() => {
@@ -39,7 +38,7 @@ export const CoinsProvider = ({ children }) => {
               last_updated: item.data[0].last_updated,
               low_24h: item.data[0].low_24h,
               market_cap: item.data[0].market_cap,
-              market_cap_change_24h: item.data[0].market_cap_change_24h ,
+              market_cap_change_24h: item.data[0].market_cap_change_24h,
               market_cap_change_percentage_24h: item.data[0].market_cap_change_percentage_24h,
               market_cap_rank: item.data[0].market_cap_rank,
               max_supply: item.data[0].max_supply,
@@ -51,26 +50,25 @@ export const CoinsProvider = ({ children }) => {
               total_volume: item.data[0].total_volume
             };
           });
-          setCoins(formatedResponse);
           setStoredCoins(formatedResponse);
         })
       )
       .catch(function (error) {
         console.error(error.message);
       });
-  //eslint-disable-next-line
+    //eslint-disable-next-line
   }, []);
 
   return (
-    <CoinsContext.Provider value={{ coins, storedCoins, market }}>
+    <CoinsContext.Provider value={{ storedCoins, market }}>
       {children}
     </CoinsContext.Provider>
   );
 };
 
 function useCoinsProvider() {
-  const [status, setStatus] = useState({});
-  const [exchangesList, setExchangesList] = useState([]);
+  const [marketStatus, setMarketStatus] = useLocalStorage('_market', {});
+  const [exchangesListStatus, setExchangesListStatus] = useLocalStorage('_exchanges', []);
 
   useEffect(() => {
     axios
@@ -80,17 +78,18 @@ function useCoinsProvider() {
       ])
       .then(
         axios.spread((...responses) => {
-          setStatus(responses[0].data);
-          setExchangesList(responses[1].data);
+          setMarketStatus(responses[0].data);
+          setExchangesListStatus(responses[1].data);
         })
       )
       .catch(function (error) {
         console.error(error.message);
       });
+  //eslint-disable-next-line
   }, []);
 
   return {
-    status,
-    exchangesList,
+    marketStatus,
+    exchangesListStatus
   };
 }

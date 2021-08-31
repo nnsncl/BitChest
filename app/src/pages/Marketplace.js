@@ -33,13 +33,13 @@ export default function Marketplace() {
                         <p className='text-gray-700' >
                             The total market cap has&nbsp;
                             <span className='text-white' >
-                                {market.status.data &&
-                                    market.status.data.market_cap_change_percentage_24h_usd >= 0 ? 'increased' : 'decreased'
+                                {market.marketStatus.data &&
+                                    market.marketStatus.data.market_cap_change_percentage_24h_usd >= 0 ? 'increased' : 'decreased'
                                 }
                             </span>&nbsp;by&nbsp;
-                            {market.status.data &&
-                                <b className={`${market.status.data.market_cap_change_percentage_24h_usd >= 0 ? 'text-green-900' : 'text-red-900'} text-sm`} >
-                                    {market.status.data.market_cap_change_percentage_24h_usd.toFixed(2)}%
+                            {market.marketStatus.data &&
+                                <b className={`${market.marketStatus.data.market_cap_change_percentage_24h_usd >= 0 ? 'text-green-900' : 'text-red-900'} text-sm`} >
+                                    {market.marketStatus.data.market_cap_change_percentage_24h_usd.toFixed(2)}%
                                 </b>
                             }
                             &nbsp;over the&nbsp;<span className='text-white'>last day</span>.
