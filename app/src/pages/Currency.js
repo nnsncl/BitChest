@@ -2,14 +2,20 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 
+import { useAuth } from "../hooks/use-auth";
 import { CoinsContext } from "../hooks/use-currencies";
 
 import { Layout } from "../components/Layout";
+import { TransactionsModule } from '../components/TransactionsModule';
+import { Market } from "../components/Market";
+import { Swap } from "../components/Icons";
 import CurrencyChart from "../components/CurrencyChart";
 
 export default function Currency() {
+  const auth = useAuth();
   const { coins, storedCoins } = useContext(CoinsContext);
   const { id } = useParams();
+  const [transactionsModuleVisible, setTransactionsModuleVisible] = useState(false);
   const [currentCoin, setCurrentCoin] = useState({});
   const [chartData, setChartData] = useState([]);
 
@@ -81,31 +87,42 @@ export default function Currency() {
             </section>
             <section className="md:w-2/3 w-full">
               <div className=" mb-6 pb-6 border-b-2 border-gray-800">
-                <div className="flex items-start gap-3 mb-3">
-                  <h2 className="text-6xl font-bold">
-                    {currentCoin.current_price && currentCoin.current_price.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
-                    €
-                  </h2>
-                  <span
-                    className={`${currentCoin.price_change_percentage_24h >= 0
-                      ? "bg-green-900"
-                      : "bg-red-900"
-                      } mt-2 flex items-center text-sm px-3 py-1 rounded-lg text-xs uppercase`}
-                  >
-                    {currentCoin.price_change_percentage_24h >= 0 ? (
-                      <small>&#x25B2;</small>
-                    ) : (
-                      <small>&#x25BC;</small>
-                    )}
-                    &nbsp;
-                    {currentCoin.current_price && currentCoin.current_price.toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}
-                    €
-                  </span>
+                <div className='flex items-start justify-between' >
+
+                  <div className="flex items-start gap-3 mb-3">
+                    <h2 className="text-6xl font-bold">
+                      {currentCoin.current_price && currentCoin.current_price.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                      €
+                    </h2>
+                    <span
+                      className={`${currentCoin.price_change_percentage_24h >= 0
+                        ? "bg-green-900"
+                        : "bg-red-900"
+                        } mt-2 flex items-center text-sm px-3 py-1 rounded-lg text-xs uppercase`}
+                    >
+                      {currentCoin.price_change_percentage_24h >= 0 ? (
+                        <small>&#x25B2;</small>
+                      ) : (
+                        <small>&#x25BC;</small>
+                      )}
+                      &nbsp;
+                      {currentCoin.current_price && currentCoin.current_price.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                      €
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => setTransactionsModuleVisible(!transactionsModuleVisible)}
+                    className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg' >
+                    <Swap />
+                    {auth.storedUser.balance}€
+                  </button>
                 </div>
+
                 <ul className="flex items-baseline gap-3 text-xs">
                   <li className="flex items-center text-xs text-gray-700 mb-2 mr-3">
                     {currentCoin.name}&nbsp;Price&nbsp;
@@ -164,7 +181,7 @@ export default function Currency() {
             </section>
           </header>
 
-          <section className="flex md:flex-row flex-col items-start w-full justify-between gap-6">
+          <section className="flex md:flex-row flex-col items-start w-full justify-between gap-6 mb-12">
             <div className="md:w-2/3 w-full">
               {chartData.length !== 0 && <CurrencyChart data={chartData} roi={currentCoin.price_change_percentage_24h >= 0} />}
             </div>
@@ -249,9 +266,17 @@ export default function Currency() {
               </ul>
             </article>
           </section>
+          <section>
+            <h3 className='text-3xl font-bold mb-2'>
+              <span className='gradient-text' >Today's</span> Cryptocurrency<br />market prices
+            </h3>
+            <Market />
+          </section>
+          {(transactionsModuleVisible && storedCoins) &&
+            <TransactionsModule position='bottom-4 right-4' />
+          }
         </>
       }
-
     </Layout>
   );
-}
+};
