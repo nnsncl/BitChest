@@ -3,21 +3,21 @@ import { CoinsContext } from '../hooks/use-currencies';
 
 import { Swap, Diamond } from './Icons';
 
-export const TransactionsModule = (position) => {
+export const TransactionsModule = ({position}) => {
     const { storedCoins } = useContext(CoinsContext);
     const [selectedCoin, setSelectedCoin] = useState(null);
 
-    const [transactionMode, settransactionMode] = useState(true);
-    const [balanceAmount, setbalanceAmount] = useState(0);
+    const [transactionMode, setTransactionMode] = useState(true);
+    const [balanceAmount, setBalanceAmount] = useState(0);
 
     return (
         <article className={`${position ? position : 'bottom-20'} right-6 bg-black text-gray-700 fixed rounded-2xl shadow-xl md:w-96 w-80 z-90`}>
             <ul className='flex w-full' >
                 <li className={`w-1/2 py-6 flex items-center justify-center ${transactionMode && "border-b-2 text-blue-900"}`}>
-                    <button className='hover:text-blue-900 text-sm' onClick={() => settransactionMode(true)}>Buy</button>
+                    <button className='hover:text-blue-900 text-sm' onClick={() => setTransactionMode(true)}>Buy</button>
                 </li>
                 <li className={`w-1/2 py-6 flex items-center justify-center ${!transactionMode && "border-b-2 text-blue-900"}`}>
-                    <button className='hover:text-blue-900 text-sm' onClick={() => settransactionMode(false)}>Sell</button>
+                    <button className='hover:text-blue-900 text-sm' onClick={() => setTransactionMode(false)}>Sell</button>
                 </li>
             </ul>
             {transactionMode
@@ -57,7 +57,7 @@ export const TransactionsModule = (position) => {
                         <div className='flex w-full justify-between items-center ' >
                             <input
                                 type='number'
-                                onChange={(e) => setbalanceAmount(e.target.value)}
+                                onChange={(e) => setBalanceAmount(e.target.value)}
                                 name='transaction_amount'
                                 placeholder='10'
                                 defaultValue=''
