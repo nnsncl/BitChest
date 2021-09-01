@@ -46,10 +46,10 @@ export const TransactionsModule = ({ position, width }) => {
       data: transaction,
     })
       .then((response) => {
+        auth.getCurrentUser(auth.storedUser.id);
         setSuccess(response.data.message);
         setPending(false);
         setError(false);
-        auth.getCurrentUser(auth.storedUser.id);
       })
       .catch((error) => {
         setPending(false);

@@ -1,22 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
-import { motion } from 'framer-motion';
 import axios from "axios";
 
-import { useAuth } from "../hooks/use-auth";
 import { CoinsContext } from "../hooks/use-currencies";
 
 import { Layout } from "../components/Layout";
-import { TransactionsModule } from '../components/TransactionsModule';
 import { Market } from "../components/Market";
-import { Swap } from "../components/Icons";
 import CurrencyChart from "../components/CurrencyChart";
 
 export default function Currency() {
-  const auth = useAuth();
   const { coins, storedCoins } = useContext(CoinsContext);
   const { id } = useParams();
-  const [transactionsModuleVisible, setTransactionsModuleVisible] = useState(false);
   const [currentCoin, setCurrentCoin] = useState({});
   const [chartData, setChartData] = useState([]);
 
@@ -46,7 +40,7 @@ export default function Currency() {
 
 
   return (
-    <Layout>
+    <Layout transactionsModule >
       {
         currentCoin &&
         <>
@@ -266,17 +260,6 @@ export default function Currency() {
             </h3>
             <Market />
           </section>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setTransactionsModuleVisible(!transactionsModuleVisible)}
-            className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' >
-            <Swap />
-            {auth.storedUser.balance}€
-          </motion.button>
-          {(transactionsModuleVisible && storedCoins) &&
-            <TransactionsModule  position='fixed right-6 bottom-20' />
-          }
         </>
       }
     </Layout>

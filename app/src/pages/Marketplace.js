@@ -3,14 +3,11 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import { CoinsContext } from '../hooks/use-currencies';
-import { useAuth } from '../hooks/use-auth';
 
 import { Layout } from '../components/Layout';
 import { Market } from '../components/Market';
-import { TransactionsModule } from '../components/TransactionsModule';
 
 import { ButtonGhost } from '../components/Buttons';
-import { Swap } from '../components/Icons';
 import { Table } from '../components/Table';
 
 import { container, article } from '../animations/motion';
@@ -18,13 +15,11 @@ import { container, article } from '../animations/motion';
 
 export default function Marketplace() {
     const [topCoinsVisible, setTopCoinsVisible] = useState(true);
-    const [transactionsModuleVisible, setTransactionsModuleVisible] = useState(false);
     const { storedCoins, market } = useContext(CoinsContext);
-    const auth = useAuth();
 
     return (
         <>
-            <Layout>
+            <Layout transactionsModule >
                 <header className='flex items-start gap-6' >
                     <section>
                         <h1 className='text-3xl font-bold mb-2'>
@@ -127,19 +122,6 @@ export default function Marketplace() {
                         }
                     </Table>
                 </section>
-                {auth.storedUser &&
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => setTransactionsModuleVisible(!transactionsModuleVisible)}
-                        className='flex items-center gap-2 gradient-bg text-sm py-3 px-6 rounded-lg fixed bottom-6 right-6' >
-                        <Swap />
-                        {auth.storedUser.balance}€
-                    </motion.button>
-                }
-                {(transactionsModuleVisible && storedCoins) &&
-                    <TransactionsModule  position='fixed right-6 bottom-20' />
-                }
             </Layout>
         </>
     );
