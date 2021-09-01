@@ -10,7 +10,7 @@ import { Swap, Diamond, Processing } from "./Icons";
 import { container, article, transactions_container, transactions_article } from '../animations/motion';
 
 
-export const TransactionsModule = ({ position }) => {
+export const TransactionsModule = ({ position, width }) => {
   const auth = useAuth();
   const { storedCoins } = useContext(CoinsContext);
   const [selectedCoin, setSelectedCoin] = useState(null);
@@ -70,7 +70,7 @@ export const TransactionsModule = ({ position }) => {
         initial='hidden'
         animate='visible'
         variants={transactions_container}
-        className={`${position ? position : "bottom-20"} right-6 bg-black text-gray-700 fixed rounded-2xl shadow-xl md:w-96 w-80 z-90`} >
+        className={`${position ? position : ""}  ${width ? '' : 'md:w-96 w-80'} bg-black text-gray-700 rounded-2xl shadow-xl z-90`} >
 
         <motion.ul 
         variants={transactions_article}

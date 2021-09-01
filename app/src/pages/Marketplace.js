@@ -138,7 +138,7 @@ export default function Marketplace() {
                     </motion.button>
                 }
                 {(transactionsModuleVisible && storedCoins) &&
-                    <TransactionsModule />
+                    <TransactionsModule  position='fixed right-6 bottom-20' />
                 }
             </Layout>
         </>
