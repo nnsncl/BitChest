@@ -25,6 +25,7 @@ class CreateTransactionsTable extends Migration
             $table->float("currency_quantity", 30, 20);
 
             $table->integer("transaction_amount");
+            $table->float("roi")->nullable();
             $table->timestamps();
         });
     }

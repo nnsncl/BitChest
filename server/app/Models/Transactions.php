@@ -14,7 +14,8 @@ class Transactions extends Model
         "type",
         "user_id",
         "transaction_amount",
-        "currency_quantity"
+        "currency_quantity",
+        "roi"
     ];
 
     public function users() {
