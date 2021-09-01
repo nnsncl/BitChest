@@ -39,9 +39,10 @@ export const TransactionsModule = ({ position, width }) => {
       url: `${baseApiUrl}/api/transaction/purchase`,
       withCredentials: true,
       headers: {
-        Accept: "application/json",
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "true",
+        "Authorization": `Bearer ${auth.storedToken}`
       },
       data: transaction,
     })

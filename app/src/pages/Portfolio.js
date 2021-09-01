@@ -3,20 +3,25 @@ import { motion } from 'framer-motion';
 
 import { useAuth } from '../hooks/use-auth';
 import { CoinsContext } from '../hooks/use-currencies';
+import { TransactionsContext } from '../hooks/use-transactions';
 
 import { Layout } from '../components/Layout';
 import { Table } from '../components/Table';
+import { GraphUp } from '../components/Icons';
 import { TransactionsModule } from '../components/TransactionsModule';
 
 import { container, article } from '../animations/motion';
-import { GraphUp } from '../components/Icons';
 
 
 export default function Portfolio() {
     const auth = useAuth();
-    const { storedCoins } = useContext(CoinsContext);
+    const transactions = useContext(TransactionsContext);
+    const { refs, storedCoins } = useContext(CoinsContext);
 
     const [totalCoinsTableVisible, setTotalCoinsTableVisible] = useState(true);
+
+    console.log(refs)
+    console.log(transactions)
 
     return (
         <Layout>
