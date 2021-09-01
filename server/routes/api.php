@@ -23,11 +23,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Public Routes
-// Transactions
-Route::get('/transactions', [TransactionsController::class, 'index']);
-Route::get('/transaction/{id}', [TransactionsController::class, 'show']);
-Route::post('/transaction/purchase', [TransactionsController::class, 'purchase']);
-Route::post('/transaction/sell', [TransactionsController::class, 'sell']);
 
 // Currencies
 Route::get('/currencies', [CurrenciesController::class, 'index']);
@@ -48,4 +43,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('user/{id}/transactions', [UsersController::class, 'indexTransactions']);
     Route::put('user/{id}', [UsersController::class, 'update']);
     Route::delete('user/{id}', [UsersController::class, 'destroy']);
+
+    // Transactions
+    Route::get('/transactions', [TransactionsController::class, 'index']);
+    Route::get('/transaction/{id}', [TransactionsController::class, 'show']);
+    Route::post('/transaction/purchase', [TransactionsController::class, 'purchase']);
+    Route::post('/transaction/sell', [TransactionsController::class, 'sell']);
 });
