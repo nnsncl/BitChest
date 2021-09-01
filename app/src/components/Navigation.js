@@ -36,13 +36,6 @@ export const Navigation = () => {
                                     Marketplace
                                 </ButtonLink>
                             </li>
-                            {auth.storedUser &&
-                                <li className="flex items-center" >
-                                    <ButtonLink active={router.pathname === ROUTES.USER_ACTIVITY} to={ROUTES.USER_ACTIVITY}>
-                                        Activity
-                                    </ButtonLink>
-                                </li>
-                            }
                         </ul>
                     </div>
                     <div className="flex items-center w-full justify-end" >

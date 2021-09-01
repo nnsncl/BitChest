@@ -3,7 +3,6 @@ import { Switch, Route, Redirect } from "react-router-dom";
 
 import Marketplace from "./pages/Marketplace";
 import Portfolio from "./pages/Portfolio";
-import Activity from "./pages/Activity";
 import Login from "./pages/Auth/Login";
 import Admin from "./pages/Admin/Admin";
 import AddUser from "./pages/Admin/AddUser";
@@ -33,9 +32,6 @@ export default function App() {
         <Admin />
       </ProtectedRoute>
 
-      <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.USER_ACTIVITY} >
-        <Activity />
-      </ProtectedRoute>
       <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.USER_PORTFOLIO}>
         <Portfolio />
       </ProtectedRoute>
