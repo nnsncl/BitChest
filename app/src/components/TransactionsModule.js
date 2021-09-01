@@ -36,7 +36,7 @@ export const TransactionsModule = ({ position, width }) => {
     setPending(true);
     axios({
       method: "POST",
-      url: `${baseApiUrl}/api/transactions`,
+      url: `${baseApiUrl}/api/transaction/purchase`,
       withCredentials: true,
       headers: {
         Accept: "application/json",

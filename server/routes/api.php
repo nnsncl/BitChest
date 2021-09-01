@@ -23,17 +23,19 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Public Routes
+// Transactions
 Route::get('/transactions', [TransactionsController::class, 'index']);
 Route::get('/transaction/{id}', [TransactionsController::class, 'show']);
-Route::post('/transactions', [TransactionsController::class, 'purchase']);
-Route::delete('/transaction/{id}', [TransactionsController::class, 'destroy']);
+Route::post('/transaction/purchase', [TransactionsController::class, 'purchase']);
+Route::post('/transaction/sell', [TransactionsController::class, 'sell']);
 
+// Currencies
 Route::get('/currencies', [CurrenciesController::class, 'index']);
 Route::get('/currency/{id}', [CurrenciesController::class, 'show']);
 Route::post('/currency', [CurrenciesController::class, 'store']);
 Route::put('/currency/{id}', [CurrenciesController::class, 'update']);
 
-// Auth routes
+// Auth
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
