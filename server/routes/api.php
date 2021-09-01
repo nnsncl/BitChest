@@ -25,7 +25,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Public Routes
 Route::get('/transactions', [TransactionsController::class, 'index']);
 Route::get('/transaction/{id}', [TransactionsController::class, 'show']);
-Route::post('/transactions', [TransactionsController::class, 'store']);
+Route::post('/transactions', [TransactionsController::class, 'purchase']);
 Route::delete('/transaction/{id}', [TransactionsController::class, 'destroy']);
 
 Route::get('/currencies', [CurrenciesController::class, 'index']);
