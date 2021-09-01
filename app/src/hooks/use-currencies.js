@@ -85,10 +85,18 @@ export const CoinsProvider = ({ children }) => {
     }
   //eslint-disable-next-line
   }, [])
-
+  const Converter = (amount, coin, ref, mode) => {
+    if(mode === 'purchase') {
+      return ((amount && coin && amount) / (ref[coin] && ref[coin].current_price)).toFixed(5);
+    }
+    if(mode === 'sell') {
+      return ((amount && coin && amount) * (ref[coin] && ref[coin].current_price)).toFixed(2);
+    }
+    return;
+  };
 
   return (
-    <CoinsContext.Provider value={{ refs, storedCoins, market }}>
+    <CoinsContext.Provider value={{ refs, storedCoins, market, Converter }}>
       {children}
     </CoinsContext.Provider>
   );
@@ -118,6 +126,6 @@ function useCoinsProvider() {
 
   return {
     marketStatus,
-    exchangesListStatus
+    exchangesListStatus,
   };
 }
