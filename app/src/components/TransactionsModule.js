@@ -102,7 +102,6 @@ export const TransactionsModule = ({ position, width }) => {
     });
   };
 
-
   useEffect(() => {
     if (success) {
       setTimeout(() => {

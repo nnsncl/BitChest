@@ -85,6 +85,15 @@ export const CoinsProvider = ({ children }) => {
     }
   //eslint-disable-next-line
   }, [])
+
+  /**
+   * 
+   * @param {*} amount 
+   * @param {*} coin 
+   * @param {*} ref 
+   * @param {*} mode  // mode: sell, purchase
+   * @returns 
+   */
   const Converter = (amount, coin, ref, mode) => {
     if(mode === 'purchase') {
       return ((amount && coin && amount) / (ref[coin] && ref[coin].current_price)).toFixed(5);
