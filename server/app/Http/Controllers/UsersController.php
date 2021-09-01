@@ -28,6 +28,12 @@ class UsersController extends Controller
         return User::find($id);
     }
 
+    public function indexTransactions($id) {
+        $user = User::find($id);
+
+        return $user->transactions;
+    }
+
     /**
      * Update the specified resource in storage.
      *
