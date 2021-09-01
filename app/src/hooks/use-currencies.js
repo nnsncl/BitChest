@@ -4,12 +4,16 @@ import axios from "axios";
 import { useLocalStorage } from "./use-local-storage";
 import { coingeckoEndpoints } from "../constants/api-endpoints";
 
+import { baseApiUrl } from "../constants/api-endpoints";
+import { useAuth } from "./use-auth";
 
 export const CoinsContext = createContext([]);
 
 export const CoinsProvider = ({ children }) => {
+  const auth = useAuth();
   const market = useCoinsProvider();
   const [storedCoins, setStoredCoins] = useLocalStorage('_coins', []);
+  const [refs, setRefs] = useLocalStorage('_refs', []);
 
   useEffect(() => {
     axios
@@ -59,8 +63,32 @@ export const CoinsProvider = ({ children }) => {
     //eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    if (refs.length === 0) {
+      axios({
+        method: "GET",
+        url: `${baseApiUrl}/api/currencies`,
+        withCredentials: true,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "true",
+          "Authorization": `Bearer ${auth.storedToken}`
+        }
+      })
+        .then((response) => {
+          setRefs(response.data);
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+    }
+  //eslint-disable-next-line
+  }, [])
+
+
   return (
-    <CoinsContext.Provider value={{ storedCoins, market }}>
+    <CoinsContext.Provider value={{ refs, storedCoins, market }}>
       {children}
     </CoinsContext.Provider>
   );
