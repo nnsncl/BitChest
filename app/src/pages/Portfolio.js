@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/use-auth';
 import { useTransactions } from '../hooks/use-transactions';
 import { CoinsContext } from '../hooks/use-currencies';
 
+import { Loader } from '../components/Loader';
 import { Layout } from '../components/Layout';
 import { Table } from '../components/Table';
 import { GraphUp } from '../components/Icons';
@@ -21,11 +22,13 @@ export default function Portfolio() {
     const [totalCoinsTableVisible, setTotalCoinsTableVisible] = useState(true);
 
     useEffect(() => {
-        userTransactions
-            .actions
-            .getTransactions(auth.storedUser.id, auth.storedToken);
+        userTransactions.actions.getTransactions(auth.storedUser.id, auth.storedToken);
         //eslint-disable-next-line
     }, [userTransactions.actions.transactions])
+
+    if (!userTransactions.actions.transactions) {
+        return <Loader />;
+    }
 
     return (
         <Layout>

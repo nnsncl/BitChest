@@ -43,7 +43,7 @@ export const AdminProvider = ({ children }) => {
 
 function useAdminProvider() {
   const auth = useAuth();
-  const [storedUsers, setStoredUsers] = useLocalStorage('_users', []);
+  const [storedUsers, setStoredUsers] = useLocalStorage('_users', null);
   const [success, setSuccess] = useState();
   const [error, setError] = useState();
   const [pending, setPending] = useState();

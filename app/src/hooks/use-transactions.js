@@ -3,6 +3,7 @@ import axios from "axios";
 
 import { baseApiUrl } from "../constants/api-endpoints";
 import { useLocalStorage } from "./use-local-storage";
+import { useAuth } from "./use-auth";
 
 
 export const TransactionsContext = createContext([]);
@@ -23,7 +24,8 @@ export const useTransactions = () => {
 
 
 function useTransactionsProvider() {
-    const [transactions, setTransactions] = useLocalStorage('_transactions', []);
+    const auth = useAuth();
+    const [transactions, setTransactions] = useLocalStorage('_transactions', null);
     const [success, setSuccess] = useState();
     const [error, setError] = useState();
     const [pending, setPending] = useState();
@@ -42,6 +44,7 @@ function useTransactionsProvider() {
             }
         })
             .then((response) => {
+                auth.getCurrentUser(auth.storedUser.id); // Update storedUser after a transaction to get the current balance.
                 setTransactions(response.data);
                 setPending(false);
                 setSuccess(true);
