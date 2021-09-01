@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
 
 import { useAuth } from '../hooks/use-auth';
@@ -16,9 +15,8 @@ import { GraphUp } from '../components/Icons';
 export default function Portfolio() {
     const auth = useAuth();
     const { storedCoins } = useContext(CoinsContext);
-    // if (!auth.storedUser) {
-    //     return <Loader />;
-    // }
+
+    const [totalCoinsTableVisible, setTotalCoinsTableVisible] = useState(true);
 
     return (
         <Layout>
@@ -30,9 +28,16 @@ export default function Portfolio() {
                 <div className="md:w-3/4 w-full">
                     <div className='flex items-center justify-between gap-6 mb-3' >
                         <h3 className='text-base font-light'>Your assets</h3>
-                        <span className='flex items-center gap-3 font-light text-xs py-2 px-4 border-2 border-gray-800 rounded-full' >
-                            <GraphUp />Tradable assets
-                        </span>
+                        <button
+                            onClick={() => setTotalCoinsTableVisible(!totalCoinsTableVisible)}
+                            className='flex items-center gap-3 font-light text-xs py-2 px-4 border-2 border-gray-800 hover:bg-gray-800 rounded-full outline-none' >
+                            <GraphUp />
+                            Tradable assets
+                            {totalCoinsTableVisible
+                                ? <small>&#x25BC;</small>
+                                : <small>&#x25B2;</small>
+                            }
+                        </button>
                     </div>
 
                     <Table boxed headings={
@@ -42,14 +47,14 @@ export default function Portfolio() {
                             <th className="w-1/4 text-right text-xs" >Total Coin</th>
                         </>
                     }>
-                        {storedCoins &&
+                        {(storedCoins && totalCoinsTableVisible) &&
                             storedCoins.map((item, key) => (
                                 <motion.tr
                                     key={key}
                                     initial='hidden'
                                     animate='visible'
                                     variants={container}
-                                    className='rounded-b-xl flex items-center justify-between gap-6 text-white py-6 px-4 gap-6 border-t-2 border-gray-800'>
+                                    className='rounded-b-2xl flex items-center justify-between gap-6 text-white py-6 px-4 gap-6 border-t-2 border-gray-800'>
                                     <motion.td variants={article} className='w-2/4 flex items-center justify-start gap-3' >
                                         <img className='w-6 h-6 bg-white rounded-full' src={item.image} alt={`${item.name}-logo`} />
                                         <p className='flex flex-col md:text-sm text-xs' >
@@ -86,6 +91,13 @@ export default function Portfolio() {
                     </Table>
                 </div>
                 <div className="md:w-1/4 w-full">
+                    <div className='flex items-center justify-between gap-6 mb-3' >
+                        <p className='text-sm font-bold'><span className='gradient-text' >Current&nbsp;</span>balance:</p>
+                        <span
+                            className='text-xs font-bold py-2 px-4 border-2 border-gray-800 rounded-full outline-none' >
+                            {auth.storedUser.balance}€&nbsp;<span className='uppercase font-light text-gray-700' >(EUR)</span>
+                        </span>
+                    </div>
                     <TransactionsModule width='w-100' />
                 </div>
             </section>

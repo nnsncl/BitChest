@@ -112,8 +112,8 @@ function useAuthProvider() {
             }
         })
             .then((response) => {
-                setUser(response.data);
                 setStoredUser(response.data);
+                setUser(response.data);
                 setPending(false);
             })
             .catch((error) => {

@@ -4,22 +4,15 @@ export const transactions_container = {
         y: 0,
         transition: {
             type: 'spring',
-            mass: 1.3,
-            bounce: 0.3,
-            staggerChildren: 0.05,
-            duration: 0.3
+            mass: 0.3,
+            bounce: 0,
+            staggerChildren: 0.03,
+            duration: 0.1
         },
     },
     hidden: {
         opacity: 0,
-        y: 100,
-        transition: {
-            type: 'spring',
-            mass: 1.3,
-            bounce: 0.3,
-            staggerChildren: 0.05,
-            duration: 0.3
-        },
+        y: 100
     },
 }
 
