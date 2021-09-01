@@ -52,11 +52,6 @@ function useAuthProvider() {
                     },
                 })
                     .then((response) => {
-                        if (storedToken || storedUser) {
-                            setUser(null);
-                            sessionStorage.clear();
-                            localStorage.clear();
-                        }
                         setUser(response.data.user);
                         setStoredUser(response.data.user);
                         setToken(response.data.token);
@@ -117,8 +112,8 @@ function useAuthProvider() {
             }
         })
             .then((response) => {
-                setUser(response.data);
                 setStoredUser(response.data);
+                setUser(response.data);
                 setPending(false);
             })
             .catch((error) => {
