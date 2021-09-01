@@ -3,6 +3,7 @@ import axios from "axios";
 import { motion } from 'framer-motion';
 
 import { useAuth } from "../hooks/use-auth";
+import { useTransactions } from "../hooks/use-transactions";
 import { CoinsContext } from "../hooks/use-currencies";
 import { baseApiUrl } from "../constants/api-endpoints";
 
@@ -12,9 +13,10 @@ import { container, article, transactions_container, transactions_article } from
 
 export const TransactionsModule = ({ position, width }) => {
   const auth = useAuth();
+  const transactions = useTransactions();
   const { storedCoins } = useContext(CoinsContext);
-  const [selectedCoin, setSelectedCoin] = useState(null);
 
+  const [selectedCoin, setSelectedCoin] = useState(null);
   const [transactionMode, setTransactionMode] = useState(true);
   const [balanceAmount, setBalanceAmount] = useState(0);
 
@@ -48,6 +50,7 @@ export const TransactionsModule = ({ position, width }) => {
     })
       .then((response) => {
         auth.getCurrentUser(auth.storedUser.id);
+        transactions.actions.getTransactions(auth.storedUser.id, auth.storedToken);
         setSuccess(response.data.message);
         setPending(false);
         setError(false);

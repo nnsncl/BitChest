@@ -1,9 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
 
 import { useAuth } from '../hooks/use-auth';
+import { useTransactions } from '../hooks/use-transactions';
 import { CoinsContext } from '../hooks/use-currencies';
-import { TransactionsContext } from '../hooks/use-transactions';
 
 import { Layout } from '../components/Layout';
 import { Table } from '../components/Table';
@@ -15,13 +15,17 @@ import { container, article } from '../animations/motion';
 
 export default function Portfolio() {
     const auth = useAuth();
-    const transactions = useContext(TransactionsContext);
+    const userTransactions = useTransactions();
     const { refs, storedCoins } = useContext(CoinsContext);
 
     const [totalCoinsTableVisible, setTotalCoinsTableVisible] = useState(true);
 
-    console.log(refs)
-    console.log(transactions)
+    useEffect(() => {
+        userTransactions
+            .actions
+            .getTransactions(auth.storedUser.id, auth.storedToken);
+        //eslint-disable-next-line
+    }, [userTransactions.actions.transactions])
 
     return (
         <Layout>
