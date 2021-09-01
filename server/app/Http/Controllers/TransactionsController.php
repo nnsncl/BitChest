@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transactions;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TransactionsController extends Controller
@@ -23,7 +24,7 @@ class TransactionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function purchase(Request $request)
     {
 
         $request->validate([
@@ -34,8 +35,14 @@ class TransactionsController extends Controller
             "transaction_amount" => "required",
             "currency_quantity" => "required",
         ]);
-        
+
         Transactions::create($request->all());
+
+        $user = User::find($request->user_id);
+
+        $user->balance = $user->balance - $request->transaction_amount;
+
+        $user->save();
 
         return [
             "message" => "Transaction created !",

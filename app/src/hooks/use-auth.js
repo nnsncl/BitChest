@@ -98,6 +98,30 @@ function useAuthProvider() {
             });
     };
 
+    const getCurrentUser = (id) => {
+        setPending(true);
+        axios({
+            method: "GET",
+            url: `${baseApiUrl}/api/user/${id}`,
+            withCredentials: true,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "true",
+                "Authorization": `Bearer ${token ? token : storedToken}`
+            }
+        })
+            .then((response) => {
+                setUser(response.data);
+                setStoredUser(response.data);
+                setPending(false);
+            })
+            .catch((error) => {
+                setError(error.message);
+                setPending(false);
+            });
+    }
+
     return {
         user,
         storedUser,
@@ -105,6 +129,7 @@ function useAuthProvider() {
         error,
         pending,
         login,
-        logout
+        logout,
+        getCurrentUser
     };
 }

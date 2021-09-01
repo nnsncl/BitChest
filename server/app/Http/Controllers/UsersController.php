@@ -28,7 +28,8 @@ class UsersController extends Controller
         return User::find($id);
     }
 
-    public function indexTransactions($id) {
+    public function indexTransactions($id)
+    {
         $user = User::find($id);
 
         return $user->transactions;
@@ -68,6 +69,8 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
+
+        $user->transactions()->delete();
 
         $user->delete();
 

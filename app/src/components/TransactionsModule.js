@@ -49,6 +49,7 @@ export const TransactionsModule = ({ position, width }) => {
         setSuccess(response.data.message);
         setPending(false);
         setError(false);
+        auth.getCurrentUser(auth.storedUser.id);
       })
       .catch((error) => {
         setPending(false);
@@ -72,9 +73,9 @@ export const TransactionsModule = ({ position, width }) => {
         variants={transactions_container}
         className={`${position ? position : ""}  ${width ? '' : 'md:w-96 w-80'} bg-black text-gray-700 rounded-2xl shadow-xl z-90`} >
 
-        <motion.ul 
-        variants={transactions_article}
-        className="flex w-full">
+        <motion.ul
+          variants={transactions_article}
+          className="flex w-full">
           <motion.li variants={transactions_article} className={`w-1/2 py-6 flex items-center justify-center ${transactionMode && "border-b-2 text-blue-900"}`} >
             <button
               className="hover:text-blue-900 text-sm"
@@ -93,9 +94,9 @@ export const TransactionsModule = ({ position, width }) => {
 
         {transactionMode
           ? <motion.form
-              initial='hidden'
-              animate='visible'
-              variants={transactions_container}
+            initial='hidden'
+            animate='visible'
+            variants={transactions_container}
             className="px-6 py-9 flex flex-col gap-6"
             onSubmit={(e) => handlePurchase(e)}>
             {error &&
@@ -104,13 +105,13 @@ export const TransactionsModule = ({ position, width }) => {
               </section>}
             {success &&
               <motion.section
-                            initial='hidden'
-              animate='visible'
-              variants={container}
-              className='border-2 border-gray-800  p-6 rounded-xl' >
+                initial='hidden'
+                animate='visible'
+                variants={container}
+                className='border-2 border-gray-800  p-6 rounded-xl' >
                 <div className=' flex items-baseline gap-3' >
                   <Diamond />
-                  <motion.div   variants={article}>
+                  <motion.div variants={article}>
                     <h3 className='font-bold text-lg gradient-text mb-2' >{success}</h3>
                     <p className='text-sm text-white' >A new transaction has been added to your portfolio.</p>
                   </motion.div>
@@ -167,6 +168,10 @@ export const TransactionsModule = ({ position, width }) => {
                 <input
                   type="number"
                   onChange={(e) => {
+                    if (e.target.value > auth.storedUser.balance) {
+                      setBalanceAmount(auth.storedUser.balance);
+                      return;
+                    }
                     setBalanceAmount(e.target.value);
                     setTransaction({
                       ...transaction,
@@ -178,10 +183,11 @@ export const TransactionsModule = ({ position, width }) => {
                       ),
                     });
                   }}
+                  value={balanceAmount}
                   name="transaction_amount"
                   placeholder="10"
-                  defaultValue=""
                   min={0}
+                  max={auth.storedUser.balance}
                   className="w-full bg-transparent text-xs font-bold text-white appearance-none outline-none"
                 />
                 <small className="text-white text-xs">
