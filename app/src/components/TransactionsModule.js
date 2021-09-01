@@ -38,13 +38,12 @@ export const TransactionsModule = ({ position }) => {
     })
       .then((response) => {
         console.log(response.data);
+        auth.getCurrentUser(auth.storedUser.id);
       })
       .catch((error) => {
         console.error(error);
       });
   }
-
-  console.log(transaction);
 
   return (
     <article
@@ -94,7 +93,9 @@ export const TransactionsModule = ({ position }) => {
                   setTransaction({
                     ...transaction,
                     currency_id: Number(e.target.value) + 1,
-                    currency_value: storedCoins[e.target.value] ? storedCoins[e.target.value].current_price : null,
+                    currency_value: storedCoins[e.target.value]
+                      ? storedCoins[e.target.value].current_price
+                      : null,
                   });
                 }}
                 name="coin"
@@ -134,6 +135,10 @@ export const TransactionsModule = ({ position }) => {
               <input
                 type="number"
                 onChange={(e) => {
+                  if (e.target.value > auth.storedUser.balance) {
+                    setBalanceAmount(auth.storedUser.balance);
+                    return;
+                  }
                   setBalanceAmount(e.target.value);
                   setTransaction({
                     ...transaction,
@@ -145,10 +150,11 @@ export const TransactionsModule = ({ position }) => {
                     ),
                   });
                 }}
+                value={balanceAmount}
                 name="transaction_amount"
                 placeholder="10"
-                defaultValue=""
                 min={0}
+                max={auth.storedUser.balance}
                 className="w-full bg-transparent text-xs font-bold text-white appearance-none outline-none"
               />
               <small className="text-white text-xs">
