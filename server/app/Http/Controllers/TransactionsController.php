@@ -19,7 +19,7 @@ class TransactionsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created purchase transaction in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -45,12 +45,12 @@ class TransactionsController extends Controller
         $user->save();
 
         return [
-            "message" => "Transaction created !",
+            "message" => "Transaction created!",
         ];
     }
 
     /**
-     * Remove an existing resource from storage.
+     * Store a newly created sell transaction in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -71,12 +71,12 @@ class TransactionsController extends Controller
 
         $user = User::find($request->user_id);
 
-        $user->balance = $user->balance - $request->transaction_amount;
+        $user->balance = $user->balance + $request->transaction_amount;
 
         $user->save();
 
         return [
-            "message" => "Transaction created !",
+            "message" => "Transaction created!",
         ];
     }
 
