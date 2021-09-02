@@ -60,6 +60,7 @@ class TransactionsController extends Controller
         $request->validate([
             "currency_id" => "required",
             "currency_value" => "required",
+            "currency_name" => "required",
             "type" => "required",
             "user_id" => "required",
             "transaction_amount" => "required",

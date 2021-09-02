@@ -104,22 +104,8 @@ export const CoinsProvider = ({ children }) => {
     return;
   };
 
-  /**
-    * 
-    * @param {*} fvi Final value of Investment
-    * @param {*} ivi Initial value of Investment
-    * @param {*} coi Cost of Investment
-    */
-  const ROICalculator = (fvi, ivi, coi) => {
-    const difference = fvi - ivi;
-    const COIdivider = difference / coi;
-    const COImultiplier = COIdivider * 100;
-
-    return COImultiplier;
-  }
-
   return (
-    <CoinsContext.Provider value={{ refs, storedCoins, market, Converter, ROICalculator }}>
+    <CoinsContext.Provider value={{ refs, storedCoins, market, Converter }}>
       {children}
     </CoinsContext.Provider>
   );

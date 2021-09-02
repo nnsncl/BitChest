@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import moment from 'moment';
 
 import { useAuth } from '../hooks/use-auth';
-import { useTransactions, TransactionsContext } from '../hooks/use-transactions';
+import { useTransactions } from '../hooks/use-transactions';
 import { CoinsContext } from '../hooks/use-currencies';
 
 import { Loader } from '../components/Loader';
@@ -14,56 +14,61 @@ import { TransactionsModule } from '../components/TransactionsModule';
 
 import { container, article } from '../animations/motion';
 
+
 export default function Portfolio() {
     const auth = useAuth();
     const userTransactions = useTransactions();
-
-    const { refs, storedCoins } = useContext(CoinsContext);
-    const { transactions } = useContext(TransactionsContext);
-    const BASE_PORTFOLIO = refs.map(item => {
-        return {
-            name: item.coin_id,
-            value: [],
-        }
-    });
-
+    const { refs } = useContext(CoinsContext);
     const [totalCoinsTableVisible, setTotalCoinsTableVisible] = useState(true);
-    const [userCoins, setUserCoins] = useState([]);
-    const [portfolio, setPortfolio] = useState(BASE_PORTFOLIO);
-    const [filteredTransactions, setFilteredTransactions] = useState([]);
 
-    useEffect(() => {
-        let concatenated_array = [];
-        transactions.map((transaction, key) => {
-            const filterTransactions = refs.filter(ref => ref.id === transaction.currency_id);
 
-            concatenated_array.push(filterTransactions[0]);
-            setFilteredTransactions(concatenated_array);
-        })
-        //eslint-disable-next-line
-    }, []);
 
-    useEffect(() => {
-        let concatenated_array = [];
-        portfolio.map(portfolioItem => {
-            const filterPortfolio = filteredTransactions.filter(item => item.coin_id === portfolioItem.name)
-            if (filterPortfolio[0]) concatenated_array.push(filterPortfolio[0]);
-        })
-        //eslint-disable-next-line
-    }, [filteredTransactions]);
+
+
+
+
+
+
+    
+
+    const [portfolio, setPortfolio] = useState([]);
+    const composePortfolio = userTransactions.methods.PortfolioReducer(userTransactions.actions.transactions, "currency_name");
 
     useEffect(() => {
         userTransactions.actions.getTransactions(auth.storedUser.id, auth.storedToken);
+        setPortfolio([composePortfolio]);
+
+        portfolio.map((item, index, array) => {
+            console.log(item)
+            console.log(index)
+            console.log(array)
+            
+        })
+    
+
         //eslint-disable-next-line
     }, [userTransactions.actions.transactions])
 
 
-    console.log("filteredTransactions", filteredTransactions);
-    console.log("portfolio", portfolio)
+
+
+
+
+
+
+
+
+
+
+
+
 
     if (!userTransactions.actions.transactions) {
         return <Loader />;
     }
+    // const test = portfolio.filter(coin => coin.coin_id === id);
+
+
 
     return (
         <Layout>
@@ -94,8 +99,9 @@ export default function Portfolio() {
                             <th className="w-1/4 text-right text-xs" >Total Coin</th>
                         </>
                     }>
-                        {(userCoins && totalCoinsTableVisible) &&
-                            userCoins.map((item, key) => (
+
+                        {/* {(portfolio && totalCoinsTableVisible) &&
+                            portfolio.map((item, key) => (
                                 <motion.tr
                                     key={key}
                                     initial='hidden'
@@ -117,7 +123,7 @@ export default function Portfolio() {
                                     </motion.td>
                                 </motion.tr>
                             ))
-                        }
+                        } */}
                     </Table>
                     <div className='flex items-center justify-between gap-6 mb-3' >
                         <h3 className='text-base font-light'>Recent Activity</h3>
@@ -127,8 +133,9 @@ export default function Portfolio() {
                             See all
                         </button>
                     </div>
+
                     <Table>
-                        {transactions.map((item, key) => (
+                        {userTransactions.actions.transactions.map((item, key) => (
                             <motion.tr
                                 className='rounded-b-2xl flex items-center justify-between gap-6 text-white py-6 px-4 gap-6 border-t-2 border-gray-800'
                                 key={key}
@@ -163,6 +170,7 @@ export default function Portfolio() {
                         )
                         )}
                     </Table>
+
                 </div>
                 <div className="md:w-1/4 w-full">
                     <div className='flex items-center justify-between gap-6 mb-3' >

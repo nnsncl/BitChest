@@ -24,6 +24,7 @@ export const TransactionsModule = ({ position, width }) => {
     type: transactionMode,
     user_id: auth.storedUser.id,
     currency_value: null,
+    currency_name: null,
     currency_id: null,
     transaction_amount: null,
     currency_quantity: null,
@@ -67,15 +68,16 @@ export const TransactionsModule = ({ position, width }) => {
       setBalanceAmount(auth.storedUser.balance);
       return;
     }
+    console.log(storedCoins[selectedCoin].coin_id)
     setBalanceAmount(value);
     setTransaction({
       ...transaction,
       type: 1,
       transaction_amount: Number(value),
+      currency_name: storedCoins[selectedCoin].coin_id,
       currency_quantity: Number(
-        value /
-        (storedCoins[selectedCoin] &&
-          storedCoins[selectedCoin].current_price)
+        value / (storedCoins[selectedCoin]
+          && storedCoins[selectedCoin].current_price)
       ),
     });
   };
@@ -86,10 +88,10 @@ export const TransactionsModule = ({ position, width }) => {
       ...transaction,
       type: 0,
       transaction_amount: Number(
-        value *
-        (storedCoins[selectedCoin] &&
-          storedCoins[selectedCoin].current_price)
+        value * (storedCoins[selectedCoin]
+          && storedCoins[selectedCoin].current_price)
       ),
+      currency_name: storedCoins[selectedCoin].coin_id,
       currency_quantity: Number(value),
       roi: ROICalculator(storedCoins.current_price, transaction.currency_value, transaction.transaction_amount),
     });
@@ -100,6 +102,7 @@ export const TransactionsModule = ({ position, width }) => {
     setTransaction({
       ...transaction,
       currency_id: Number(value) + 1,
+      currency_name: storedCoins[value].coin_id,
       currency_value: storedCoins[value] ? storedCoins[value].current_price : null,
     });
   };

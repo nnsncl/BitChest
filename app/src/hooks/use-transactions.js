@@ -9,7 +9,7 @@ import { useAuth } from "./use-auth";
 export const TransactionsContext = createContext([]);
 export const TransactionsProvider = ({ children }) => {
     const actions = useTransactionsProvider();
-    
+
     const methods = {
         ROICalculator: (fvi, ivi, coi) => {
             const difference = fvi - ivi;
@@ -17,6 +17,18 @@ export const TransactionsProvider = ({ children }) => {
             const COImultiplier = COIdivider * 100;
 
             return COImultiplier;
+        },
+        PortfolioReducer: (array, properties) => {
+            return array.reduce((accumulator, object) => {
+                const key = object[properties];
+                if (!accumulator[key]) {
+                    accumulator[key] = [];
+                }
+                accumulator[key].push(object);
+                return accumulator;
+                
+            }, {});
+            
         }
     }
 
