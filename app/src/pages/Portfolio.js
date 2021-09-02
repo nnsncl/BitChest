@@ -42,10 +42,18 @@ export default function Portfolio() {
     }, []);
 
     useEffect(() => {
+        let concatenated_array = [];
+        portfolio.map(portfolioItem => {
+            const filterPortfolio = filteredTransactions.filter(item => item.coin_id === portfolioItem.name)
+            if(filterPortfolio[0]) {
+                concatenated_array.push(filterPortfolio[0]);
+            }
 
+            console.log(concatenated_array)
+        })
     }, [filteredTransactions]);
 
-    console.log(filteredTransactions);
+    console.log("filteredTransactions",filteredTransactions);
     console.log("portfolio", portfolio)
 
 
