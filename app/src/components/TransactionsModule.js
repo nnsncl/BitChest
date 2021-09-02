@@ -14,7 +14,7 @@ import { container, article, transactions_container, transactions_article } from
 export const TransactionsModule = ({ position, width }) => {
   const auth = useAuth();
   const transactions = useTransactions();
-  const { storedCoins, Converter } = useContext(CoinsContext);
+  const { storedCoins, Converter, ROICalculator } = useContext(CoinsContext);
 
   const [selectedCoin, setSelectedCoin] = useState(null);
   const [transactionMode, setTransactionMode] = useState(1);
@@ -91,7 +91,7 @@ export const TransactionsModule = ({ position, width }) => {
           storedCoins[selectedCoin].current_price)
       ),
       currency_quantity: Number(value),
-      roi: 0
+      roi: ROICalculator(storedCoins.current_price, transaction.currency_value, transaction.transaction_amount),
     });
   };
 
@@ -110,7 +110,7 @@ export const TransactionsModule = ({ position, width }) => {
         setSuccess(false);
       }, 3000)
     }
-  }, [success])
+  }, [success]);
 
   return (
     <>

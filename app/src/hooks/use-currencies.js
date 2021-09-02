@@ -83,7 +83,7 @@ export const CoinsProvider = ({ children }) => {
           console.error(error.message);
         });
     }
-  //eslint-disable-next-line
+    //eslint-disable-next-line
   }, [])
 
   /**
@@ -95,17 +95,31 @@ export const CoinsProvider = ({ children }) => {
    * @returns 
    */
   const Converter = (amount, coin, ref, mode) => {
-    if(mode === 'purchase') {
-      return ((amount && coin && amount) / (ref[coin] && ref[coin].current_price)).toFixed(5);
+    if (mode === 'purchase') {
+      return (amount / (ref[coin] && ref[coin].current_price)).toFixed(5);
     }
-    if(mode === 'sell') {
-      return ((amount && coin && amount) * (ref[coin] && ref[coin].current_price)).toFixed(2);
+    if (mode === 'sell') {
+      return (amount * (ref[coin] && ref[coin].current_price)).toFixed(2);
     }
     return;
   };
 
+  /**
+    * 
+    * @param {*} fvi Final value of Investment
+    * @param {*} ivi Initial value of Investment
+    * @param {*} coi Cost of Investment
+    */
+  const ROICalculator = (fvi, ivi, coi) => {
+    const difference = fvi - ivi;
+    const COIdivider = difference / coi;
+    const COImultiplier = COIdivider * 100;
+
+    return COImultiplier;
+  }
+
   return (
-    <CoinsContext.Provider value={{ refs, storedCoins, market, Converter }}>
+    <CoinsContext.Provider value={{ refs, storedCoins, market, Converter, ROICalculator }}>
       {children}
     </CoinsContext.Provider>
   );
@@ -130,7 +144,7 @@ function useCoinsProvider() {
       .catch(function (error) {
         console.error(error.message);
       });
-  //eslint-disable-next-line
+    //eslint-disable-next-line
   }, []);
 
   return {

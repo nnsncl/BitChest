@@ -8,11 +8,20 @@ import { useAuth } from "./use-auth";
 
 export const TransactionsContext = createContext([]);
 export const TransactionsProvider = ({ children }) => {
-
     const actions = useTransactionsProvider();
+    
+    const methods = {
+        ROICalculator: (fvi, ivi, coi) => {
+            const difference = fvi - ivi;
+            const COIdivider = difference / coi;
+            const COImultiplier = COIdivider * 100;
+
+            return COImultiplier;
+        }
+    }
 
     return (
-        <TransactionsContext.Provider value={{ actions }}>
+        <TransactionsContext.Provider value={{ actions, methods }}>
             {children}
         </TransactionsContext.Provider>
     );
