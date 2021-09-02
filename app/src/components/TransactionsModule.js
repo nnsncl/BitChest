@@ -17,7 +17,7 @@ export const TransactionsModule = ({ position, width }) => {
   const { storedCoins, Converter } = useContext(CoinsContext);
 
   const [selectedCoin, setSelectedCoin] = useState(null);
-  const [transactionMode, setTransactionMode] = useState(true);
+  const [transactionMode, setTransactionMode] = useState(1);
   const [balanceAmount, setBalanceAmount] = useState(0);
 
   const BASE_TRANSACTION = {
@@ -40,7 +40,7 @@ export const TransactionsModule = ({ position, width }) => {
     setPending(true);
     axios({
       method: "POST",
-      url: `${baseApiUrl}/api/transaction/${transactionMode ? 'purchase' : 'sell'}`,
+      url: `${baseApiUrl}/api/transaction/${transactionMode === 1 ? 'purchase' : 'sell'}`,
       withCredentials: true,
       headers: {
         "Accept": "application/json",
@@ -70,6 +70,7 @@ export const TransactionsModule = ({ position, width }) => {
     setBalanceAmount(value);
     setTransaction({
       ...transaction,
+      type: 1,
       transaction_amount: Number(value),
       currency_quantity: Number(
         value /
@@ -83,6 +84,7 @@ export const TransactionsModule = ({ position, width }) => {
     setBalanceAmount(value);
     setTransaction({
       ...transaction,
+      type: 0,
       transaction_amount: Number(
         value *
         (storedCoins[selectedCoin] &&
@@ -124,14 +126,14 @@ export const TransactionsModule = ({ position, width }) => {
           <motion.li variants={transactions_article} className={`w-1/2 py-6 flex items-center justify-center ${transactionMode && "border-b-2 text-blue-900"}`} >
             <button
               className="hover:text-blue-900 text-sm"
-              onClick={() => setTransactionMode(true)} >
+              onClick={() => setTransactionMode(1)} >
               Buy
             </button>
           </motion.li>
           <motion.li variants={transactions_article} className={`w-1/2 py-6 flex items-center justify-center ${!transactionMode && "border-b-2 text-blue-900"}`}>
             <button
               className="hover:text-blue-900 text-sm"
-              onClick={() => setTransactionMode(false)}>
+              onClick={() => setTransactionMode(0)}>
               Sell
             </button>
           </motion.li>
@@ -199,7 +201,7 @@ export const TransactionsModule = ({ position, width }) => {
             </div>
           </motion.fieldset>
 
-          {transactionMode
+          {transactionMode === 1
             ? <>
               <motion.fieldset variants={transactions_article} className="flex flex-col rounded-lg border-2 border-gray-800 bg-gray-900 py-4 px-3 outline-none">
                 <label htmlFor="transaction_amount" className="text-xs mb-1">
@@ -291,7 +293,7 @@ export const TransactionsModule = ({ position, width }) => {
             {storedCoins[selectedCoin] && storedCoins[selectedCoin].name
               ? pending
                 ? <Processing />
-                : `${transactionMode ? 'Buy' : 'Sell'} ${storedCoins[selectedCoin].name}`
+                : `${transactionMode === 1 ? 'Buy' : 'Sell'} ${storedCoins[selectedCoin].name}`
               : 'Select a currency'
             }
           </button>
