@@ -21,7 +21,11 @@ export const TransactionsProvider = ({ children }) => {
         ReducePortfolio: (array, properties) => {
             return array.reduce((accumulator, object, index) => {
                 const key = object[properties];
-                accumulator.push({name: key, data: object});
+                accumulator.push({
+                    name: key,
+                    currency_quantity: object.currency_quantity,
+                    type: object.type
+                });
 
                 return accumulator;
             }, []);

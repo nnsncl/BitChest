@@ -73,10 +73,8 @@ export const TransactionsModule = ({ position, width }) => {
       ...transaction,
       type: 1,
       transaction_amount: Number(value),
-      currency_quantity: Number(
-        value / (storedCoins[selectedCoin]
-          && storedCoins[selectedCoin].current_price)
-      ),
+      currency_quantity: value / (storedCoins[selectedCoin]
+        && storedCoins[selectedCoin].current_price),
     });
   };
 
@@ -85,10 +83,8 @@ export const TransactionsModule = ({ position, width }) => {
     setTransaction({
       ...transaction,
       type: 0,
-      transaction_amount: Number(
-        value * (storedCoins[selectedCoin]
-          && storedCoins[selectedCoin].current_price)
-      ),
+      transaction_amount:  value * (storedCoins[selectedCoin]
+        && storedCoins[selectedCoin].current_price),
       currency_quantity: Number(value),
       roi: transactions.methods.ROICalculator(storedCoins[selectedCoin].current_price, transaction.currency_value, transaction.transaction_amount),
     });

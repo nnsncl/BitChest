@@ -16,13 +16,14 @@ import { container, article } from "../animations/motion";
 
 const ACTIONS = {
     COMPOSE_PORTFOLIO: "compose_portfolio",
-    FORMAT_PORTFOLIO_KEYS: "format_portfolio_keys",
+    FORMAT_PORTFOLIO_ENTRIES: "format_portfolio_entries",
 };
 
 export default function Portfolio() {
     const auth = useAuth();
     const userTransactions = useTransactions();
     const { refs } = useContext(CoinsContext);
+
     const [totalCoinsTableVisible, setTotalCoinsTableVisible] = useState(true);
     const [transactionsTableVisible, setTransactionsTableVisible] = useState(true);
 
@@ -35,13 +36,27 @@ export default function Portfolio() {
                     userTransactions.provider.transactions,
                     "currency_name"
                 );
-            case ACTIONS.FORMAT_PORTFOLIO_KEYS:
-                Object.keys(portfolio).map((item) => {
-                    return {
-                        name: item,
-                        data: portfolio[item][0],
-                    };
-                });
+            case ACTIONS.FORMAT_PORTFOLIO_ENTRIES:
+
+                console.log(Array.from(
+                    action.payload.portfolio
+                        .reduce((accumulator, { name, type, currency_quantity }) =>
+                            accumulator.set(
+                                name,
+                               (type === 1
+                                    ? (accumulator.get(name) || 0) + Number(currency_quantity)
+                                    : (accumulator.get(name) || 0) - Number(currency_quantity)
+                               )
+                            ),
+                            new Map()
+                        ), ([
+                            name,
+                            currency_quantity,
+                        ]) => ({
+                            name,
+                            currency_quantity,
+                        })
+                ))
                 break;
             default:
                 return state;
@@ -53,22 +68,18 @@ export default function Portfolio() {
             auth.storedUser.id,
             auth.storedToken
         );
-        portfolio && dispatch({ type: ACTIONS.COMPOSE_PORTFOLIO })
-        // dispatch({ type: ACTIONS.FORMAT_PORTFOLIO_KEYS })
-
-        // Object.keys(portfolio).map((item) => {
-        //     console.log({
-        //         name: item,
-        //         data: portfolio[item][0],
-        //     })
-        // });
+        dispatch({ type: ACTIONS.COMPOSE_PORTFOLIO })
 
         //eslint-disable-next-line
-    }, []);
+    }, [userTransactions.provider.transactions]);
 
-    if (portfolio) {
-        console.log(portfolio);
-    }
+
+
+    useEffect(() => {
+        portfolio &&
+            dispatch({ type: ACTIONS.FORMAT_PORTFOLIO_ENTRIES, payload: { portfolio: portfolio } })
+    }, [portfolio])
+
 
     if (!userTransactions.provider.transactions) {
         return <Loader />;
@@ -135,7 +146,6 @@ export default function Portfolio() {
                             ))
                         } */}
                     </Table>
-
                     <div className="flex items-center justify-between gap-6 mb-3 mt-12">
                         <h3 className="text-base font-light">Recent Activity</h3>
                         <button
@@ -182,7 +192,7 @@ export default function Portfolio() {
                                     <motion.td className='w-2/4 flex flex-col items-end justify-end'>
                                         <p className={`${item.type === 1 ? "text-green-900" : "text-red-900"} uppercase flex gap-3 text-sm`}>
                                             {item.type === 1 ? "+" : "-"}
-                                            {item.currency_quantity.toFixed(5)} &nbsp;
+                                            {item.currency_quantity.toFixed(5)}&nbsp;
                                             {refs.filter((ref) => ref.id === item.currency_id)[0].symbol}
                                         </p>
                                         <p className="flex justify-end text-gray-700">
