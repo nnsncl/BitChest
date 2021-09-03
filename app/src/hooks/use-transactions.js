@@ -19,15 +19,14 @@ export const TransactionsProvider = ({ children }) => {
             return COImultiplier;
         },
         ReducePortfolio: (array, properties) => {
-            return array.reduce((accumulator, object) => {
+            return array.reduce((accumulator, object, index) => {
                 const key = object[properties];
-                if (!accumulator[key]) {
-                    accumulator[key] = [];
-                }
-                accumulator[key].push(object);
+
+                accumulator.push({name: key, data: object});
+                
                 return accumulator;
                 
-            }, {});
+            }, []);
             
         }
     }
