@@ -40,16 +40,18 @@ export default function EditUser() {
     };
 
     return (
-        <main className='text-white flex relative gap-12' >
+        <main className='text-white p-6 relative h-screen flex flex-col items-center justify-center' >
+        <header className='w-full flex items-center justify-center absolute top-9' >
+            <p className='text-sm text-white'>Bit<b>Chest</b></p>
+        </header>
             {user &&
-                <section className='flex flex-col items-center md:w-1/3 w-full mx-auto justify-center px-6 py-9 h-screen'>
-                    <div className='w-full flex flex-col items-start'>
-                        <Link className='mb-3 text-sm font-bold' to={ROUTES.ADMIN} >&larr;&nbsp;Go back to admin</Link>
-                        <h1 className='text-3xl font-bold mb-9'>
+                <section  className='flex flex-col justify-center items-center px-6 py-9 '>
+                    <div>
+                        <Link className='text-xs py-3 px-6 border-2 border-gray-800 rounded-xl' to={ROUTES.ADMIN} >&larr;&nbsp;Go back to admin</Link>
+                        <h1 className='text-3xl font-bold my-9'>
                             <span className='gradient-text' >Edit</span> <span className='capitalize'>{user.name}</span>'s<br />personal informations.
                         </h1>
-                    </div>
-                    <form className='w-full' onSubmit={(e) => handleEdition(e)} >
+                        <form className='flex flex-col md:w-96 w-full' onSubmit={(e) => handleEdition(e)} >
                         {error &&
                             <div className='bg-red-900 p-3 mb-6 rounded-lg' >
                                 <h6 className='font-bold mb-1' >Something went wrong</h6>
@@ -106,6 +108,8 @@ export default function EditUser() {
                             }
                         </button>
                     </form>
+                    </div>
+                    
                 </section>
             }
         </main>

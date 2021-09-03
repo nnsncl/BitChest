@@ -15,7 +15,7 @@ export default function AddUser() {
 
     const error = admin.actions.error;
     const pending = admin.actions.pending;
-    
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUser(prevState => ({
@@ -28,18 +28,19 @@ export default function AddUser() {
         e.preventDefault();
         admin.actions.createUser(user);
     };
-    
+
     return (
-        <main className='text-white flex relative gap-12' >
-            <header style={{ backgroundImage: 'url(/add_user.jpg)' }} className="hidden md:flex side-hero-section w-96 h-screen p-6 items-start fixed left-0 bottom-0" >
-                <p className='text-sm text-white items-center'>Bit<b>Chest</b></p>
+        <main className='text-white p-6 relative h-screen flex flex-col items-center justify-center' >
+            <header className='w-full flex items-center justify-center absolute top-9' >
+                <p className='text-sm text-white'>Bit<b>Chest</b></p>
             </header>
-            <section className='flex flex-col md:w-1/3 w-full justify-center px-6 py-9 h-screen'>
-                <Link className='mb-3 text-sm font-bold' to={ROUTES.ADMIN} >&larr;&nbsp;Go back to admin</Link>
-                <h1 className='text-3xl font-bold mb-9'>
+            <section className='flex flex-col justify-center items-center px-6 py-9 '>
+                <div>
+                <Link className='text-xs py-3 px-6 border-2 border-gray-800 rounded-xl' to={ROUTES.ADMIN} >&larr;&nbsp;Go back to admin</Link>
+                <h1 className='text-3xl font-bold my-9'>
                     <span className='gradient-text' >Create</span> a new user.
                 </h1>
-                <form onSubmit={(e) => handleRegistration(e)} >
+                <form className='flex flex-col md:w-96 w-full' onSubmit={(e) => handleRegistration(e)} >
                     {error &&
                         <div className='bg-red-900 p-3 mb-6 rounded-lg' >
                             <h6 className='font-bold mb-1' >Something went wrong</h6>
@@ -97,6 +98,8 @@ export default function AddUser() {
                         }
                     </button>
                 </form>
+                </div>
+               
             </section>
         </main>
     );
