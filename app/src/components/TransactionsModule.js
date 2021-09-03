@@ -14,7 +14,7 @@ import { container, article, transactions_container, transactions_article } from
 export const TransactionsModule = ({ position, width }) => {
   const auth = useAuth();
   const transactions = useTransactions();
-  const { storedCoins, Converter, ROICalculator } = useContext(CoinsContext);
+  const { storedCoins, Converter } = useContext(CoinsContext);
 
   const [selectedCoin, setSelectedCoin] = useState(null);
   const [transactionMode, setTransactionMode] = useState(1);
@@ -52,7 +52,7 @@ export const TransactionsModule = ({ position, width }) => {
       data: transaction,
     })
       .then((response) => {
-        transactions.actions.getTransactions(auth.storedUser.id, auth.storedToken);
+        transactions.provider.getTransactions(auth.storedUser.id, auth.storedToken);
         setPending(false);
         setError(false);
         setSuccess(response.data.message);
@@ -68,13 +68,11 @@ export const TransactionsModule = ({ position, width }) => {
       setBalanceAmount(auth.storedUser.balance);
       return;
     }
-    console.log(storedCoins[selectedCoin].coin_id)
     setBalanceAmount(value);
     setTransaction({
       ...transaction,
       type: 1,
       transaction_amount: Number(value),
-      currency_name: storedCoins[selectedCoin].coin_id,
       currency_quantity: Number(
         value / (storedCoins[selectedCoin]
           && storedCoins[selectedCoin].current_price)
@@ -91,9 +89,8 @@ export const TransactionsModule = ({ position, width }) => {
         value * (storedCoins[selectedCoin]
           && storedCoins[selectedCoin].current_price)
       ),
-      currency_name: storedCoins[selectedCoin].coin_id,
       currency_quantity: Number(value),
-      roi: ROICalculator(storedCoins.current_price, transaction.currency_value, transaction.transaction_amount),
+      roi: transactions.methods.ROICalculator(storedCoins[selectedCoin].current_price, transaction.currency_value, transaction.transaction_amount),
     });
   };
 

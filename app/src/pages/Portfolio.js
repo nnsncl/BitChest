@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useReducer, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
 import moment from 'moment';
 
@@ -15,58 +15,63 @@ import { TransactionsModule } from '../components/TransactionsModule';
 import { container, article } from '../animations/motion';
 
 
+const ACTIONS = {
+    COMPOSE_PORTFOLIO: 'compose_portfolio',
+    FORMAT_PORTFOLIO_KEYS: 'format_portfolio_keys'
+};
+
 export default function Portfolio() {
     const auth = useAuth();
     const userTransactions = useTransactions();
     const { refs } = useContext(CoinsContext);
     const [totalCoinsTableVisible, setTotalCoinsTableVisible] = useState(true);
+    const [portfolio, dispatch] = useReducer(PortfolioReducer, []);
 
-
-
-
-
-
-
-
-
+    function PortfolioReducer(state, action) {
+        switch (action.type) {
+            case ACTIONS.COMPOSE_PORTFOLIO:
+                return userTransactions
+                        .methods
+                        .ReducePortfolio(
+                            userTransactions.provider.transactions,
+                            "currency_name"
+                        );
+            case ACTIONS.FORMAT_PORTFOLIO_KEYS:
+                Object.keys(portfolio).map((item) => {
+                    return ({
+                        name: item,
+                        data: portfolio[item][0],
+                    })
+                });
+                break;
+            default:
+                return state
+        };
+    };
     
-
-    const [portfolio, setPortfolio] = useState([]);
-    const composePortfolio = userTransactions.methods.PortfolioReducer(userTransactions.actions.transactions, "currency_name");
 
     useEffect(() => {
-        userTransactions.actions.getTransactions(auth.storedUser.id, auth.storedToken);
-        setPortfolio([composePortfolio]);
+        userTransactions.provider.getTransactions(auth.storedUser.id, auth.storedToken);
+        dispatch({ type: ACTIONS.COMPOSE_PORTFOLIO })
+        // dispatch({ type: ACTIONS.FORMAT_PORTFOLIO_KEYS })
 
-        portfolio.map((item, index, array) => {
-            console.log(item)
-            console.log(index)
-            console.log(array)
-            
-        })
-    
+        // Object.keys(portfolio).map((item) => {
+        //     console.log({
+        //         name: item,
+        //         data: portfolio[item][0],
+        //     })
+        // });
+
 
         //eslint-disable-next-line
-    }, [userTransactions.actions.transactions])
+    }, [userTransactions.provider.transactions])
 
 
+  
 
-
-
-
-
-
-
-
-
-
-
-
-
-    if (!userTransactions.actions.transactions) {
+    if (!userTransactions.provider.transactions) {
         return <Loader />;
     }
-    // const test = portfolio.filter(coin => coin.coin_id === id);
 
 
 
@@ -100,6 +105,8 @@ export default function Portfolio() {
                         </>
                     }>
 
+                    {console.log(portfolio.bitcoin && portfolio.bitcoin.map((item) => (item)))}
+                        portfolio[ref]
                         {/* {(portfolio && totalCoinsTableVisible) &&
                             portfolio.map((item, key) => (
                                 <motion.tr
@@ -135,7 +142,7 @@ export default function Portfolio() {
                     </div>
 
                     <Table>
-                        {userTransactions.actions.transactions.map((item, key) => (
+                        {userTransactions.provider.transactions.map((item, key) => (
                             <motion.tr
                                 className='rounded-b-2xl flex items-center justify-between gap-6 text-white py-6 px-4 gap-6 border-t-2 border-gray-800'
                                 key={key}
