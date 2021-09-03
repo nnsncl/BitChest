@@ -170,7 +170,7 @@ export default function Currency() {
             <div className="md:w-2/3 w-full">
               {chartData.length !== 0 && <CurrencyChart data={chartData} roi={currentCoin.price_change_percentage_24h >= 0} />}
             </div>
-            <article className="md:w-1/3 w-full bg-gray-800 p-6 rounded-xl">
+            <article className="md:w-1/3 w-full bg-black p-6 rounded-xl">
               <h3 className="text-xl font-bold mb-9">
                 <span className="uppercase">{currentCoin.symbol}</span>&nbsp;Price
                 Statistics
@@ -179,14 +179,14 @@ export default function Currency() {
                 <p className="font-light text-xs mb-3">
                   {currentCoin.name}&nbsp;Price Today
                 </p>
-                <li className="flex items-center justify-between border-b-2 border-gray-900 pb-3 mb-3 ">
+                <li className="flex items-center justify-between border-b-2 border-gray-800 pb-3 mb-3 ">
                   <p className="font-bold">{currentCoin.name}&nbsp;Price</p>
                   <p className="text-white">{currentCoin.current_price}€</p>
                 </li>
-                <li className="flex items-center justify-between border-b-2 border-gray-900 pb-3 mb-3">
+                <li className="flex items-center justify-between border-b-2 border-gray-800 pb-3 mb-3">
                   <p className="font-bold flex items-center gap-2">
                     Price Change{" "}
-                    <span className="block text-gray-700 text-xs font-bold border-gray-700 border-2 rounded-lg px-1">
+                    <span className="block text-gray-700 text-xs font-bold border-gray-800 border-2 rounded-lg px-1">
                       24h
                     </span>
                   </p>
@@ -211,7 +211,7 @@ export default function Currency() {
                     </span>
                   </p>
                 </li>
-                <li className="flex items-center justify-between border-b-2 border-gray-900 pb-3 mb-9">
+                <li className="flex items-center justify-between border-b-2 border-gray-800 pb-3 mb-9">
                   <p className="font-bold">24h High / Low</p>
                   <p className="flex flex-col items-end">
                     <span className="text-white">{currentCoin.high_24h}€</span>
@@ -221,7 +221,7 @@ export default function Currency() {
                 <p className="font-light text-xs mb-3">
                   {currentCoin.name}&nbsp;Market Cap
                 </p>
-                <li className="flex items-center justify-between border-b-2 border-gray-900 pb-3 mb-3">
+                <li className="flex items-center justify-between border-b-2 border-gray-800 pb-3 mb-3">
                   <p className="font-bold flex items-center gap-2">Market Cap</p>
                   <p className="flex flex-col items-end">
                     <span className="text-white">
