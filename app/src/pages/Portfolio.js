@@ -206,37 +206,36 @@ export default function Portfolio() {
                       initial="hidden"
                       animate="visible"
                       variants={container}
-                      className="rounded-b-2xl flex items-center justify-between gap-6 text-white py-6 px-4 gap-6 border-t-2 border-gray-800">
+                      className="rounded-b-2xl flex items-center justify-between gap-6 text-white p-6 gap-6 border-t-2 border-gray-800">
                       <motion.td
                         variants={article}
                         className="w-2/4 flex items-center justify-start gap-3">
                         <img
-                          className="w-6 h-6 bg-white rounded-full"
-                          src={
-                            storedCoins.filter(
-                              (coin) => coin.coin_id === item.name)[0].image
-                          }
+                          className="w-9 h-9 bg-white rounded-full"
+                          src={storedCoins.filter((coin) => coin.coin_id === item.name)[0].image}
                           alt={`${item.name}-logo`}
                         />
-                        <p className="flex flex-col md:text-sm text-xs">
-                          {
-                            storedCoins.filter(
-                              (coin) => coin.coin_id === item.name)[0].name
-                          }
+                        <p className="flex items-center text-sm gap-2">
+                          {storedCoins.filter((coin) => coin.coin_id === item.name)[0].name}
                           <span className="text-gray-700 text-xs uppercase">
                             {item.symbol}
                           </span>
                         </p>
                       </motion.td>
-                      <motion.td>
-                        <p>
-                          {(item.currency_quantity *
-                            storedCoins.filter(
-                              (coin) => coin.coin_id === item.name)[0].current_price).toFixed(2)} €
+                      <motion.td className="flex text-sm gap-2 items-end justify-end">
+                        <p className="flex text-sm gap-1 items-center justify-center" >
+                          {(item.currency_quantity
+                            * storedCoins.filter((coin) => coin.coin_id === item.name)[0].current_price).toFixed(2)
+                          }€
                         </p>
                       </motion.td>
-                      <motion.td>
-                        <p>{item.currency_quantity.toFixed(5)}</p>
+                      <motion.td className="flex text-sm gap-2 items-end justify-end">
+                        <p className="flex text-sm gap-1 items-center justify-center" >
+                          {item.currency_quantity.toFixed(5)}
+                          <span className="block text-xs font-bold border-2 border-gray-800 rounded-lg px-2 py-1 uppercase text-gray-700 ">
+                            {refs.filter((ref) => ref.coin_id === item.name)[0].symbol}
+                          </span>
+                        </p>
                       </motion.td>
                     </motion.tr>
                   ))}
@@ -244,7 +243,6 @@ export default function Portfolio() {
               }
             </div>
         }
-
         <div className="md:w-1/4 w-full">
           <div className="flex items-center justify-between gap-6 mb-3">
             <p className="text-sm font-bold">
