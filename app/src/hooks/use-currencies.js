@@ -4,12 +4,16 @@ import axios from "axios";
 import { useLocalStorage } from "./use-local-storage";
 import { coingeckoEndpoints } from "../constants/api-endpoints";
 
+import { baseApiUrl } from "../constants/api-endpoints";
+import { useAuth } from "./use-auth";
 
 export const CoinsContext = createContext([]);
 
 export const CoinsProvider = ({ children }) => {
+  const auth = useAuth();
   const market = useCoinsProvider();
   const [storedCoins, setStoredCoins] = useLocalStorage('_coins', []);
+  const [refs, setRefs] = useLocalStorage('_refs', []);
 
   useEffect(() => {
     axios
@@ -59,8 +63,63 @@ export const CoinsProvider = ({ children }) => {
     //eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    if (refs.length === 0) {
+      axios({
+        method: "GET",
+        url: `${baseApiUrl}/api/currencies`,
+        withCredentials: true,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "true",
+          "Authorization": `Bearer ${auth.storedToken}`
+        }
+      })
+        .then((response) => {
+          setRefs(response.data);
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+    }
+    //eslint-disable-next-line
+  }, [])
+
+  /**
+   * 
+   * @param {*} amount 
+   * @param {*} coin 
+   * @param {*} ref 
+   * @param {*} mode  // mode: sell, purchase
+   * @returns 
+   */
+  const Converter = (amount, coin, ref, mode) => {
+    if (mode === 'purchase') {
+      return (amount / (ref[coin] && ref[coin].current_price)).toFixed(5);
+    }
+    if (mode === 'sell') {
+      return (amount * (ref[coin] && ref[coin].current_price)).toFixed(2);
+    }
+    return;
+  };
+
+  /**
+    * 
+    * @param {*} fvi Final value of Investment
+    * @param {*} ivi Initial value of Investment
+    * @param {*} coi Cost of Investment
+    */
+  const ROICalculator = (fvi, ivi, coi) => {
+    const difference = fvi - ivi;
+    const COIdivider = difference / coi;
+    const COImultiplier = COIdivider * 100;
+
+    return COImultiplier;
+  }
+
   return (
-    <CoinsContext.Provider value={{ storedCoins, market }}>
+    <CoinsContext.Provider value={{ refs, storedCoins, market, Converter, ROICalculator }}>
       {children}
     </CoinsContext.Provider>
   );
@@ -85,11 +144,11 @@ function useCoinsProvider() {
       .catch(function (error) {
         console.error(error.message);
       });
-  //eslint-disable-next-line
+    //eslint-disable-next-line
   }, []);
 
   return {
     marketStatus,
-    exchangesListStatus
+    exchangesListStatus,
   };
 }

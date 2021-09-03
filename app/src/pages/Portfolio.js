@@ -1,54 +1,128 @@
-import React, { useState, useContext } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useReducer, useEffect, useContext } from "react";
+import { motion } from "framer-motion";
+import moment from "moment";
 
-import { useAuth } from '../hooks/use-auth';
-import { CoinsContext } from '../hooks/use-currencies';
+import { useAuth } from "../hooks/use-auth";
+import { useTransactions } from "../hooks/use-transactions";
+import { CoinsContext } from "../hooks/use-currencies";
 
-import { Layout } from '../components/Layout';
-import { Table } from '../components/Table';
-import { TransactionsModule } from '../components/TransactionsModule';
+import { Loader } from "../components/Loader";
+import { Layout } from "../components/Layout";
+import { Table } from "../components/Table";
+import { GraphUp } from "../components/Icons";
+import { TransactionsModule } from "../components/TransactionsModule";
 
-import { container, article } from '../animations/motion';
-import { GraphUp } from '../components/Icons';
+import { container, article } from "../animations/motion";
 
+const ACTIONS = {
+    COMPOSE_PORTFOLIO: "compose_portfolio",
+    FORMAT_PORTFOLIO_ENTRIES: "format_portfolio_entries",
+};
 
 export default function Portfolio() {
     const auth = useAuth();
-    const { storedCoins } = useContext(CoinsContext);
+    const userTransactions = useTransactions();
+    const { refs } = useContext(CoinsContext);
 
     const [totalCoinsTableVisible, setTotalCoinsTableVisible] = useState(true);
+    const [transactionsTableVisible, setTransactionsTableVisible] = useState(true);
+
+    const [portfolio, dispatch] = useReducer(PortfolioReducer, []);
+
+    function PortfolioReducer(state, action) {
+        switch (action.type) {
+            case ACTIONS.COMPOSE_PORTFOLIO:
+                return userTransactions.methods.ReducePortfolio(
+                    userTransactions.provider.transactions,
+                    "currency_name"
+                );
+            case ACTIONS.FORMAT_PORTFOLIO_ENTRIES:
+
+                console.log(Array.from(
+                    action.payload.portfolio
+                        .reduce((accumulator, { name, type, currency_quantity }) =>
+                            accumulator.set(
+                                name,
+                               (type === 1
+                                    ? (accumulator.get(name) || 0) + Number(currency_quantity)
+                                    : (accumulator.get(name) || 0) - Number(currency_quantity)
+                               )
+                            ),
+                            new Map()
+                        ), ([
+                            name,
+                            currency_quantity,
+                        ]) => ({
+                            name,
+                            currency_quantity,
+                        })
+                ))
+                break;
+            default:
+                return state;
+        }
+    }
+
+    useEffect(() => {
+        userTransactions.provider.getTransactions(
+            auth.storedUser.id,
+            auth.storedToken
+        );
+        dispatch({ type: ACTIONS.COMPOSE_PORTFOLIO })
+
+        //eslint-disable-next-line
+    }, [userTransactions.provider.transactions]);
+
+
+
+    useEffect(() => {
+        portfolio &&
+            dispatch({ type: ACTIONS.FORMAT_PORTFOLIO_ENTRIES, payload: { portfolio: portfolio } })
+    }, [portfolio])
+
+
+    if (!userTransactions.provider.transactions) {
+        return <Loader />;
+    }
 
     return (
         <Layout>
-            <header className='mb-12' >
-                <h1 className='text-lg font-bold'>Hi {auth.storedUser.name},</h1>
-                <p className='text-sm text-gray-700' >Manage your every coin with ease.</p>
+            <header className="mb-12">
+                <h1 className="text-lg font-bold">Hi {auth.storedUser.name},</h1>
+                <p className="text-sm text-gray-700">
+                    Manage your every coin with ease.
+                </p>
             </header>
             <section className="flex md:flex-row flex-col items-start gap-6 mb-6">
                 <div className="md:w-3/4 w-full">
-                    <div className='flex items-center justify-between gap-6 mb-3' >
-                        <h3 className='text-base font-light'>Your assets</h3>
+                    <div className="flex items-center justify-between gap-6 mb-3">
+                        <h3 className="text-base font-light">Your assets</h3>
                         <button
                             onClick={() => setTotalCoinsTableVisible(!totalCoinsTableVisible)}
-                            className='flex items-center gap-3 font-light text-xs py-2 px-4 border-2 border-gray-800 hover:bg-gray-800 rounded-full outline-none' >
+                            className="flex items-center gap-3 font-light text-xs py-2 px-4 border-2 border-gray-800 hover:bg-gray-800 rounded-full outline-none"
+                        >
                             <GraphUp />
                             Tradable assets
-                            {totalCoinsTableVisible
-                                ? <small>&#x25BC;</small>
-                                : <small>&#x25B2;</small>
-                            }
+                            {totalCoinsTableVisible ? (
+                                <small>&#x25BC;</small>
+                            ) : (
+                                <small>&#x25B2;</small>
+                            )}
                         </button>
                     </div>
 
-                    <Table boxed headings={
-                        <>
-                            <th className="w-2/4 text-left text-xs" >Coin Name</th>
-                            <th className="w-1/4 text-right text-xs" >Total Balance</th>
-                            <th className="w-1/4 text-right text-xs" >Total Coin</th>
-                        </>
-                    }>
-                        {(storedCoins && totalCoinsTableVisible) &&
-                            storedCoins.map((item, key) => (
+                    <Table
+                        boxed
+                        headings={
+                            <>
+                                <th className="w-2/4 text-left text-xs">Coin Name</th>
+                                <th className="w-1/4 text-right text-xs">Total Balance</th>
+                                <th className="w-1/4 text-right text-xs">Total Coin</th>
+                            </>
+                        }
+                    >
+                        {/* {(portfolio && totalCoinsTableVisible) &&
+                            portfolio.map((item, key) => (
                                 <motion.tr
                                     key={key}
                                     initial='hidden'
@@ -62,43 +136,89 @@ export default function Portfolio() {
                                             <span className='text-gray-700 text-xs uppercase'>{item.symbol}</span>
                                         </p>
                                     </motion.td>
-                                    <motion.td variants={article} className='w-1/4 flex items-cente justify-end gap-3' >
-                                        <p className={`${item.price_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} text-right flex items-center text-sm uppercase`} >
-                                            {item.price_change_percentage_24h >= 0
-                                                ? <small>&#x25B2;</small>
-                                                : <small>&#x25BC;</small>
-                                            }
-                                            &nbsp;{item.current_price.toLocaleString()}€
-                                        </p>
+                                    <motion.td>
+                                        <p>{item.total_balance}</p>
                                     </motion.td>
-                                    <motion.td variants={article} className='w-1/4 flex items-cente justify-end gap-3' >
-                                        <p className={`${item.price_change_percentage_24h >= 0 ? 'text-green-900' : 'text-red-900'} text-sm flex gap-1 text-right`} >
-                                            {item.price_change_percentage_24h >= 0
-                                                ? <>
-                                                    <small>&#x25B2;</small>
-                                                    {item.price_change_percentage_24h.toFixed(2)}%
-                                                </>
-                                                : <>
-                                                    <small>&#x25BC;</small>
-                                                    {item.price_change_percentage_24h.toFixed(2) * -1}%
-                                                </>
-                                            }
-                                        </p>
+                                    <motion.td>
+                                        <p>{item.total_coin}</p>
                                     </motion.td>
                                 </motion.tr>
                             ))
-                        }
+                        } */}
                     </Table>
+                    <div className="flex items-center justify-between gap-6 mb-3 mt-12">
+                        <h3 className="text-base font-light">Recent Activity</h3>
+                        <button
+                            onClick={() => setTransactionsTableVisible(!transactionsTableVisible)}
+                            className="flex items-center gap-3 font-light text-xs py-2 px-4 border-2 border-gray-800 hover:bg-gray-800 rounded-full outline-none"
+                        >
+                            Details
+                            {transactionsTableVisible
+                                ? <small>&#x25BC;</small>
+                                : <small>&#x25B2;</small>
+                            }
+                        </button>
+                    </div>
+                    {transactionsTableVisible &&
+                        <Table boxed >
+                            {userTransactions.provider.transactions.map((item, key) => (
+                                <motion.tr
+                                    key={key}
+                                    initial='hidden'
+                                    animate='visible'
+                                    variants={container}
+                                    className='rounded-b-2xl flex items-center justify-between gap-6 text-white p-6 gap-6 border-gray-800'>
+                                    <motion.td variants={article} className='flex flex-col items-center justify-start' >
+                                        <p className="text-gray-700">
+                                            {moment(item.created_at).format("MMM")}
+                                        </p>
+                                        <p>{moment(item.created_at).format("DD")}</p>
+                                    </motion.td>
+
+                                    <motion.td className='flex items-center justify-start gap-3'>
+                                        <p className='flex flex-col text-sm' >
+                                            {item.type === 1 ? "Purchase" : "Sell"}
+                                        </p>
+
+                                    </motion.td>
+                                    <motion.td className='w-1/4 flex items-center justify-start gap-3'>
+                                        <p className='flex items-center text-sm gap-2' >
+                                            {refs.filter((ref) => ref.id === item.currency_id)[0].name}
+                                            <span className="block text-xs font-bold border-2 border-gray-800 rounded-lg px-2 py-1 uppercase text-gray-700 ">
+                                                {refs.filter((ref) => ref.id === item.currency_id)[0].symbol}
+                                            </span>
+                                        </p>
+                                    </motion.td>
+                                    <motion.td className='w-2/4 flex flex-col items-end justify-end'>
+                                        <p className={`${item.type === 1 ? "text-green-900" : "text-red-900"} uppercase flex gap-3 text-sm`}>
+                                            {item.type === 1 ? "+" : "-"}
+                                            {item.currency_quantity.toFixed(5)}&nbsp;
+                                            {refs.filter((ref) => ref.id === item.currency_id)[0].symbol}
+                                        </p>
+                                        <p className="flex justify-end text-gray-700">
+                                            {item.type === 1 ? "-" : "+"}
+                                            {item.transaction_amount}€
+                                        </p>
+                                    </motion.td>
+                                </motion.tr>
+                            ))}
+                        </Table>
+                    }
+
+
+
                 </div>
                 <div className="md:w-1/4 w-full">
-                    <div className='flex items-center justify-between gap-6 mb-3' >
-                        <p className='text-sm font-bold'><span className='gradient-text' >Current&nbsp;</span>balance:</p>
-                        <span
-                            className='text-xs font-bold py-2 px-4 border-2 border-gray-800 rounded-full outline-none' >
-                            {auth.storedUser.balance}€&nbsp;<span className='uppercase font-light text-gray-700' >(EUR)</span>
+                    <div className="flex items-center justify-between gap-6 mb-3">
+                        <p className="text-sm font-bold">
+                            <span className="gradient-text">Current&nbsp;</span>balance:
+                        </p>
+                        <span className="text-xs font-bold py-2 px-4 border-2 border-gray-800 rounded-full outline-none">
+                            {auth.storedUser.balance}€&nbsp;
+                            <span className="uppercase font-light text-gray-700">(EUR)</span>
                         </span>
                     </div>
-                    <TransactionsModule width='w-100' />
+                    <TransactionsModule width="w-100" />
                 </div>
             </section>
         </Layout>

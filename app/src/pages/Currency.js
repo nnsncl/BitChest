@@ -103,10 +103,7 @@ export default function Currency() {
                         <small>&#x25BC;</small>
                       )}
                       &nbsp;
-                      {currentCoin.current_price && currentCoin.current_price.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                      })}
-                      €
+                      {currentCoin.price_change_percentage_24h && currentCoin.price_change_percentage_24h.toFixed(2)}%
                     </span>
                   </div>
                 </div>

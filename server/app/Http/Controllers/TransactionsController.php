@@ -19,7 +19,7 @@ class TransactionsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created purchase transaction in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -45,7 +45,39 @@ class TransactionsController extends Controller
         $user->save();
 
         return [
-            "message" => "Transaction created !",
+            "message" => "Transaction created!",
+        ];
+    }
+
+    /**
+     * Store a newly created sell transaction in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+    */
+    public function sell(Request $request)
+    {
+        $request->validate([
+            "currency_id" => "required",
+            "currency_value" => "required",
+            "currency_name" => "required",
+            "type" => "required",
+            "user_id" => "required",
+            "transaction_amount" => "required",
+            "currency_quantity" => "required",
+            "roi" => "required",
+        ]);
+
+        Transactions::create($request->all());
+
+        $user = User::find($request->user_id);
+
+        $user->balance = $user->balance + $request->transaction_amount;
+
+        $user->save();
+
+        return [
+            "message" => "Transaction created!",
         ];
     }
 
@@ -58,16 +90,5 @@ class TransactionsController extends Controller
     public function show($id)
     {
         return Transactions::find($id);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        return Transactions::destroy($id);
     }
 }

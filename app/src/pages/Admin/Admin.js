@@ -8,7 +8,7 @@ import { AdminContext } from '../../hooks/use-admin';
 
 import { Layout } from '../../components/Layout';
 import { ButtonSecondary, ButtonTertiary } from '../../components/Buttons';
-// import { Loader } from '../../components/Loader';
+import { Loader } from '../../components/Loader';
 import { Table } from '../../components/Table';
 
 import { container, article } from '../../animations/motion';
@@ -22,6 +22,11 @@ export default function Admin() {
         admin.actions.getUsers();
     //eslint-disable-next-line
     }, [])
+
+    if (!admin.actions.storedUsers) {
+        return <Loader />;
+    }
+
 
     return (
         <Layout>
