@@ -23,6 +23,7 @@ export const useAuth = () => {
 function useAuthProvider() {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
+    const [success, setSuccess] = useState();
     const [error, setError] = useState();
     const [pending, setPending] = useState();
 
@@ -136,8 +137,9 @@ function useAuthProvider() {
             },
             data: user,
         })
-            .then(() => {
+            .then((response) => {
                 setPending(false);
+                setSuccess(response.data.message);
             })
             .catch((error) => {
                 setError(error.message);
@@ -149,6 +151,7 @@ function useAuthProvider() {
         user,
         storedUser,
         storedToken,
+        success,
         error,
         pending,
         login,
