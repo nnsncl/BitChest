@@ -174,7 +174,7 @@ export default function Portfolio() {
             }
           </div>
         }
-        <div className="md:w-1/4 w-full">
+        <div className="sm:w-96 w-full">
           <div className="flex items-center justify-between gap-6 mb-3">
             <p className="text-sm font-bold">
               <span className="gradient-text">Current&nbsp;</span>balance:
@@ -184,7 +184,7 @@ export default function Portfolio() {
               <span className="uppercase font-light text-gray-700">(EUR)</span>
             </span>
           </div>
-          <TransactionsModule width="w-100" />
+          <TransactionsModule width="w-full" />
         </div>
       </section>
     </Layout>
