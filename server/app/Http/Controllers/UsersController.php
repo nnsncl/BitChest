@@ -71,10 +71,17 @@ class UsersController extends Controller
             'password' => 'string|confirmed'
         ]);
 
-        $user->update($request->all());
+        if ($request['password']) {
+            $user->update($request->all());
+
+            $user->password = Hash::make($user->password);
+
+            $user->save;
+        }
 
         $user->update([
-            'password' => Hash::make($user->password),
+            'name' => $request['name'],
+            'email' => $request['email'],
         ]);
 
         $user->save;
