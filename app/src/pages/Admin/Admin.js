@@ -20,7 +20,7 @@ export default function Admin() {
 
     useEffect(() => {
         admin.actions.getUsers();
-    //eslint-disable-next-line
+        //eslint-disable-next-line
     }, [])
 
     if (!admin.actions.storedUsers) {
@@ -47,37 +47,40 @@ export default function Admin() {
                     </>
                 }>
                     {
-                        admin.actions.storedUsers && admin.actions.storedUsers.map((user, key) => (
-                            <motion.tr
-                                key={key}
-                                initial='hidden'
-                                animate='visible'
-                                variants={container}
-                                className='flex items-center justify-between gap-3 text-white py-3 px-4 gap-6 border-b-2 border-gray-800'>
+                        admin.actions.storedUsers && admin.actions.storedUsers.map((user, key) => {
+                            if (auth.storedUser.id !== user.id) {
+                                return (
+                                    <motion.tr
+                                        key={key}
+                                        initial='hidden'
+                                        animate='visible'
+                                        variants={container}
+                                        className='flex items-center justify-between gap-3 text-white py-3 px-4 gap-6 border-b-2 border-gray-800'>
 
-                                <motion.td variants={article} className='w-1/3 flex items-start gap-3 md:flex hidden' >
-                                    <p className=' text-sm font-light'>{user.name}</p>
-                                </motion.td>
-                                <motion.td variants={article} className='w-1/3 flex items-start gap-3' >
-                                    <p className=' text-sm font-light'>{user.email}</p>
-                                </motion.td>
-                                <motion.td variants={article} className='w-1/3 md:flex hidden items-start gap-3' >
-                                    <p className=' text-sm font-light'>{user.balance}</p>
-                                </motion.td>
-                                <motion.td variants={article} className='w-1/3 md:flex hidden items-start gap-3' >
-                                    <p className=' text-sm font-light'>{user.elevation}</p>
-                                </motion.td>
-                                <motion.td variants={article} className='w-1/3 flex items-center gap-3' >
-                                    <ButtonTertiary to={`${ROUTES.ADMIN}/user/${user.id}`}>
-                                        Edit
-                                    </ButtonTertiary>
-                                    <button onClick={() => admin.actions.deleteUser(user.id)} className='bg-red-900 py-3 px-3 rounded-lg text-sm' >
-                                        Delete
-                                    </button>
-                                </motion.td>
-
-                            </motion.tr>
-                        ))
+                                        <motion.td variants={article} className='w-1/3 flex items-start gap-3 md:flex hidden' >
+                                            <p className=' text-sm font-light'>{user.name}</p>
+                                        </motion.td>
+                                        <motion.td variants={article} className='w-1/3 flex items-start gap-3' >
+                                            <p className=' text-sm font-light'>{user.email}</p>
+                                        </motion.td>
+                                        <motion.td variants={article} className='w-1/3 md:flex hidden items-start gap-3' >
+                                            <p className=' text-sm font-light'>{user.balance}</p>
+                                        </motion.td>
+                                        <motion.td variants={article} className='w-1/3 md:flex hidden items-start gap-3' >
+                                            <p className=' text-sm font-light'>{user.elevation}</p>
+                                        </motion.td>
+                                        <motion.td variants={article} className='w-1/3 flex items-center gap-3' >
+                                            <ButtonTertiary to={`${ROUTES.ADMIN}/user/${user.id}`}>
+                                                Edit
+                                            </ButtonTertiary>
+                                            <button onClick={() => admin.actions.deleteUser(user.id)} className='bg-red-900 py-3 px-3 rounded-lg text-sm' >
+                                                Delete
+                                            </button>
+                                        </motion.td>
+                                    </motion.tr>
+                                )
+                            }
+                        })
                     }
 
 

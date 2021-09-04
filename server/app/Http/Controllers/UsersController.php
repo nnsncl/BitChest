@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -57,6 +58,36 @@ class UsersController extends Controller
         return [
             "user" => $user,
             "message" => "User updated"
+        ];
+    }
+
+    public function updateCurrentUser(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        $request->validate([
+            'name' => 'string',
+            'email' => 'string',
+            'password' => 'string|confirmed'
+        ]);
+
+        if ($request['password']) {
+            $user->update($request->all());
+
+            $user->password = Hash::make($user->password);
+
+            $user->save;
+        }
+
+        $user->update([
+            'name' => $request['name'],
+            'email' => $request['email'],
+        ]);
+
+        $user->save;
+
+        return [
+            "message" => "User updated",
         ];
     }
 
