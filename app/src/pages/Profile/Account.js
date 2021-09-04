@@ -1,9 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import * as ROUTES from '../../routes/routes';
-
-import { USER_ROLES } from '../../constants/user';
+import { SecureSpace } from '../../components/Icons';
 
 import { Processing } from '../../components/Icons';
 import { useAuth } from '../../hooks/use-auth';
@@ -17,6 +16,7 @@ export default function EditUser() {
         elevation: auth.storedUser.elevation
     });
 
+    const success = auth.success;
     const error = auth.error;
     const pending = auth.pending;
 
@@ -51,6 +51,19 @@ export default function EditUser() {
                                     <h6 className='font-bold mb-1' >Something went wrong</h6>
                                     <p className='text-sm' >{error}</p>
                                 </div>
+                            }
+                            {success &&
+                                <section
+                                    initial='hidden'
+                                    animate='visible'
+                                    className='border-2 border-gray-800 p-6 mb-3 rounded-xl' >
+                                    <div className=' flex items-center gap-3' >
+                                        <div>
+                                            <h3 className='font-bold text-lg gradient-text mb-2' >{success}</h3>
+                                            <p className='text-sm text-white' >Your personal informations have been updated You'll need to logout to see the changes.</p>
+                                        </div>
+                                    </div>
+                                </section>
                             }
                             <fieldset className='border-0 flex flex-col mb-6' >
                                 <label htmlFor='name' className='text-xs font-bold mb-2' >Name</label>
