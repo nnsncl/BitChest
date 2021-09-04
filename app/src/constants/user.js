@@ -1,7 +1,7 @@
 export const BASE_USER = {
     name: '',
     email: '',
-    passwoord: '',
+    password: '',
     password_confirmation: '',
     elevation: 'user',
     balance: 100,
