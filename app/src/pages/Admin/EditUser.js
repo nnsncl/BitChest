@@ -103,7 +103,7 @@ export default function EditUser() {
                             </fieldset>
                             <button
                                 disabled={user.name === '' || user.email === ''}
-                                className='disabled:opacity-30 uppercase text-xs font-bold bg-blue-900 py-3 px-12 rounded-lg transition duration-300 ease-in-out outline-none' >
+                                className='flex justify-center disabled:opacity-30 uppercase text-xs font-bold bg-blue-900 py-3 px-12 rounded-lg transition duration-300 ease-in-out outline-none' >
                                 {pending
                                     ? <Processing />
                                     : 'Edit User'

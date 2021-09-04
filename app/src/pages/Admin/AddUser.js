@@ -80,8 +80,9 @@ export default function AddUser() {
                                 placeholder=''
                                 defaultValue={user.password}
                                 onChange={(e) => handleChange(e)}
-                                className='rounded-lg border-2 border-gray-800 hover:bg-gray-800 focus:bg-gray-800 bg-transparent py-3 px-3 outline-none text-sm transition duration-300 ease-in-out'
+                                className='mb-1 rounded-lg border-2 border-gray-800 hover:bg-gray-800 focus:bg-gray-800 bg-transparent py-3 px-3 outline-none text-sm transition duration-300 ease-in-out'
                             />
+                            <small className='text-gray-700' >At least 8 characters</small>
                         </fieldset>
                         <fieldset className='border-0 flex flex-col mb-6' >
                             <label htmlFor='password_confirmation' className='text-xs font-bold mb-2' >Confirm Password</label>
@@ -97,7 +98,7 @@ export default function AddUser() {
                         </fieldset>
                         <button
                             disabled={user.password.length < 8 || user.name === '' || user.email === ''}
-                            className='disabled:opacity-30 uppercase text-xs font-bold bg-blue-900 py-3 px-12 rounded-lg transition duration-300 ease-in-out outline-none' >
+                            className='disabled:opacity-30 uppercase text-xs font-bold bg-blue-900 py-3 px-12 rounded-lg transition duration-300 ease-in-out outline-none flex justify-center' >
                             {pending
                                 ? <Processing />
                                 : 'Create user'
