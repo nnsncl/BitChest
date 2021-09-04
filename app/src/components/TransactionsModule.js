@@ -115,6 +115,12 @@ export const TransactionsModule = ({ position, width }) => {
     }
   }, [success]);
 
+  useEffect(() => {
+    transactions.provider.getTransactions(auth.storedUser.id, auth.storedToken);
+
+    //eslint-disable-next-line
+  }, [transactions.provider.transactions])
+
   return (
     <>
       <motion.article

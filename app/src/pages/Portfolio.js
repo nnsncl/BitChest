@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import moment from "moment";
@@ -15,7 +15,7 @@ import { TransactionsModule } from "../components/TransactionsModule";
 
 import { MARKETPLACE } from "../routes/routes";
 
-import { container, article } from "../animations/motion";
+import { container, article, transactions_container, transactions_article } from "../animations/motion";
 
 export default function Portfolio() {
   const auth = useAuth();
@@ -24,6 +24,15 @@ export default function Portfolio() {
 
   const [totalCoinsTableVisible, setTotalCoinsTableVisible] = useState(true);
   const [transactionsTableVisible, setTransactionsTableVisible] = useState(true);
+
+  const [alertVisible, setAlertVisible] = useState(true);
+
+  useEffect(() => {
+    transactions.provider.getTransactions(auth.storedUser.id, auth.storedToken);
+
+    //eslint-disable-next-line
+  }, [transactions.provider.transactions])
+
 
   if (!transactions.provider.transactions) {
     return <Loader />;
@@ -187,6 +196,25 @@ export default function Portfolio() {
           <TransactionsModule width="w-full" />
         </div>
       </section>
+      {alertVisible
+        && <motion.section
+          initial="hidden"
+          animate="visible"
+          variants={transactions_container}
+          className='fixed bottom-6 left-6 bg-white text-black p-9 rounded-2xl mt-9 w-96 ' >
+          <motion.div variants={article} className='flex items-center justify-between gap-2 mb-3' >
+            <h3 className='text-2xl font-bold ' >Information</h3>
+            <span className='text-3xl' >🚨</span>
+          </motion.div>
+          <motion.p variants={article} className='text-base leading-none mb-6' >You may need to <b>refresh your browser to see recent updates</b> in your assets table.</motion.p>
+          <motion.button
+            variants={transactions_article}
+            onClick={() => setAlertVisible(!alertVisible)}
+            className='px-6 py-3 bg-gray-900 text-white rounded-lg font-bold text-sm' >
+            Got it
+          </motion.button>
+        </motion.section>
+      }
     </Layout>
   );
 };
