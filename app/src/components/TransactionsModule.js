@@ -36,6 +36,7 @@ export const TransactionsModule = ({ position, width }) => {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState(false);
 
+  
   const handleTransaction = (e) => {
     e.preventDefault();
     setPending(true);
@@ -80,14 +81,20 @@ export const TransactionsModule = ({ position, width }) => {
 
   const handleSell = (value) => {
     setBalanceAmount(value);
-    setTransaction({
-      ...transaction,
-      type: 0,
-      transaction_amount:  value * (storedCoins[selectedCoin]
-        && storedCoins[selectedCoin].current_price),
-      currency_quantity: Number(value),
-      roi: transactions.methods.ROICalculator(storedCoins[selectedCoin].current_price, transaction.currency_value, transaction.transaction_amount),
-    });
+    transaction &&
+      setTransaction({
+        ...transaction,
+        type: 0,
+        transaction_amount: value
+          * (storedCoins[selectedCoin]
+            && storedCoins[selectedCoin].current_price),
+        currency_quantity: Number(value),
+        roi: transactions.methods.ROICalculator(
+          storedCoins[selectedCoin].current_price,
+          transaction.currency_value,
+          transaction.currency_quantity
+        ),
+      });
   };
 
   const handleSelect = (value) => {

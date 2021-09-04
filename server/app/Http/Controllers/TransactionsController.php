@@ -65,7 +65,6 @@ class TransactionsController extends Controller
             "user_id" => "required",
             "transaction_amount" => "required",
             "currency_quantity" => "required",
-            "roi" => "required",
         ]);
 
         Transactions::create($request->all());
