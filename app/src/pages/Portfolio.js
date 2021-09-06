@@ -113,6 +113,7 @@ export default function Portfolio() {
                       <p className={`flex justify-end gap-2 items-center text-xs`}>
                         {(item.roi && item.roi !== 0)
                           ? <span className={`text-xs border-2 border-gray-800 py-1 px-2 rounded-full ${item.roi <= 0 ? 'text-red-900' : 'text-green-900'}`} >
+                            {item.roi <= 0 ? '-' : '+'}
                             {item.roi.toFixed(2)}%
                           </span>
                           : null
@@ -165,9 +166,7 @@ export default function Portfolio() {
                         animate="visible"
                         variants={container}
                         className="rounded-b-2xl flex items-center justify-between gap-6 text-white p-6 gap-6 border-t-2 border-gray-800">
-                        <motion.td
-                          variants={article}
-                          className="w-2/4 flex items-center justify-start gap-3">
+                        <motion.td variants={article} className="w-2/4 flex items-center justify-start gap-3">
                           <img
                             className="w-9 h-9 bg-white rounded-full"
                             src={storedCoins.filter((coin) => coin.coin_id === item.name)[0].image}
@@ -180,14 +179,14 @@ export default function Portfolio() {
                             </span>
                           </p>
                         </motion.td>
-                        <motion.td className="flex text-sm gap-2 items-end justify-end">
-                          <p className="flex text-sm gap-1 items-center justify-center" >
+                        <motion.td variants={article} className="w-1/4 flex text-sm gap-2 items-end justify-end">
+                          <p className="flex text-sm gap-1 text-right" >
                             {(item.currency_quantity
                               * storedCoins.filter((coin) => coin.coin_id === item.name)[0].current_price).toFixed(2)
                             }€
                           </p>
                         </motion.td>
-                        <motion.td className="flex text-sm gap-2 items-end justify-end">
+                        <motion.td variants={article} className="w-1/4 flex text-sm gap-2 items-end justify-end">
                           <p className="flex text-sm gap-1 items-center justify-center" >
                             {item.currency_quantity.toFixed(5)}
                             <span className="block text-xs font-bold border-2 border-gray-800 rounded-lg px-2 py-1 uppercase text-gray-700 ">
