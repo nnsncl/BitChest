@@ -11,15 +11,27 @@ const ACTIONS = {
 };
 
 const METHODS = {
-    ROICalculator: (fvi, ivi, coi) => {
+    /**
+     * 
+     * @param {*} fvi final value of investment 
+     * @param {*} ivi  initial value of investment
+     * @returns 
+     */
+    ROICalculator: (fvi, ivi) => {
         const difference = fvi - ivi;
-        const COIdivider = difference / coi;
-        const COImultiplier = COIdivider * 100;
+        const roi = (difference / fvi )* 100 
 
-        return COImultiplier;
+        return roi; // Return on Investment in %
     },
+
+    /**
+     * 
+     * @param {*} array 
+     * @param {*} properties 
+     * @returns 
+     */
     ReducePortfolio: (array, properties) => {
-        return array.reduce((accumulator, object, index) => {
+        return array.reduce((accumulator, object) => {
             const key = object[properties];
             accumulator.push({
                 name: key,

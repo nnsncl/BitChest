@@ -79,22 +79,9 @@ export const TransactionsModule = ({ position, width }) => {
         });
     };
 
-    const handleSell = (value) => {
-        setBalanceAmount(value);
-        transaction &&
-            setTransaction({
-                ...transaction,
-                type: 0,
-                roi: transactions.methods.ROICalculator(
-                    storedCoins[selectedCoin].current_price,
-                    transaction.currency_value,
-                    transaction.currency_quantity
-                ),
-            });
-    };
 
     const handleSelect = (value) => {
-        if (transactionMode === 1) {
+        if (transactionMode === 1 && storedCoins[value]) {
             setSelectedCoin(value);
             setTransaction({
                 ...transaction,
@@ -104,17 +91,32 @@ export const TransactionsModule = ({ position, width }) => {
             });
         } else {
             setSelectedCoin(value);
-            let vaultFilter = transactions.vault.filter(transaction => transaction.name === value)[0];
+            const vaultFilter = transactions.vault.filter(transaction => transaction.name === value)[0];
+            const ROIFilter = transactions.provider.transactions.filter(transaction => transaction.currency_name === value && transaction.type === 1);
+            const currencyCurrentPrice = storedCoins.filter(coin => coin.coin_id === value)[0].current_price;
+
             setTransaction({
                 ...transaction,
                 type: transactionMode,
-                currency_id: refs.filter(coin => coin.coin_id === value)[0].id,
+                currency_id: refs.filter(coin => coin.coin_id === value)[0]
+                    ? refs.filter(coin => coin.coin_id === value)[0].id
+                    : null,
                 currency_name: value,
-                currency_value: storedCoins.filter(coin => coin.coin_id === value)[0].current_price,
-                currency_quantity: vaultFilter.currency_quantity,
-                transaction_amount: vaultFilter.currency_quantity * storedCoins.filter(coin => coin.coin_id === value)[0].current_price,
-            })
-        }
+                currency_value: storedCoins.filter(coin => coin.coin_id === value)[0]
+                    ? currencyCurrentPrice
+                    : null,
+                currency_quantity: vaultFilter
+                    ? vaultFilter.currency_quantity
+                    : null,
+                transaction_amount: vaultFilter
+                    ? vaultFilter.currency_quantity * storedCoins.filter(coin => coin.coin_id === value)[0].current_price
+                    : null,
+                roi: transactions.methods.ROICalculator(
+                    currencyCurrentPrice,
+                    ROIFilter[ROIFilter.length - 1].currency_value
+                ),
+            });
+        };
     };
 
     useEffect(() => {
@@ -129,7 +131,7 @@ export const TransactionsModule = ({ position, width }) => {
         transactions.provider.getTransactions(auth.storedUser.id, auth.storedToken);
 
         //eslint-disable-next-line
-    }, [])
+    }, []);
 
     return (
         <>
@@ -138,32 +140,38 @@ export const TransactionsModule = ({ position, width }) => {
                 animate='visible'
                 variants={transactions_container}
                 className={`${position ? position : ""}  ${width ? '' : 'md:w-96 w-80'} bg-black text-gray-700 rounded-2xl shadow-xl z-90`} >
-
                 <motion.ul
                     variants={transactions_article}
                     className="flex w-full">
                     <motion.li variants={transactions_article} className={`w-1/2 py-6 flex items-center justify-center ${transactionMode && "border-b-2 text-blue-900"}`} >
                         <button
                             className="hover:text-blue-900 text-sm"
-                            onClick={() => setTransactionMode(1)} >
+                            onClick={() => {
+                                setTransactionMode(1)
+                                setTransaction(BASE_TRANSACTION)
+                            }} >
                             Buy
                         </button>
                     </motion.li>
                     <motion.li variants={transactions_article} className={`w-1/2 py-6 flex items-center justify-center ${!transactionMode && "border-b-2 text-blue-900"}`}>
                         <button
                             className="hover:text-blue-900 text-sm"
-                            onClick={() => setTransactionMode(0)}>
+                            onClick={() => {
+                                setTransactionMode(0)
+                                setTransaction(BASE_TRANSACTION)
+                            }}>
                             Sell
                         </button>
                     </motion.li>
                 </motion.ul>
-
                 <motion.form
                     initial='hidden'
                     animate='visible'
                     variants={transactions_container}
                     className="px-6 py-9 flex flex-col gap-6"
-                    onSubmit={(e) => handleTransaction(e)}>
+                    onSubmit={(e) => {
+                        handleTransaction(e)
+                    }}>
 
                     {error &&
                         <section className='bg-red-900 text-sm p-6 rounded-xl' >
@@ -305,7 +313,6 @@ export const TransactionsModule = ({ position, width }) => {
                                     </span>
                                 </label>
                                 <div className="flex w-full justify-between items-center ">
-
                                     <input
                                         type="number"
                                         value={transaction.currency_quantity ? transaction.currency_quantity : ""}
@@ -327,16 +334,14 @@ export const TransactionsModule = ({ position, width }) => {
                                 </label>
                                 <div className="flex w-full justify-between items-center ">
                                     <p className="bg-transparent text-xs font-bold text-white appearance-none outline-none">
-                                        {transaction.currency_quantity * transaction.currency_value}
+                                        {transaction.currency_quantity && (transaction.currency_quantity * transaction.currency_value)}
                                     </p>
                                     <small className="text-white text-xs">
                                         <Swap />
                                     </small>
                                 </div>
                             </motion.fieldset>
-                        </>
-                    }
-
+                        </>}
                     <button
                         className='bg-blue-900 py-4 rounded-lg text-white flex items-center justify-center disabled:opacity-30 text-xs uppercase font-bold'
                         disabled={!selectedCoin || pending ? true : false} >
@@ -348,7 +353,6 @@ export const TransactionsModule = ({ position, width }) => {
                         }
                     </button>
                 </motion.form>
-
             </motion.article>
         </>
     );
