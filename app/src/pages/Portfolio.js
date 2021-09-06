@@ -101,14 +101,19 @@ export default function Portfolio() {
                       </p>
                     </motion.td>
                     <motion.td className="w-2/4 flex flex-col items-end justify-end">
-                      <p className={`${item.type === 1 ? "text-green-900" : "text-red-900"} uppercase flex gap-3 text-sm`}>
+                      <p className={`${item.type === 1 ? "text-green-900" : "text-red-900"} uppercase flex gap-3 mb-1 text-sm`}>
                         {item.type === 1 ? "+" : "-"}
                         {item.currency_quantity.toFixed(5)}&nbsp;
                         {refs.filter((ref) => ref.id === item.currency_id)[0].symbol}
                       </p>
-                      <p className="flex justify-end text-gray-700">
+                      <p className={`flex justify-end gap-2 items-center `}>
+                        {item.roi
+                          && <span className={`text-xs border-2 border-gray-800 py-1 px-2 rounded-full ${item.roi < 0 ? 'text-red-900' : 'text-green-900'}`} >
+                            {item.roi.toFixed(2)}%
+                          </span>}
                         {item.type === 1 ? "-" : "+"}
                         {item.transaction_amount}€
+
                       </p>
                     </motion.td>
                   </motion.tr>
