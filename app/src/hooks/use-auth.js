@@ -23,6 +23,7 @@ export const useAuth = () => {
 function useAuthProvider() {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
+    const [success, setSuccess] = useState();
     const [error, setError] = useState();
     const [pending, setPending] = useState();
 
@@ -122,14 +123,40 @@ function useAuthProvider() {
             });
     }
 
+    const updateCurrentUser = (id, user) => {
+        setPending(true);
+        axios({
+            method: "PUT",
+            url: `${baseApiUrl}/api/current-user/${id}`,
+            withCredentials: true,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "true",
+                "Authorization": `Bearer ${storedToken}`
+            },
+            data: user,
+        })
+            .then((response) => {
+                setPending(false);
+                setSuccess(response.data.message);
+            })
+            .catch((error) => {
+                setError(error.message);
+                setPending(false);
+            });
+    }
+
     return {
         user,
         storedUser,
         storedToken,
+        success,
         error,
         pending,
         login,
         logout,
-        getCurrentUser
+        getCurrentUser,
+        updateCurrentUser
     };
 }

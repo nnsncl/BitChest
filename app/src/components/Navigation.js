@@ -75,7 +75,7 @@ export const Navigation = () => {
                                                     ? <ButtonLink active={router.pathname === ROUTES.ADMIN} to={ROUTES.ADMIN}>Admin</ButtonLink>
                                                     : null
                                                 }
-                                                <motion.p variants={item} className='text-sm text-gray-700' >Account</motion.p>
+                                                <ButtonLink className='text-sm text-gray-700' to={`/account/${auth.storedUser.id}`} >Account</ButtonLink>
                                                 <motion.p variants={item} className='text-sm text-gray-700 mb-3 pb-5 border-b-2 border-gray-800' >Help center</motion.p>
                                                 <motion.button variants={item} onClick={() => handleLogout()} className='w-full flex justify-between items-center text-sm text-white'>
                                                     <span>Sign out of Bit<b>Chest</b></span>

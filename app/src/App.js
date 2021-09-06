@@ -8,6 +8,7 @@ import Admin from "./pages/Admin/Admin";
 import AddUser from "./pages/Admin/AddUser";
 import EditUser from "./pages/Admin/EditUser";
 import Currency from "./pages/Currency";
+import Account from "./pages/Profile/Account";
 
 import * as ROUTES from "./routes/routes";
 import { ProtectedRoute } from "./routes/protected-routes";
@@ -25,8 +26,11 @@ export default function App() {
       <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.ADD_USER} >
         <AddUser />
       </ProtectedRoute>
-      <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.EDIt_USER} >
+      <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.EDIT_USER} >
         <EditUser />
+      </ProtectedRoute>
+      <ProtectedRoute exact auth={isAuthenticated} path={ROUTES.EDIT_ACCOUNT} >
+        <Account />
       </ProtectedRoute>
       <ProtectedRoute exact auth={isAuthenticated && isAdmin} path={ROUTES.ADMIN} >
         <Admin />
