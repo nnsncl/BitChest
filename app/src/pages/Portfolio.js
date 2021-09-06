@@ -48,7 +48,7 @@ export default function Portfolio() {
       </header>
       <section className="flex md:flex-row flex-col items-start gap-6 mb-6">
         {transactions.provider.transactions.length === 0
-          ? <div className="md:w-3/4 w-full bg-black rounded-2xl p-9 flex flex-col items-center">
+          ? <div className="md:w-3/4 w-full bg-black rounded-2xl py-9 px-6 flex flex-col items-center">
             <h3 className="text-base font-bold">Nothing here at the moment.</h3>
             <p className="text-gray-700 text-sm mb-6">You don't have any transaction registered yet</p>
             <span>
@@ -183,7 +183,7 @@ export default function Portfolio() {
             }
           </div>
         }
-        <div className="sm:w-96 w-full">
+        <div className="md:w-96 w-full">
           <div className="flex items-center justify-between gap-6 mb-3">
             <p className="text-sm font-bold">
               <span className="gradient-text">Current&nbsp;</span>balance:
@@ -196,17 +196,17 @@ export default function Portfolio() {
           <TransactionsModule width="w-full" />
         </div>
       </section>
-      {alertVisible
+      {alertVisible && transactions.provider.transactions.length !== 0
         && <motion.section
           initial="hidden"
           animate="visible"
           variants={transactions_container}
-          className='fixed bottom-6 left-6 bg-white text-black p-9 rounded-2xl mt-9 w-96 ' >
+          className='fixed bottom-6 left-6 bg-white text-black p-9 rounded-2xl mt-9 md:w-96 w-64' >
           <motion.div variants={article} className='flex items-center justify-between gap-2 mb-3' >
-            <h3 className='text-2xl font-bold ' >Information</h3>
-            <span className='text-3xl' >🚨</span>
+            <h3 className='md:text-2xl text-xl font-bold ' >Information</h3>
+            <span className='md:text-3xl text-2xl' >🚨</span>
           </motion.div>
-          <motion.p variants={article} className='text-base leading-none mb-6' >You may need to <b>refresh your browser to see recent updates</b> in your assets table.</motion.p>
+          <motion.p variants={article} className='md:text-base text-sm md:leading-none leading-none mb-6' >You may need to <b>refresh your browser to see recent updates</b> in your assets table.</motion.p>
           <motion.button
             variants={transactions_article}
             onClick={() => setAlertVisible(!alertVisible)}
