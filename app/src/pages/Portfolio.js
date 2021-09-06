@@ -71,7 +71,17 @@ export default function Portfolio() {
               </button>
             </div>
             {transactionsTableVisible && (
-              <Table boxed>
+              <Table
+                boxed
+                headings={
+                  <>
+                    <th className="w-1/4 text-left text-xs">Coin Name</th>
+                    <th className="text-left text-xs">Type</th>
+                    <th className="w-1/4 text-xs" />
+                    <th className="w-2/4 text-right text-xs">Details</th>
+                  </>
+                }
+              >
                 {transactions.provider.transactions.map((item, key) => (
                   <motion.tr
                     key={key}
@@ -79,34 +89,28 @@ export default function Portfolio() {
                     animate="visible"
                     variants={container}
                     className="rounded-b-2xl flex items-center justify-between gap-6 text-white p-6 gap-6 border-gray-800">
-                    <motion.td
-                      variants={article}
-                      className="flex flex-col items-center justify-start" >
-                      <p className="text-gray-700">
-                        {moment(item.created_at).format("MMM")}
+                    <motion.td variants={article} className="w-1/4 flex items-center justify-start gap-3">
+                      <img
+                        className="w-9 h-9 bg-white rounded-full"
+                        src={storedCoins.filter((coin) => coin.coin_id === item.currency_name)[0]?.image}
+                        alt={`${item.name}-logo`}
+                      />
+                      <p className="md:flex hidden flex-col items-center text-sm gap-2">
+                        {refs.filter((ref) => ref.id === item.currency_id)[0].name}
                       </p>
-                      <p>{moment(item.created_at).format("DD")}</p>
-                    </motion.td>
-                    <motion.td className="flex items-center justify-start gap-3">
+                    </motion.td>                 
+                    <motion.td variants={article} className="w-1/4 flex items-center justify-start gap-3">
                       <p className="flex flex-col text-sm">
                         {item.type === 1 ? "Purchase" : "Sell"}
                       </p>
                     </motion.td>
-                    <motion.td className="w-1/4 flex items-center justify-start gap-3">
-                      <p className="flex items-center text-sm gap-2">
-                        {refs.filter((ref) => ref.id === item.currency_id)[0].name}
-                        <span className="block text-xs font-bold border-2 border-gray-800 rounded-lg px-2 py-1 uppercase text-gray-700 ">
-                          {refs.filter((ref) => ref.id === item.currency_id)[0].symbol}
-                        </span>
-                      </p>
-                    </motion.td>
-                    <motion.td className="w-2/4 flex flex-col items-end justify-end">
+                    <motion.td variants={article} className="w-2/4 flex flex-col items-end justify-end">
                       <p className={`${item.type === 1 ? "text-green-900" : "text-red-900"} uppercase flex gap-3 mb-1 text-sm`}>
                         {item.type === 1 ? "+" : "-"}
                         {item.currency_quantity.toFixed(5)}&nbsp;
                         {refs.filter((ref) => ref.id === item.currency_id)[0].symbol}
                       </p>
-                      <p className={`flex justify-end gap-2 items-center `}>
+                      <p className={`flex justify-end gap-2 items-center text-xs`}>
                         {(item.roi && item.roi !== 0)
                           ? <span className={`text-xs border-2 border-gray-800 py-1 px-2 rounded-full ${item.roi <= 0 ? 'text-red-900' : 'text-green-900'}`} >
                             {item.roi.toFixed(2)}%
@@ -115,8 +119,13 @@ export default function Portfolio() {
                         }
                         {item.type === 1 ? "-" : "+"}
                         {item.transaction_amount}€
-
                       </p>
+                    </motion.td>
+                    <motion.td variants={article} className="flex flex-col items-center justify-end" >
+                      <p className="text-gray-700 text-xs">
+                        {moment(item.created_at).format("MMM")}
+                      </p>
+                      <p className='text-sm' >{moment(item.created_at).format("DD")}</p>
                     </motion.td>
                   </motion.tr>
                 ))}
@@ -164,7 +173,7 @@ export default function Portfolio() {
                             src={storedCoins.filter((coin) => coin.coin_id === item.name)[0].image}
                             alt={`${item.name}-logo`}
                           />
-                          <p className="flex items-center text-sm gap-2">
+                          <p className="md:flex hidden items-center text-sm gap-2">
                             {storedCoins.filter((coin) => coin.coin_id === item.name)[0].name}
                             <span className="text-gray-700 text-xs uppercase">
                               {item.symbol}
