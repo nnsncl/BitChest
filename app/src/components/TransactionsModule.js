@@ -91,29 +91,23 @@ export const TransactionsModule = ({ position, width }) => {
             });
         } else {
             setSelectedCoin(value);
-            const vaultFilter = transactions.vault.filter(transaction => transaction.name === value)[0];
-            const ROIFilter = transactions.provider.transactions.filter(transaction => transaction.currency_name === value && transaction.type === 1);
-            const currencyCurrentPrice = storedCoins.filter(coin => coin.coin_id === value)[0].current_price;
+            const vaultFilter = transactions?.vault?.filter(transaction => transaction?.name === value)[0];
+            const ROIFilter = transactions?.provider?.transactions?.filter(transaction => transaction?.currency_name === value && transaction?.type === 1);
+            const currencyCurrentPrice = storedCoins?.filter(coin => coin?.coin_id === value)[0]?.current_price;
 
             setTransaction({
                 ...transaction,
                 type: transactionMode,
-                currency_id: refs.filter(coin => coin.coin_id === value)[0]
-                    ? refs.filter(coin => coin.coin_id === value)[0].id
-                    : null,
+                currency_id: refs.filter(coin => coin.coin_id === value)[0]?.id,
                 currency_name: value,
                 currency_value: storedCoins.filter(coin => coin.coin_id === value)[0]
                     ? currencyCurrentPrice
                     : null,
-                currency_quantity: vaultFilter
-                    ? vaultFilter.currency_quantity
-                    : null,
-                transaction_amount: vaultFilter
-                    ? vaultFilter.currency_quantity * storedCoins.filter(coin => coin.coin_id === value)[0].current_price
-                    : null,
+                currency_quantity: vaultFilter?.currency_quantity,
+                transaction_amount: vaultFilter?.currency_quantity * storedCoins.filter(coin => coin?.coin_id === value)[0]?.current_price,
                 roi: transactions.methods.ROICalculator(
                     currencyCurrentPrice,
-                    ROIFilter[ROIFilter.length - 1].currency_value
+                    ROIFilter[ROIFilter.length - 1]?.currency_value
                 ),
             });
         };

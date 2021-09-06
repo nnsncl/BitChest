@@ -107,10 +107,12 @@ export default function Portfolio() {
                         {refs.filter((ref) => ref.id === item.currency_id)[0].symbol}
                       </p>
                       <p className={`flex justify-end gap-2 items-center `}>
-                        {item.roi
-                          && <span className={`text-xs border-2 border-gray-800 py-1 px-2 rounded-full ${item.roi < 0 ? 'text-red-900' : 'text-green-900'}`} >
+                        {(item.roi && item.roi !== 0)
+                          ? <span className={`text-xs border-2 border-gray-800 py-1 px-2 rounded-full ${item.roi <= 0 ? 'text-red-900' : 'text-green-900'}`} >
                             {item.roi.toFixed(2)}%
-                          </span>}
+                          </span>
+                          : null
+                        }
                         {item.type === 1 ? "-" : "+"}
                         {item.transaction_amount}€
 
