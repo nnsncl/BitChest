@@ -75,10 +75,10 @@ export default function Portfolio() {
                 boxed
                 headings={
                   <>
-                    <th className="w-1/4 text-left text-xs">Coin Name</th>
-                    <th className="text-left text-xs">Type</th>
-                    <th className="w-1/4 text-xs" />
-                    <th className="w-2/4 text-right text-xs">Details</th>
+                    <th className="w-2/4 text-left text-xs">Coin Name</th>
+                    <th className="w-1/4 md:block hidden text-right text-xs">Type</th>
+                    <th className="text-xs" />
+                    <th className="w-1/4 text-right text-xs">Details</th>
                   </>
                 }
               >
@@ -89,7 +89,7 @@ export default function Portfolio() {
                     animate="visible"
                     variants={container}
                     className="rounded-b-2xl flex items-center justify-between gap-6 text-white p-6 gap-6 border-gray-800">
-                    <motion.td variants={article} className="w-1/4 flex items-center justify-start gap-3">
+                    <motion.td variants={article} className="w-2/4 flex items-center justify-start gap-3">
                       <img
                         className="w-9 h-9 bg-white rounded-full"
                         src={storedCoins.filter((coin) => coin.coin_id === item.currency_name)[0]?.image}
@@ -98,13 +98,13 @@ export default function Portfolio() {
                       <p className="md:flex hidden flex-col items-center text-sm gap-2">
                         {refs.filter((ref) => ref.id === item.currency_id)[0].name}
                       </p>
-                    </motion.td>                 
-                    <motion.td variants={article} className="w-1/4 flex items-center justify-start gap-3">
+                    </motion.td>
+                    <motion.td variants={article} className="w-1/4 md:flex hidden items-end justify-end gap-3">
                       <p className="flex flex-col text-sm">
                         {item.type === 1 ? "Purchase" : "Sell"}
                       </p>
                     </motion.td>
-                    <motion.td variants={article} className="w-2/4 flex flex-col items-end justify-end">
+                    <motion.td variants={article} className="w-1/4 flex flex-col items-end justify-end">
                       <p className={`${item.type === 1 ? "text-green-900" : "text-red-900"} uppercase flex gap-3 mb-1 text-sm`}>
                         {item.type === 1 ? "+" : "-"}
                         {item.currency_quantity.toFixed(5)}&nbsp;
@@ -113,7 +113,7 @@ export default function Portfolio() {
                       <p className={`flex justify-end gap-2 items-center text-xs`}>
                         {(item.roi && item.roi !== 0)
                           ? <span className={`text-xs border-2 border-gray-800 py-1 px-2 rounded-full ${item.roi <= 0 ? 'text-red-900' : 'text-green-900'}`} >
-                            {item.roi <= 0 ? '-' : '+'}
+                            {item.roi >= 0 && '+'}
                             {item.roi.toFixed(2)}%
                           </span>
                           : null
@@ -122,11 +122,11 @@ export default function Portfolio() {
                         {item.transaction_amount}€
                       </p>
                     </motion.td>
-                    <motion.td variants={article} className="flex flex-col items-center justify-end" >
-                      <p className="text-gray-700 text-xs">
+                    <motion.td variants={article} className="flex flex-col items-end justify-end" >
+                      <p className="text-gray-700 text-sm">
                         {moment(item.created_at).format("MMM")}
                       </p>
-                      <p className='text-sm' >{moment(item.created_at).format("DD")}</p>
+                      <p className='text-xs' >{moment(item.created_at).format("DD/YY")}</p>
                     </motion.td>
                   </motion.tr>
                 ))}
@@ -152,8 +152,8 @@ export default function Portfolio() {
                 headings={
                   <>
                     <th className="w-2/4 text-left text-xs">Coin Name</th>
-                    <th className="w-1/4 text-right text-xs">Total Balance</th>
-                    <th className="w-1/4 text-right text-xs">Total Coin</th>
+                    <th className="md:w-1/4 w-auto text-right text-xs">Total Balance</th>
+                    <th className="md:w-1/4 w-auto text-right text-xs">Total Coin</th>
                   </>
                 }
               >
@@ -179,14 +179,14 @@ export default function Portfolio() {
                             </span>
                           </p>
                         </motion.td>
-                        <motion.td variants={article} className="w-1/4 flex text-sm gap-2 items-end justify-end">
+                        <motion.td variants={article} className="md:w-1/4 w-auto flex text-sm gap-2 items-end justify-end">
                           <p className="flex text-sm gap-1 text-right" >
                             {(item.currency_quantity
                               * storedCoins.filter((coin) => coin.coin_id === item.name)[0].current_price).toFixed(2)
                             }€
                           </p>
                         </motion.td>
-                        <motion.td variants={article} className="w-1/4 flex text-sm gap-2 items-end justify-end">
+                        <motion.td variants={article} className="md:w-1/4 w-auto flex text-sm gap-2 items-end justify-end">
                           <p className="flex text-sm gap-1 items-center justify-center" >
                             {item.currency_quantity.toFixed(5)}
                             <span className="block text-xs font-bold border-2 border-gray-800 rounded-lg px-2 py-1 uppercase text-gray-700 ">
@@ -222,7 +222,9 @@ export default function Portfolio() {
           variants={transactions_container}
           className='fixed bottom-6 left-6 bg-white text-black p-9 rounded-2xl mt-9 md:w-96 w-64' >
           <motion.div variants={article} className='flex items-center justify-between gap-2 mb-3' >
-            <h3 className='md:text-2xl text-xl font-bold ' >Information</h3>
+            <motion.h3 variants={article} className='md:text-2xl text-xl font-bold flex items-center gap-2' >
+              Information
+            </motion.h3>
             <span className='md:text-3xl text-2xl' >🚨</span>
           </motion.div>
           <motion.p variants={article} className='md:text-base text-sm md:leading-none leading-none mb-6' >You may need to <b>refresh your browser to see recent updates</b> in your assets table.</motion.p>
