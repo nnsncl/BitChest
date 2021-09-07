@@ -18,9 +18,9 @@ class UserTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'name' => 'Sami',
-                'email' => 'sami@sami.fr',
-                'password' => Hash::make('admin'), // crypté le mot de passe
+                'name' => 'Jane Admin',
+                'email' => 'admin@admin.com',
+                'password' => Hash::make('admin'),
                 'elevation' => 'admin',
                 'balance' => 100,
                 'remember_token' => Str::random(10),
@@ -28,9 +28,9 @@ class UserTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Nuni',
-                'email' => 'nuni@nuni.fr',
-                'password' => Hash::make('nuni'),
+                'name' => 'John User',
+                'email' => 'user@user.com',
+                'password' => Hash::make('user'),
                 'elevation' => 'user',
                 'balance' => 100,
                 'remember_token' => Str::random(10),
