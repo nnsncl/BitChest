@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import { motion } from 'framer-motion';
 
@@ -19,6 +19,7 @@ export const TransactionsModule = ({ position, width }) => {
     const [selectedCoin, setSelectedCoin] = useState(null);
     const [transactionMode, setTransactionMode] = useState(1);
     const [balanceAmount, setBalanceAmount] = useState(0);
+    const formRef = useRef(null);
 
     const BASE_TRANSACTION = {
         type: transactionMode,
@@ -61,7 +62,11 @@ export const TransactionsModule = ({ position, width }) => {
             .catch((error) => {
                 setPending(false);
                 setError(error.message);
-            });
+            })
+            .then(() => {
+                setTransaction(BASE_TRANSACTION);
+                formRef.current.reset();
+            })
     };
 
     const handlePurchase = (value) => {
@@ -127,6 +132,12 @@ export const TransactionsModule = ({ position, width }) => {
         //eslint-disable-next-line
     }, []);
 
+    useEffect(() => {
+        setTransaction(BASE_TRANSACTION);
+        setSelectedCoin(null);
+        formRef.current.reset();
+    }, [transactionMode]);
+
     return (
         <>
             <motion.article
@@ -141,8 +152,7 @@ export const TransactionsModule = ({ position, width }) => {
                         <button
                             className="hover:text-blue-900 text-sm"
                             onClick={() => {
-                                setTransactionMode(1)
-                                setTransaction(BASE_TRANSACTION)
+                                setTransactionMode(1);
                             }} >
                             Buy
                         </button>
@@ -151,8 +161,7 @@ export const TransactionsModule = ({ position, width }) => {
                         <button
                             className="hover:text-blue-900 text-sm"
                             onClick={() => {
-                                setTransactionMode(0)
-                                setTransaction(BASE_TRANSACTION)
+                                setTransactionMode(0);
                             }}>
                             Sell
                         </button>
@@ -165,7 +174,9 @@ export const TransactionsModule = ({ position, width }) => {
                     className="px-6 py-9 flex flex-col gap-6"
                     onSubmit={(e) => {
                         handleTransaction(e)
-                    }}>
+                    }}
+                    ref={formRef}
+                >
 
                     {error &&
                         <section className='bg-red-900 text-sm p-6 rounded-xl' >
@@ -198,8 +209,9 @@ export const TransactionsModule = ({ position, width }) => {
                                         name="coin"
                                         id="coin-select"
                                         className="bg-transparent w-full appearance-none outline-none text-white"
+                                        data-default-value=""
                                     >
-                                        <option value="">Select a currency</option>
+                                        <option value="" >Select a currency</option>
                                         {storedCoins &&
                                             storedCoins.map((item, key) => {
                                                 return (
@@ -274,6 +286,7 @@ export const TransactionsModule = ({ position, width }) => {
                                         name="coin"
                                         id="coin-select"
                                         className="bg-transparent w-full appearance-none outline-none text-white"
+                                        data-default-value=""
                                     >
                                         <option value="">Select a currency</option>
                                         {transactions.vault &&
@@ -288,12 +301,12 @@ export const TransactionsModule = ({ position, width }) => {
                                                 );
                                             })}
                                     </select>
-                                    {storedCoins[selectedCoin] && storedCoins[selectedCoin].image
+                                    {selectedCoin
                                         ? (
                                             <img
                                                 className="w-8 h-8 bg-white rounded-full"
-                                                src={storedCoins[selectedCoin].image}
-                                                alt={`${storedCoins[selectedCoin].image.name}-logo`}
+                                                src={storedCoins.filter(coin => coin.coin_id === selectedCoin)[0]?.image}
+                                                alt={`${storedCoins.filter(coin => coin.coin_id === selectedCoin)[0]?.image?.name}-logo`}
                                             />)
                                         : <small className="text-white text-xs">▼</small>
                                     }
