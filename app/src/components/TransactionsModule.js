@@ -291,14 +291,16 @@ export const TransactionsModule = ({ position, width }) => {
                                         <option value="">Select a currency</option>
                                         {transactions.vault &&
                                             transactions.vault.map((item, key) => {
-                                                return (
-                                                    <option
-                                                        key={key}
-                                                        value={item.name}
-                                                        className="text-xs font-regular"  >
-                                                        {item.name}
-                                                    </option>
-                                                );
+                                                if (item.currency_quantity.toFixed(5) !== "0.00000") {
+                                                    return (
+                                                        <option
+                                                            key={key}
+                                                            value={item.name}
+                                                            className="text-xs font-regular"  >
+                                                            {item.name}
+                                                        </option>
+                                                    );
+                                                }
                                             })}
                                     </select>
                                     {selectedCoin
