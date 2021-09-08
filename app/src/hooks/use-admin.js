@@ -29,7 +29,7 @@ export const AdminProvider = ({ children }) => {
           setUsers(response.data);
         })
         .catch((error) => {
-          console.log(error.message);
+          console.error(error.message);
         });
     //eslint-disable-next-line
   }, [])
@@ -64,7 +64,7 @@ function useAdminProvider() {
         setStoredUsers(response.data);
       })
       .catch((error) => {
-        console.log(error.message);
+        console.error(error.message);
       });
   }
   const createUser = (user) => {

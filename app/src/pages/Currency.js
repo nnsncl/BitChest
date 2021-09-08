@@ -34,7 +34,7 @@ export default function Currency() {
       .then((response) => {
         setChartData(formatData(response.data.prices));
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
     //eslint-disable-next-line
   }, [id, coins]);
 
