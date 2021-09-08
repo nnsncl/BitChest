@@ -97,7 +97,7 @@ export default function AddUser() {
                             />
                         </fieldset>
                         <button
-                            disabled={user.password.length < 8 || user.name === '' || user.email === ''}
+                            disabled={user.password.length < 8 || user.name === '' || user.email === '' || user.password_confirmation !== user.password}
                             className='disabled:opacity-30 uppercase text-xs font-bold bg-blue-900 py-3 px-12 rounded-lg transition duration-300 ease-in-out outline-none flex justify-center' >
                             {pending
                                 ? <Processing />
