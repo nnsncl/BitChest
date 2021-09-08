@@ -69,7 +69,7 @@ export default function Admin() {
                                         <motion.td variants={article} className='w-1/3 md:flex hidden items-start gap-3' >
                                             <p className=' text-sm font-light'>{user.elevation}</p>
                                         </motion.td>
-                                        <motion.td variants={article} className='w-1/3 flex items-center gap-3' >
+                                        <motion.td variants={article} className='md:w-1/3 w-auto flex items-center gap-3' >
                                             <ButtonTertiary to={`${ROUTES.ADMIN}/user/${user.id}`}>
                                                 Edit
                                             </ButtonTertiary>
