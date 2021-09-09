@@ -27,6 +27,14 @@ export default function Admin() {
         return <Loader />;
     }
 
+    function handleDelete(id) {
+        const confirm = window.confirm("Are you sure you want to delete this user ?");
+
+        if(confirm === true) {
+            admin.actions.deleteUser(id);
+        }
+    }
+
 
     return (
         <Layout>
@@ -73,7 +81,7 @@ export default function Admin() {
                                             <ButtonTertiary to={`${ROUTES.ADMIN}/user/${user.id}`}>
                                                 Edit
                                             </ButtonTertiary>
-                                            <button onClick={() => admin.actions.deleteUser(user.id)} className='bg-red-900 py-3 px-3 rounded-lg text-sm' >
+                                            <button onClick={() => handleDelete(user.id)} className='bg-red-900 py-3 px-3 rounded-lg text-sm' >
                                                 Delete
                                             </button>
                                         </motion.td>
