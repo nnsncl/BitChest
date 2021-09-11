@@ -161,7 +161,8 @@ export default function Portfolio() {
                 {
                   //eslint-disable-next-line
                   transactions.vault.map((item, key) => {
-                    if (item.currency_quantity !== 0) {
+                    
+                    if (item.currency_quantity.toFixed(5) !== "0.00000") {
                       return (
                         <motion.tr
                           key={key}

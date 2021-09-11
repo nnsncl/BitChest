@@ -33,8 +33,6 @@ export default function EditUser() {
         auth.updateCurrentUser(auth.storedUser.id, user);
     };
 
-    console.log(user);
-
     return (
         <main className='text-white p-6 relative h-screen flex flex-col items-center justify-center' >
             
