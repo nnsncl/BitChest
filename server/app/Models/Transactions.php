@@ -11,9 +11,12 @@ class Transactions extends Model
     protected $fillable = [
         "currency_id",
         "currency_value",
+        "currency_name",
         "type",
         "user_id",
-        "transaction_amount"
+        "transaction_amount",
+        "currency_quantity",
+        "roi"
     ];
 
     public function users() {

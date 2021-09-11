@@ -1,12 +1,7 @@
 import React, { useState, useContext, createContext, } from "react";
 import axios from "axios";
 
-import {
-    SESSION_TOKEN_COOKIE_KEY,
-    USER_ID_COOKIE_KEY,
-    getSessionTokenCookie,
-    getUserIDCookie
-} from "../constants/session-storage-endpoints";
+import { useLocalStorage } from "./use-local-storage";
 import { baseApiUrl } from '../constants/api-endpoints';
 
 
@@ -28,8 +23,15 @@ export const useAuth = () => {
 function useAuthProvider() {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
+    const [success, setSuccess] = useState();
+    const [error, setError] = useState();
+    const [pending, setPending] = useState();
+
+    const [storedUser, setStoredUser] = useLocalStorage('_user', {});
+    const [storedToken, setStoredToken] = useLocalStorage('_token', {});
 
     const login = (email, password) => {
+        setPending(true);
         axios
             .get(`${baseApiUrl}/sanctum/csrf-cookie`, {
                 method: "GET",
@@ -46,56 +48,30 @@ function useAuthProvider() {
                         "Access-Control-Allow-Origin": "true",
                     },
                     data: {
-                        email: "nuni@nuni.fr",
-                        password: "nuni",
+                        email: email,
+                        password: password,
                     },
                 })
                     .then((response) => {
-                        if (getSessionTokenCookie) {
-                            setUser(null);
-                            sessionStorage.clear();
-                        }
                         setUser(response.data.user);
+                        setStoredUser(response.data.user);
                         setToken(response.data.token);
-                        sessionStorage.setItem(SESSION_TOKEN_COOKIE_KEY, response.data.token);
-                        sessionStorage.setItem(USER_ID_COOKIE_KEY, response.data.user.id);
+                        setStoredToken(response.data.token);
+                        setPending(false);
                         return {
                             user: response.data.user,
                             token: response.data.token
                         };
                     })
                     .catch((error) => {
-                        console.log(error.message);
+                        setError(error.message);
+                        setPending(false);
                     });
             });
     };
 
-    const getAuthUser = () => {
-        if (!user && getSessionTokenCookie) {
-            axios({
-                method: "GET",
-                url: `${baseApiUrl}/api/user/${user && user.id ? user.id : getUserIDCookie}`,
-                withCredentials: true,
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "true",
-                    "Authorization": `Bearer ${token ? token : getSessionTokenCookie}`
-                }
-            })
-                .then((response) => {
-                    setUser(response.data);
-                    return {
-                        user: response.data.user
-                    };
-                })
-                .catch((error) => {
-                    console.log(error.message);
-                });
-        };
-    };
-
     const logout = () => {
+        setPending(true);
         axios({
             method: "POST",
             url: `${baseApiUrl}/api/logout`,
@@ -104,26 +80,83 @@ function useAuthProvider() {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "true",
-                "Authorization": `Bearer ${token ? token : getSessionTokenCookie}`
+                "Authorization": `Bearer ${token ? token : storedToken}`
             }
         })
             .then(() => {
                 sessionStorage.clear();
+                localStorage.clear();
             })
             .then(() => {
                 setUser(null);
                 setToken(null);
+                setPending(false);
                 window.location.reload();
             })
             .catch((error) => {
-                console.log(error.message);
+                setError(error.message);
+                setPending(false);
             });
     };
 
+    const getCurrentUser = (id) => {
+        setPending(true);
+        axios({
+            method: "GET",
+            url: `${baseApiUrl}/api/user/${id}`,
+            withCredentials: true,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "true",
+                "Authorization": `Bearer ${token ? token : storedToken}`
+            }
+        })
+            .then((response) => {
+                setStoredUser(response.data);
+                setUser(response.data);
+                setPending(false);
+            })
+            .catch((error) => {
+                setError(error.message);
+                setPending(false);
+            });
+    }
+
+    const updateCurrentUser = (id, user) => {
+        setPending(true);
+        axios({
+            method: "PUT",
+            url: `${baseApiUrl}/api/current-user/${id}`,
+            withCredentials: true,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "true",
+                "Authorization": `Bearer ${storedToken}`
+            },
+            data: user,
+        })
+            .then((response) => {
+                setPending(false);
+                setSuccess(response.data.message);
+            })
+            .catch((error) => {
+                setError(error.message);
+                setPending(false);
+            });
+    }
+
     return {
         user,
-        getAuthUser,
+        storedUser,
+        storedToken,
+        success,
+        error,
+        pending,
         login,
-        logout
+        logout,
+        getCurrentUser,
+        updateCurrentUser
     };
 }

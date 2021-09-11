@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -18,29 +19,6 @@ class UsersController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            "name" => "required",
-            "email" => "required",
-            "password" => "required",
-            "elevation" => "required",
-        ]);
-
-        $user = User::create($request->all());
-
-        return [
-            "user" => $user,
-            "message" => "User created"
-        ];
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -49,6 +27,13 @@ class UsersController extends Controller
     public function show($id)
     {
         return User::find($id);
+    }
+
+    public function indexTransactions($id)
+    {
+        $user = User::find($id);
+
+        return $user->transactions;
     }
 
     /**
@@ -76,6 +61,36 @@ class UsersController extends Controller
         ];
     }
 
+    public function updateCurrentUser(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        $request->validate([
+            'name' => 'string',
+            'email' => 'string',
+            'password' => 'string|confirmed'
+        ]);
+
+        if ($request['password']) {
+            $user->update($request->all());
+
+            $user->password = Hash::make($user->password);
+
+            $user->save;
+        }
+
+        $user->update([
+            'name' => $request['name'],
+            'email' => $request['email'],
+        ]);
+
+        $user->save;
+
+        return [
+            "message" => "User updated",
+        ];
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -85,6 +100,8 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
+
+        $user->transactions()->delete();
 
         $user->delete();
 

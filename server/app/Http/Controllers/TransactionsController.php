@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transactions;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TransactionsController extends Controller
@@ -18,12 +19,12 @@ class TransactionsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created purchase transaction in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function purchase(Request $request)
     {
 
         $request->validate([
@@ -31,10 +32,52 @@ class TransactionsController extends Controller
             "currency_value" => "required",
             "type" => "required",
             "user_id" => "required",
-            "transaction_amount" => "required"
+            "transaction_amount" => "required",
+            "currency_quantity" => "required",
         ]);
-        
-        return Transactions::create($request->all());
+
+        Transactions::create($request->all());
+
+        $user = User::find($request->user_id);
+
+        $user->balance = $user->balance - $request->transaction_amount;
+
+        $user->save();
+
+        return [
+            "message" => "Transaction created!",
+        ];
+    }
+
+    /**
+     * Store a newly created sell transaction in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+    */
+    public function sell(Request $request)
+    {
+        $request->validate([
+            "currency_id" => "required",
+            "currency_value" => "required",
+            "currency_name" => "required",
+            "type" => "required",
+            "user_id" => "required",
+            "transaction_amount" => "required",
+            "currency_quantity" => "required",
+        ]);
+
+        Transactions::create($request->all());
+
+        $user = User::find($request->user_id);
+
+        $user->balance = $user->balance + $request->transaction_amount;
+
+        $user->save();
+
+        return [
+            "message" => "Transaction created!",
+        ];
     }
 
     /**
@@ -46,16 +89,5 @@ class TransactionsController extends Controller
     public function show($id)
     {
         return Transactions::find($id);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        return Transactions::destroy($id);
     }
 }

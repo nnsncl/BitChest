@@ -1,3 +1,43 @@
+export const transactions_container = {
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            type: 'spring',
+            mass: 0.3,
+            bounce: 0,
+            staggerChildren: 0.03,
+            duration: 0.1
+        },
+    },
+    hidden: {
+        opacity: 0,
+        y: 100
+    },
+}
+
+export const transactions_article = {
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            type: 'spring',
+            mass: 0.3,
+            bounce: 1,
+            staggerChildren: 0.05,
+            duration: 0.3
+        },
+    },
+    hidden: {
+        opacity: 0,
+        y: 100,
+        transition: {
+            staggerChildren: 0.05,
+            duration: 0.3
+        },
+    }
+}
+
 export const container = {
     visible: {
         opacity: 1,

@@ -23,17 +23,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Public Routes
-Route::get('/transactions', [TransactionsController::class, 'index']);
-Route::get('/transaction/{id}', [TransactionsController::class, 'show']);
-Route::post('/transactions', [TransactionsController::class, 'store']);
-Route::delete('/transaction/{id}', [TransactionsController::class, 'destroy']);
 
+// Currencies
 Route::get('/currencies', [CurrenciesController::class, 'index']);
 Route::get('/currency/{id}', [CurrenciesController::class, 'show']);
 Route::post('/currency', [CurrenciesController::class, 'store']);
 Route::put('/currency/{id}', [CurrenciesController::class, 'update']);
 
-// Auth routes
+// Auth
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
@@ -43,7 +40,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/users', [UsersController::class, 'index']);
     Route::get('user/{id}', [UsersController::class, 'show']);
-    Route::post('user', [UsersController::class, 'store']);
+    Route::get('user/{id}/transactions', [UsersController::class, 'indexTransactions']);
     Route::put('user/{id}', [UsersController::class, 'update']);
+    Route::put('current-user/{id}', [UsersController::class, 'updateCurrentUser']);
     Route::delete('user/{id}', [UsersController::class, 'destroy']);
+
+    // Transactions
+    Route::get('/transactions', [TransactionsController::class, 'index']);
+    Route::get('/transaction/{id}', [TransactionsController::class, 'show']);
+    Route::post('/transaction/purchase', [TransactionsController::class, 'purchase']);
+    Route::post('/transaction/sell', [TransactionsController::class, 'sell']);
 });
