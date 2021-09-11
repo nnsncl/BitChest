@@ -136,6 +136,8 @@ export const TransactionsModule = ({ position, width }) => {
         setTransaction(BASE_TRANSACTION);
         setSelectedCoin(null);
         formRef.current.reset();
+
+        //eslint-disable-next-line
     }, [transactionMode]);
 
     return (
@@ -290,6 +292,8 @@ export const TransactionsModule = ({ position, width }) => {
                                     >
                                         <option value="">Select a currency</option>
                                         {transactions.vault &&
+
+                                            //eslint-disable-next-line
                                             transactions.vault.map((item, key) => {
                                                 if (item.currency_quantity.toFixed(5) !== "0.00000") {
                                                     return (

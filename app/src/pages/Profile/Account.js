@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import * as ROUTES from '../../routes/routes';
-import { SecureSpace } from '../../components/Icons';
 
 import { Processing } from '../../components/Icons';
 import { useAuth } from '../../hooks/use-auth';

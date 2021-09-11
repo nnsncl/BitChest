@@ -55,6 +55,7 @@ export default function Admin() {
                         </>
                     }>
                         {
+                            //eslint-disable-next-line
                             admin.actions.storedUsers.map((user, key) => {
                                 if (auth.storedUser.id !== user.id) {
                                     return (
