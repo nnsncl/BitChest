@@ -43,15 +43,10 @@ then in your terminal, run`cd server`  , then paste the following commands:
 composer install
 php artisan migrate --seed
 php artisan serve
+php artisan key:generate
 ```
 
 It will install dependencies, create the migrations and lauch the server.
-
-**Generate an app Encryption Key**
-
-```shell
-php artisan key:generate
-```
 
 ## 
 
