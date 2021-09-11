@@ -42,8 +42,8 @@ then in your terminal, run`cd server`  , then paste the following commands:
 ```shell
 composer install
 php artisan migrate --seed
-php artisan serve
 php artisan key:generate
+php artisan serve
 ```
 
 It will install dependencies, create the migrations and lauch the server.
